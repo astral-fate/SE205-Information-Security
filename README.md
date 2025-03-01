@@ -62,3 +62,16 @@ firewalls.
 - Case Studies on Cryptography and security: Secure Inter-branch Payment
 
 Transactions, Cross site Scripting Vulnerability, Virtual Elections.
+
+
+
+## Course Reference
+
+
+TEXT BOOKS:
+
+1. Cryptography and Network Security: William Stallings, Pearson
+
+Education.
+
+2. Cryptography and Network Security: Atul Kahate, Mc Graw Hill.
