@@ -17,3 +17,4 @@ This course is part of [Cairo University Software Engineering Professional Maste
 **Text Books:**
 1. "Cryptography and Network Security" by William Stallings, Pearson Education
 2. "Cryptography and Network Security" by Atul Kahate, McGraw Hill
+3. https://xipher.netlify.app/
