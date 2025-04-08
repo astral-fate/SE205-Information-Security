@@ -102,3 +102,8 @@ XV. AES 3DES and DES Techniques
 
 XVI. Assignments
 * Encryption and Decryption problems.
+
+* ## rerences
+* 1. [Cryptography and Information Theory](https://www.coursera.org/learn/crypto-info-theory/home/module/1)
+  2. [Symmetric Cryptography](https://www.coursera.org/learn/symmetric-crypto/home/module/1)
+  3. [Asymmetric Cryptography and Key Management](https://www.coursera.org/learn/asymmetric-crypto/home/module/1)
