@@ -254,22 +254,79 @@
         #concepts .concept-block {
             background-color: #ffffff; /* White background for concept blocks */
             border: 1px solid #e9ecef;
-            padding: 20px;
+            padding: 0; /* Remove padding here, apply to header/content */
             border-radius: 5px;
             margin-bottom: 25px;
              box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+             overflow: hidden; /* Contain borders */
         }
-         #concepts .concept-block h3 {
-            margin-top: 0;
+         /* Style for the clickable concept header (h3) */
+         #concepts .concept-header {
+            margin: 0; /* Remove default h3 margin */
+            padding: 15px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
             color: #007bff;
-            border-bottom: 1px dotted #ccc;
-            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef; /* Separator */
+            transition: background-color 0.3s ease;
+            position: relative; /* For indicator */
+            font-size: 1.2em; /* Adjust size if needed */
+        }
+        #concepts .concept-header:hover {
+            background-color: #e9ecef;
+        }
+        /* Indicator (+/-) for concept headers */
+        #concepts .concept-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 10px;
+            transition: transform 0.2s ease-in-out;
+        }
+        #concepts .concept-header.active::after {
+            content: "\2212"; /* - sign */
+            /* transform: rotate(180deg); */ /* Optional rotation */
+        }
+        #concepts .concept-header.active {
+             background-color: #e7f1ff; /* Slightly different bg when active */
+        }
+
+        /* Style for the collapsible content within concepts */
+        #concepts .concept-content {
+            padding: 0 20px; /* Start with 0 padding top/bottom */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+            border-top: none; /* Avoid double border */
+        }
+        #concepts .concept-content > *:first-child {
+            margin-top: 15px; /* Add margin to first element inside */
+        }
+        #concepts .concept-content > *:last-child {
+            margin-bottom: 20px; /* Add margin to last element inside */
+        }
+        /* Ensure nested elements inside concept-content have appropriate margin */
+        #concepts .concept-content p,
+        #concepts .concept-content ul,
+        #concepts .concept-content ol,
+        #concepts .concept-content table,
+        #concepts .concept-content .diagram,
+        #concepts .concept-content h4 { /* Include h4 */
+            margin-top: 15px;
             margin-bottom: 15px;
         }
+        #concepts .concept-content h4 {
+             color: #17a2b8; /* Keep h4 color */
+             border-bottom: 1px dotted #ccc;
+             padding-bottom: 5px;
+        }
+
         .requirements-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            /* margin-top: 15px; */ /* Removed, handled by parent */
         }
          .requirements-table th, .requirements-table td {
              border: 1px solid #ddd;
@@ -562,166 +619,176 @@
             <h2>Key Concepts & Examples from Unit 4</h2>
 
              <div class="concept-block">
-                <h3>Authentication Overview</h3>
-                <p>Why Authenticate?</p>
-                <ul>
-                    <li>Ensures <span class="keyword">message integrity</span> (data hasn't been altered).</li>
-                    <li>Verifies <span class="keyword">sender identity</span> (data is from the claimed source).</li>
-                    <li>Prevents <span class="keyword">replay attacks</span> (prevents capturing and resending old messages).</li>
-                </ul>
-                 <p>Threats Countered: Disclosure, Masquerade, Content Modification, Sequence Modification.</p>
-                 <p>Types of Authentication Functions:</p>
-                 <ol>
-                     <li>Message Encryption (Symmetric/Asymmetric - provides some auth but primarily confidentiality).</li>
-                     <li>Message Authentication Code (MAC).</li>
-                     <li>Hash Functions.</li>
-                 </ol>
+                <h3 class="concept-header">Authentication Overview</h3>
+                <div class="concept-content">
+                    <p>Why Authenticate?</p>
+                    <ul>
+                        <li>Ensures <span class="keyword">message integrity</span> (data hasn't been altered).</li>
+                        <li>Verifies <span class="keyword">sender identity</span> (data is from the claimed source).</li>
+                        <li>Prevents <span class="keyword">replay attacks</span> (prevents capturing and resending old messages).</li>
+                    </ul>
+                    <p>Threats Countered: Disclosure, Masquerade, Content Modification, Sequence Modification.</p>
+                    <p>Types of Authentication Functions:</p>
+                    <ol>
+                        <li>Message Encryption (Symmetric/Asymmetric - provides some auth but primarily confidentiality).</li>
+                        <li>Message Authentication Code (MAC).</li>
+                        <li>Hash Functions.</li>
+                    </ol>
+                </div>
              </div>
 
              <div class="concept-block">
-                <h3>Hash Functions</h3>
-                <p>A core tool for ensuring data integrity and enabling authentication mechanisms.</p>
-                <ul>
-                    <li>Takes an arbitrary-length input M.</li>
-                    <li>Produces a fixed-length output <span class="keyword">h = H(M)</span> (hash value or message digest).</li>
-                    <li>Purpose: <span class="keyword">Data Integrity</span>. Also used for password storage, secure authentication, file organization.</li>
-                    <li>Based on computationally infeasible properties:
-                        <ul>
-                            <li><span class="keyword">One-Way Property (Preimage Resistance):</span> Given h, hard to find M such that H(M)=h.</li>
-                             <li><span class="keyword">Second Preimage Resistance (Weak Collision Resistance):</span> Given M1, hard to find M2 ≠ M1 such that H(M1)=H(M2).</li>
-                            <li><span class="keyword">Collision Resistance (Strong Collision Resistance):</span> Hard to find *any* pair M1 ≠ M2 such that H(M1)=H(M2).</li>
-                        </ul>
-                    </li>
-                </ul>
-                 <div class="diagram">
-                     <img src="https://via.placeholder.com/600x200.png?text=Hashing+Diagram+(Input+->+Hash+Function+->+Fixed+Output)" alt="Hashing Process Diagram">
-                     <figcaption>General Hashing Process</figcaption>
-                 </div>
-                 <h4>Hash Function Requirements</h4>
-                 <table class="requirements-table">
-                     <thead><tr><th>Requirement</th><th>Description</th></tr></thead>
-                     <tbody>
-                         <tr><td>Variable input size</td><td>Can be applied to data block of any size.</td></tr>
-                         <tr><td>Fixed output size</td><td>Produces a fixed-length output (hash).</td></tr>
-                         <tr><td>Efficiency</td><td>H(x) is relatively easy/fast to compute.</td></tr>
-                         <tr><td>Preimage resistant (one-way)</td><td>Given h, infeasible to find x such that H(x)=h.</td></tr>
-                         <tr><td>Second preimage resistant (weak collision)</td><td>Given x, infeasible to find y≠x with H(y)=H(x).</td></tr>
-                         <tr><td>Collision resistant (strong collision)</td><td>Infeasible to find any pair (x, y) with x≠y such that H(x)=H(y).</td></tr>
-                         <tr><td>Pseudorandomness</td><td>Output meets standard tests for pseudorandomness.</td></tr>
-                     </tbody>
-                 </table>
-                  <h4>Attacks on Hash Functions</h4>
-                 <ul>
-                     <li><span class="keyword">Brute-Force Attacks:</span> Depend on hash output length (n).
-                         <ul>
-                             <li>To find a preimage or second preimage: Requires ~2<sup>n</sup> operations.</li>
-                             <li>To find a collision (Birthday Attack): Requires only ~2<sup>n/2</sup> operations. This is often the determining factor for security strength.</li>
-                         </ul>
-                     </li>
-                     <li><span class="keyword">Cryptanalysis:</span> Exploits specific weaknesses in the hash algorithm itself (e.g., collisions found in MD5 and SHA-1).</li>
-                 </ul>
-                 <h4>Basic Hash Structure (Merkle–Damgård)</h4>
-                 <p>Iterative process using a compression function 'f':</p>
-                 <ol>
-                     <li>Append Padding & Length: Message padded to be multiple of block size (b). Length of original message often appended.</li>
-                     <li>Initialize: Start with an initial hash value IV (CV<sub>0</sub>).</li>
-                     <li>Process Blocks: For each message block Y<sub>i</sub>: CV<sub>i</sub> = f(CV<sub>i-1</sub>, Y<sub>i</sub>). The output of one stage feeds into the next.</li>
-                     <li>Final Hash: The last output CV<sub>L</sub> is the hash value H(M).</li>
-                 </ol>
-                 <div class="diagram">
-                      <img src="https://via.placeholder.com/700x300.png?text=Merkle-Damgard+Structure+(IV+->+f(CV0,Y1)+->+...)" alt="Merkle-Damgard Construction Diagram">
-                      <figcaption>Merkle–Damgård Structure</figcaption>
-                  </div>
+                <h3 class="concept-header">Hash Functions</h3>
+                <div class="concept-content">
+                    <p>A core tool for ensuring data integrity and enabling authentication mechanisms.</p>
+                    <ul>
+                        <li>Takes an arbitrary-length input M.</li>
+                        <li>Produces a fixed-length output <span class="keyword">h = H(M)</span> (hash value or message digest).</li>
+                        <li>Purpose: <span class="keyword">Data Integrity</span>. Also used for password storage, secure authentication, file organization.</li>
+                        <li>Based on computationally infeasible properties:
+                            <ul>
+                                <li><span class="keyword">One-Way Property (Preimage Resistance):</span> Given h, hard to find M such that H(M)=h.</li>
+                                <li><span class="keyword">Second Preimage Resistance (Weak Collision Resistance):</span> Given M1, hard to find M2 ≠ M1 such that H(M1)=H(M2).</li>
+                                <li><span class="keyword">Collision Resistance (Strong Collision Resistance):</span> Hard to find *any* pair M1 ≠ M2 such that H(M1)=H(M2).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="diagram">
+                        <img src="https://via.placeholder.com/600x200.png?text=Hashing+Diagram+(Input+->+Hash+Function+->+Fixed+Output)" alt="Hashing Process Diagram">
+                        <figcaption>General Hashing Process</figcaption>
+                    </div>
+                    <h4>Hash Function Requirements</h4>
+                    <table class="requirements-table">
+                        <thead><tr><th>Requirement</th><th>Description</th></tr></thead>
+                        <tbody>
+                            <tr><td>Variable input size</td><td>Can be applied to data block of any size.</td></tr>
+                            <tr><td>Fixed output size</td><td>Produces a fixed-length output (hash).</td></tr>
+                            <tr><td>Efficiency</td><td>H(x) is relatively easy/fast to compute.</td></tr>
+                            <tr><td>Preimage resistant (one-way)</td><td>Given h, infeasible to find x such that H(x)=h.</td></tr>
+                            <tr><td>Second preimage resistant (weak collision)</td><td>Given x, infeasible to find y≠x with H(y)=H(x).</td></tr>
+                            <tr><td>Collision resistant (strong collision)</td><td>Infeasible to find any pair (x, y) with x≠y such that H(x)=H(y).</td></tr>
+                            <tr><td>Pseudorandomness</td><td>Output meets standard tests for pseudorandomness.</td></tr>
+                        </tbody>
+                    </table>
+                    <h4>Attacks on Hash Functions</h4>
+                    <ul>
+                        <li><span class="keyword">Brute-Force Attacks:</span> Depend on hash output length (n).
+                            <ul>
+                                <li>To find a preimage or second preimage: Requires ~2<sup>n</sup> operations.</li>
+                                <li>To find a collision (Birthday Attack): Requires only ~2<sup>n/2</sup> operations. This is often the determining factor for security strength.</li>
+                            </ul>
+                        </li>
+                        <li><span class="keyword">Cryptanalysis:</span> Exploits specific weaknesses in the hash algorithm itself (e.g., collisions found in MD5 and SHA-1).</li>
+                    </ul>
+                    <h4>Basic Hash Structure (Merkle–Damgård)</h4>
+                    <p>Iterative process using a compression function 'f':</p>
+                    <ol>
+                        <li>Append Padding & Length: Message padded to be multiple of block size (b). Length of original message often appended.</li>
+                        <li>Initialize: Start with an initial hash value IV (CV<sub>0</sub>).</li>
+                        <li>Process Blocks: For each message block Y<sub>i</sub>: CV<sub>i</sub> = f(CV<sub>i-1</sub>, Y<sub>i</sub>). The output of one stage feeds into the next.</li>
+                        <li>Final Hash: The last output CV<sub>L</sub> is the hash value H(M).</li>
+                    </ol>
+                    <div class="diagram">
+                        <img src="https://via.placeholder.com/700x300.png?text=Merkle-Damgard+Structure+(IV+->+f(CV0,Y1)+->+...)" alt="Merkle-Damgard Construction Diagram">
+                        <figcaption>Merkle–Damgård Structure</figcaption>
+                    </div>
+                </div>
              </div>
 
             <div class="concept-block">
-                <h3>Applications of Hash Functions</h3>
-                <h4>Message Authentication (using Hash only)</h4>
-                 <p>Basic method: Sender computes h=H(M), sends {M, h}. Receiver recomputes H(M') and compares with received h.</p>
-                <p>Vulnerable to Man-in-the-Middle attack if channel isn't secure (Attacker intercepts {M,h}, replaces with {M', h'=H(M')}).</p>
-                 <div class="diagram">
-                     <img src="https://via.placeholder.com/700x250.png?text=Hash+for+Integrity+Diagram+(Slide+10a)" alt="Hash for Integrity Check">
-                     <figcaption>Using Hash Function to Check Data Integrity</figcaption>
-                 </div>
-                <p>Improved Methods (Combining with Encryption/Secrets):</p>
-                <ul>
-                    <li><strong>Encrypt Message + Hash:</strong> E(K, [M || H(M)]) - Provides confidentiality and integrity. (Slide 12a)</li>
-                    <li><strong>Encrypt Hash Only:</strong> M || E(K, H(M)) - Efficient for large messages, provides integrity but not confidentiality. (Slide 12b)</li>
-                    <li><strong>Hashed Secret Value (like MAC):</strong> M || H(M || S) - Uses a shared secret S. Provides integrity/authentication, no encryption needed. (Slide 12c)</li>
-                    <li><strong>Encrypted Hashed Secret Value:</strong> E(K, [M || H(M || S)]) - Provides confidentiality and integrity/authentication. (Slide 12d)</li>
-                 </ul>
+                <h3 class="concept-header">Applications of Hash Functions</h3>
+                <div class="concept-content">
+                    <h4>Message Authentication (using Hash only)</h4>
+                    <p>Basic method: Sender computes h=H(M), sends {M, h}. Receiver recomputes H(M') and compares with received h.</p>
+                    <p>Vulnerable to Man-in-the-Middle attack if channel isn't secure (Attacker intercepts {M,h}, replaces with {M', h'=H(M')}).</p>
+                    <div class="diagram">
+                        <img src="https://via.placeholder.com/700x250.png?text=Hash+for+Integrity+Diagram+(Slide+10a)" alt="Hash for Integrity Check">
+                        <figcaption>Using Hash Function to Check Data Integrity</figcaption>
+                    </div>
+                    <p>Improved Methods (Combining with Encryption/Secrets):</p>
+                    <ul>
+                        <li><strong>Encrypt Message + Hash:</strong> E(K, [M || H(M)]) - Provides confidentiality and integrity. (Slide 12a)</li>
+                        <li><strong>Encrypt Hash Only:</strong> M || E(K, H(M)) - Efficient for large messages, provides integrity but not confidentiality. (Slide 12b)</li>
+                        <li><strong>Hashed Secret Value (like MAC):</strong> M || H(M || S) - Uses a shared secret S. Provides integrity/authentication, no encryption needed. (Slide 12c)</li>
+                        <li><strong>Encrypted Hashed Secret Value:</strong> E(K, [M || H(M || S)]) - Provides confidentiality and integrity/authentication. (Slide 12d)</li>
+                    </ul>
 
-                <h4>Message Authentication Codes (MACs)</h4>
-                <p>A keyed hash function, provides integrity and authenticity.</p>
-                <p class="formula">MAC = C<sub>K</sub>(M) = f(K, M)</p>
-                <p>Requires sender and receiver to share a secret key K.</p>
-                <ul>
-                    <li>Sender computes MAC = C<sub>K</sub>(M), sends {M, MAC}.</li>
-                    <li>Receiver computes MAC' = C<sub>K</sub>(M'), compares MAC' with received MAC.</li>
-                 </ul>
-                 <div class="diagram">
-                      <img src="https://via.placeholder.com/600x400.png?text=MAC+Process+Diagram+(Slide+16)" alt="MAC Process Diagram">
-                      <figcaption>MAC Generation and Verification</figcaption>
-                  </div>
-                <p>Types:</p>
-                 <ul>
-                     <li><span class="keyword">HMAC:</span> Based on a cryptographic hash function (e.g., HMAC-SHA256).</li>
-                     <li><span class="keyword">CMAC:</span> Based on a block cipher (e.g., AES-CMAC).</li>
-                 </ul>
-                 <p>Must also protect against replay attacks (e.g., include timestamp or sequence number in M).</p>
+                    <h4>Message Authentication Codes (MACs)</h4>
+                    <p>A keyed hash function, provides integrity and authenticity.</p>
+                    <p class="formula">MAC = C<sub>K</sub>(M) = f(K, M)</p>
+                    <p>Requires sender and receiver to share a secret key K.</p>
+                    <ul>
+                        <li>Sender computes MAC = C<sub>K</sub>(M), sends {M, MAC}.</li>
+                        <li>Receiver computes MAC' = C<sub>K</sub>(M'), compares MAC' with received MAC.</li>
+                    </ul>
+                    <div class="diagram">
+                        <img src="https://via.placeholder.com/600x400.png?text=MAC+Process+Diagram+(Slide+16)" alt="MAC Process Diagram">
+                        <figcaption>MAC Generation and Verification</figcaption>
+                    </div>
+                    <p>Types:</p>
+                    <ul>
+                        <li><span class="keyword">HMAC:</span> Based on a cryptographic hash function (e.g., HMAC-SHA256).</li>
+                        <li><span class="keyword">CMAC:</span> Based on a block cipher (e.g., AES-CMAC).</li>
+                    </ul>
+                    <p>Must also protect against replay attacks (e.g., include timestamp or sequence number in M).</p>
 
-                <h4>Digital Signatures</h4>
-                 <p>Provides integrity, authenticity, and <span class="keyword">non-repudiation</span>.</p>
-                 <p>Uses asymmetric cryptography:</p>
-                 <ul>
-                     <li>Sender computes h = H(M).</li>
-                     <li>Sender encrypts hash with their <span class="keyword">Private Key</span>: Sig = E(KR<sub>sender</sub>, h).</li>
-                     <li>Sender transmits {M, Sig}.</li>
-                     <li>Receiver computes h' = H(M').</li>
-                     <li>Receiver decrypts signature using sender's <span class="keyword">Public Key</span>: h'' = D(KU<sub>sender</sub>, Sig).</li>
-                     <li>Receiver compares h' and h''. If match, message is authentic and intact.</li>
-                 </ul>
-                  <div class="diagram">
-                      <img src="https://via.placeholder.com/700x300.png?text=Digital+Signature+Diagram+(Slide+19a)" alt="Digital Signature Creation and Verification">
-                      <figcaption>Digital Signature Creation and Verification</figcaption>
-                  </div>
+                    <h4>Digital Signatures</h4>
+                    <p>Provides integrity, authenticity, and <span class="keyword">non-repudiation</span>.</p>
+                    <p>Uses asymmetric cryptography:</p>
+                    <ul>
+                        <li>Sender computes h = H(M).</li>
+                        <li>Sender encrypts hash with their <span class="keyword">Private Key</span>: Sig = E(KR<sub>sender</sub>, h).</li>
+                        <li>Sender transmits {M, Sig}.</li>
+                        <li>Receiver computes h' = H(M').</li>
+                        <li>Receiver decrypts signature using sender's <span class="keyword">Public Key</span>: h'' = D(KU<sub>sender</sub>, Sig).</li>
+                        <li>Receiver compares h' and h''. If match, message is authentic and intact.</li>
+                    </ul>
+                    <div class="diagram">
+                        <img src="https://via.placeholder.com/700x300.png?text=Digital+Signature+Diagram+(Slide+19a)" alt="Digital Signature Creation and Verification">
+                        <figcaption>Digital Signature Creation and Verification</figcaption>
+                    </div>
 
-                <h4>Other Uses</h4>
-                <ul>
-                    <li><strong>Password Storage:</strong> Store H(password) instead of password. Compare H(entered_password) with stored hash.</li>
-                    <li><strong>Intrusion/Virus Detection:</strong> Store hashes of critical files. Periodically recompute hashes to detect modifications.</li>
-                     <li><strong>Pseudorandom Function (PRF) / Number Generator (PRNG):</strong> Hashing can be used to construct PRFs or PRNGs.</li>
-                </ul>
+                    <h4>Other Uses</h4>
+                    <ul>
+                        <li><strong>Password Storage:</strong> Store H(password) instead of password. Compare H(entered_password) with stored hash.</li>
+                        <li><strong>Intrusion/Virus Detection:</strong> Store hashes of critical files. Periodically recompute hashes to detect modifications.</li>
+                        <li><strong>Pseudorandom Function (PRF) / Number Generator (PRNG):</strong> Hashing can be used to construct PRFs or PRNGs.</li>
+                    </ul>
+                </div>
              </div>
 
              <div class="concept-block">
-                 <h3>Secure Hash Algorithm (SHA) Family</h3>
-                 <p>Developed by NIST.</p>
-                 <ul>
-                     <li><strong>SHA-1:</strong> 160-bit hash. Widely used but now considered insecure (collisions found).</li>
-                     <li><strong>SHA-2:</strong> Family including SHA-224, SHA-256, SHA-384, SHA-512. Uses Merkle–Damgård structure. Still considered secure. SHA-512 processes 1024-bit message blocks through 80 rounds.</li>
-                     <li><strong>SHA-3:</strong> Based on Keccak algorithm and <span class="keyword">Sponge Construction</span>. Different internal structure than SHA-1/SHA-2. Offers similar hash sizes (224, 256, 384, 512) plus extendable output functions (SHAKE).</li>
-                 </ul>
-                  <div class="diagram">
-                      <img src="https://via.placeholder.com/800x400.png?text=SHA-512+Processing+Diagram+(Slide+38)" alt="SHA-512 Message Digest Generation">
-                      <figcaption>SHA-512 Message Digest Generation Overview</figcaption>
-                  </div>
+                 <h3 class="concept-header">Secure Hash Algorithm (SHA) Family</h3>
+                 <div class="concept-content">
+                     <p>Developed by NIST.</p>
+                     <ul>
+                         <li><strong>SHA-1:</strong> 160-bit hash. Widely used but now considered insecure (collisions found).</li>
+                         <li><strong>SHA-2:</strong> Family including SHA-224, SHA-256, SHA-384, SHA-512. Uses Merkle–Damgård structure. Still considered secure. SHA-512 processes 1024-bit message blocks through 80 rounds.</li>
+                         <li><strong>SHA-3:</strong> Based on Keccak algorithm and <span class="keyword">Sponge Construction</span>. Different internal structure than SHA-1/SHA-2. Offers similar hash sizes (224, 256, 384, 512) plus extendable output functions (SHAKE).</li>
+                     </ul>
+                     <div class="diagram">
+                         <img src="https://via.placeholder.com/800x400.png?text=SHA-512+Processing+Diagram+(Slide+38)" alt="SHA-512 Message Digest Generation">
+                         <figcaption>SHA-512 Message Digest Generation Overview</figcaption>
+                     </div>
+                 </div>
              </div>
 
               <div class="concept-block">
-                  <h3>Hashing in Blockchain</h3>
-                  <ul>
-                      <li>Blockchain is a distributed ledger of blocks linked chronologically.</li>
-                      <li>Each block contains data (transactions) and a <span class="keyword">Block Header</span>.</li>
-                      <li>Block Header includes: Timestamp, <span class="keyword">Merkle Root</span> (hash of all transactions), <span class="keyword">Nonce</span>, and crucially, the <span class="keyword">Hash of the Previous Block's Header</span>.</li>
-                      <li>This previous block hash creates the "chain", ensuring immutability (changing a block invalidates subsequent hashes).</li>
-                      <li><span class="keyword">Proof-of-Work (PoW):</span> Miners compete to find a Nonce such that H(Block Header) meets a difficulty target. Requires computational effort, secures the network (e.g., Bitcoin uses double SHA-256).</li>
-                      <li><span class="keyword">Proof-of-Stake (PoS):</span> Validators are chosen to create blocks based on staked currency, avoids high energy consumption of PoW.</li>
-                      <li><strong>51% Attack:</strong> If an attacker controls >50% of mining power (PoW) or stake (PoS), they can potentially rewrite recent history or double-spend. Harder on large networks.</li>
-                  </ul>
-                   <div class="diagram">
-                      <img src="https://via.placeholder.com/600x300.png?text=Blockchain+Chaining+Diagram+(Slide+50)" alt="Blockchain Hash Chaining">
-                      <figcaption>Blocks Linked by Hashes</figcaption>
+                  <h3 class="concept-header">Hashing in Blockchain</h3>
+                  <div class="concept-content">
+                      <ul>
+                          <li>Blockchain is a distributed ledger of blocks linked chronologically.</li>
+                          <li>Each block contains data (transactions) and a <span class="keyword">Block Header</span>.</li>
+                          <li>Block Header includes: Timestamp, <span class="keyword">Merkle Root</span> (hash of all transactions), <span class="keyword">Nonce</span>, and crucially, the <span class="keyword">Hash of the Previous Block's Header</span>.</li>
+                          <li>This previous block hash creates the "chain", ensuring immutability (changing a block invalidates subsequent hashes).</li>
+                          <li><span class="keyword">Proof-of-Work (PoW):</span> Miners compete to find a Nonce such that H(Block Header) meets a difficulty target. Requires computational effort, secures the network (e.g., Bitcoin uses double SHA-256).</li>
+                          <li><span class="keyword">Proof-of-Stake (PoS):</span> Validators are chosen to create blocks based on staked currency, avoids high energy consumption of PoW.</li>
+                          <li><strong>51% Attack:</strong> If an attacker controls >50% of mining power (PoW) or stake (PoS), they can potentially rewrite recent history or double-spend. Harder on large networks.</li>
+                      </ul>
+                      <div class="diagram">
+                          <img src="https://via.placeholder.com/600x300.png?text=Blockchain+Chaining+Diagram+(Slide+50)" alt="Blockchain Hash Chaining">
+                          <figcaption>Blocks Linked by Hashes</figcaption>
+                      </div>
                   </div>
               </div>
 
@@ -805,8 +872,11 @@
             const tfContainer = document.getElementById('tf-questions');
             const mcContainer = document.getElementById('mc-questions');
 
-             // Select accordion elements
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
+             // Select accordion elements (Glossary)
+            const glossaryAccordionHeaders = document.querySelectorAll('.glossary-accordion .accordion-header');
+
+            // Select accordion elements (Key Concepts) - NEW
+            const conceptAccordionHeaders = document.querySelectorAll('#concepts .concept-header');
 
 
             // --- Main Tab Switching Logic ---
@@ -816,7 +886,11 @@
 
                     // Deactivate all main buttons and content
                     mainTabButtons.forEach(btn => btn.classList.remove('active'));
-                    mainTabContents.forEach(content => content.classList.remove('active'));
+                    mainTabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Ensure non-active tabs are hidden (redundant if CSS handles .active correctly, but safe)
+                        content.style.display = 'none';
+                    });
 
                     // Activate the clicked button
                     button.classList.add('active');
@@ -825,12 +899,14 @@
                     const targetContent = document.getElementById(tabId);
                     if (targetContent) {
                         targetContent.classList.add('active');
+                        // Ensure active tab is displayed
+                        targetContent.style.display = 'block';
                     }
                 });
             });
 
             // --- Accordion Logic (for Glossary) ---
-             accordionHeaders.forEach(header => {
+             glossaryAccordionHeaders.forEach(header => {
                 header.addEventListener('click', function() {
                     // Toggle active class on the header for styling (+) (-) sign
                     this.classList.toggle('active');
@@ -850,7 +926,7 @@
                     }
 
                     // --- Optional: Close other accordions ---
-                    accordionHeaders.forEach(otherHeader => {
+                    glossaryAccordionHeaders.forEach(otherHeader => {
                         if (otherHeader !== this && otherHeader.classList.contains('active')) {
                             otherHeader.classList.remove('active');
                             otherHeader.nextElementSibling.style.maxHeight = null;
@@ -861,8 +937,47 @@
                 });
             });
 
+            // --- Accordion Logic (for Key Concepts) - NEW ---
+            conceptAccordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Toggle active class on the header
+                    this.classList.toggle('active');
+
+                    // Get the content panel sibling
+                    const panel = this.nextElementSibling; // Assumes .concept-content is immediately after .concept-header
+
+                    // Toggle the max-height for smooth transition
+                    if (panel.style.maxHeight) {
+                        // If panel is open, close it
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px"; // Adjust padding on close
+                    } else {
+                        // If panel is closed, open it
+                        // Need to calculate scrollHeight *after* setting display potentially
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add buffer for margins/padding inside
+                        panel.style.padding = "1px 20px"; // Add padding back (use 1px top/bottom to avoid margin collapse issues if needed, then adjust margins inside)
+                        // Re-apply top/bottom padding after transition starts or use internal margins
+                         setTimeout(() => { // Ensure padding is applied correctly with transition
+                             panel.style.padding = "1px 20px"; // Keep this simple, rely on internal element margins set in CSS
+                         }, 5); // Small delay
+                    }
+
+                    // --- Optional: Close other concept accordions ---
+                    conceptAccordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            const otherPanel = otherHeader.nextElementSibling;
+                            otherPanel.style.maxHeight = null;
+                            otherPanel.style.padding = "0 20px";
+                        }
+                    });
+                    // --- End Optional Close Others ---
+                });
+            });
+
 
             // --- Function to handle option selection within a question ---
+            // ... existing handleOptionSelection function ...
             function handleOptionSelection(button, questionDiv) {
                 // Deselect siblings within the same question
                 const siblings = questionDiv.querySelectorAll('.option-button.selected');
@@ -876,7 +991,9 @@
                 }
             }
 
+
             // --- Function to create and append feedback ---
+            // ... existing showFeedback function ...
             function showFeedback(questionDiv, isCorrect, correctAnswer) {
                  // Remove existing feedback first
                 const existingFeedback = questionDiv.querySelector('.feedback');
@@ -909,7 +1026,9 @@
                 }
             }
 
+
             // --- Load Fill in the Blank Questions ---
+            // ... existing loadFillInTheBlankQuestions function ...
             function loadFillInTheBlankQuestions() {
                 fillContainer.innerHTML = ''; // Clear previous content
                 fillInTheBlank.forEach((q, index) => { // Added index for unique IDs if needed
@@ -954,6 +1073,7 @@
 
 
             // --- Load True/False Questions ---
+            // ... existing loadTrueFalseQuestions function ...
             function loadTrueFalseQuestions() {
                 tfContainer.innerHTML = ''; // Clear previous content
                 trueOrFalse.forEach((q, index) => { // Added index
@@ -1001,7 +1121,9 @@
                 });
             }
 
+
             // --- Load Multiple Choice Questions ---
+            // ... existing loadMultipleChoiceQuestions function ...
             function loadMultipleChoiceQuestions() {
                 mcContainer.innerHTML = ''; // Clear previous content
                 multipleChoice.forEach((q, index) => { // Added index
@@ -1045,14 +1167,21 @@
                 });
             }
 
+
             // --- Initial Load ---
             // Load all quiz questions initially so they are ready when tabs are clicked
             loadFillInTheBlankQuestions();
             loadTrueFalseQuestions();
             loadMultipleChoiceQuestions();
 
-             // Activate the default tab's content on load
-             document.querySelector('.main-content.active').style.display = 'block';
+             // Activate the default tab's content on load and hide others
+             mainTabContents.forEach(content => {
+                 if (content.classList.contains('active')) {
+                     content.style.display = 'block';
+                 } else {
+                     content.style.display = 'none';
+                 }
+             });
 
 
         }); // End DOMContentLoaded
