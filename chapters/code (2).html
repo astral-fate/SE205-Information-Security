@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Cryptography Basics Quiz</title>
+    <style>
+        /* CSS Styles identical to the previous quiz examples */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .options button:hover:not(:disabled) {
+            background-color: #e9e9e9;
+        }
+
+        .options button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: none; /* Initially hidden */
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+         /* Style for selected buttons */
+        .options button.selected.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .options button.selected.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+         /* Style to highlight the correct answer when wrong one is selected */
+        .options button.reveal-correct {
+            background-color: #d4edda; /* Light green background */
+            color: #155724;         /* Dark green text */
+            border: 1px solid #c3e6cb; /* Green border */
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Unit 2: Cryptography Basics - Interactive Quiz</h1>
+
+    <div class="quiz-container" id="quiz-container">
+        <!-- Questions will be loaded here by JavaScript -->
+    </div>
+
+    <script>
+        const quizData = [
+            // --- Multiple Choice Questions (Unit 2) ---
+            { // MCQ 1
+                question: "What is the primary goal of cryptography?",
+                options: [
+                    "Data compression",
+                    "Data encryption for secure communication",
+                    "Increasing data transmission speed",
+                    "Reducing data storage requirements"
+                ],
+                answer: "Data encryption for secure communication"
+            },
+            { // MCQ 2
+                question: "Which of the following is a symmetric key algorithm?",
+                options: [
+                    "RSA",
+                    "AES",
+                    "ECC",
+                    "DSA"
+                ],
+                answer: "AES"
+            },
+            { // MCQ 3
+                question: "In Caesar Cipher, if the key is 5, what is the ciphertext for \"HELLO\"?",
+                options: [
+                    "KHOOR",
+                    "EBIIL",
+                    "MJQQT",
+                    "OLSSV"
+                ],
+                answer: "MJQQT"
+            },
+            { // MCQ 4
+                question: "Which of the following is NOT a classical encryption technique?",
+                options: [
+                    "Caesar Cipher",
+                    "AES",
+                    "Hill Cipher",
+                    "Playfair Cipher"
+                ],
+                answer: "AES"
+            },
+            { // MCQ 5
+                question: "What is the key length of DES?",
+                options: [
+                    "56 bits",
+                    "128 bits",
+                    "192 bits",
+                    "256 bits"
+                ],
+                answer: "56 bits"
+            },
+            { // MCQ 6
+                question: "Which cipher uses a 5x5 matrix for encryption?",
+                options: [
+                    "Caesar Cipher",
+                    "Playfair Cipher",
+                    "Hill Cipher",
+                    "Vigenère Cipher"
+                ],
+                answer: "Playfair Cipher"
+            },
+            { // MCQ 7
+                question: "What is the main weakness of the Caesar Cipher?",
+                options: [
+                    "It uses a large key space",
+                    "It is vulnerable to brute-force attacks",
+                    "It is too complex to implement",
+                    "It requires a public key"
+                ],
+                answer: "It is vulnerable to brute-force attacks"
+            },
+            { // MCQ 8
+                question: "Which of the following is a polyalphabetic cipher?",
+                options: [
+                    "Caesar Cipher",
+                    "Vigenère Cipher",
+                    "Playfair Cipher",
+                    "Hill Cipher"
+                ],
+                answer: "Vigenère Cipher"
+            },
+            { // MCQ 9
+                question: "What is the key size of AES-256?",
+                options: [
+                    "128 bits",
+                    "192 bits",
+                    "256 bits",
+                    "512 bits"
+                ],
+                answer: "256 bits"
+            },
+            { // MCQ 10
+                question: "Which of the following is a characteristic of symmetric key cryptography?",
+                options: [
+                    "Uses two different keys",
+                    "Faster than asymmetric cryptography",
+                    "Provides non-repudiation",
+                    "Uses public and private keys"
+                ],
+                answer: "Faster than asymmetric cryptography"
+            },
+            { // MCQ 11
+                question: "What is the main advantage of 3DES over DES?",
+                options: [
+                    "It uses a single key",
+                    "It is faster than DES",
+                    "It increases key length and complexity",
+                    "It is less secure than DES"
+                ],
+                answer: "It increases key length and complexity"
+            },
+            { // MCQ 12
+                question: "Which of the following is a substitution cipher?",
+                options: [
+                    "Caesar Cipher",
+                    "Rail Fence Cipher",
+                    "Transposition Cipher", // Generic term, but Caesar is specifically substitution
+                    "Stream Cipher" // Category, not specific technique like Caesar
+                ],
+                answer: "Caesar Cipher"
+            },
+            { // MCQ 13
+                question: "What is the purpose of the S-box in AES?",
+                options: [
+                    "To shift rows",
+                    "To mix columns",
+                    "To perform substitution",
+                    "To add round keys"
+                ],
+                answer: "To perform substitution"
+            },
+            { // MCQ 14
+                question: "Which of the following is a transposition cipher?",
+                options: [
+                    "Caesar Cipher",
+                    "Playfair Cipher",
+                    "Rail Fence Cipher",
+                    "Vigenère Cipher"
+                ],
+                answer: "Rail Fence Cipher"
+            },
+            { // MCQ 15
+                question: "What is the key length of AES-128?",
+                options: [
+                    "128 bits",
+                    "192 bits",
+                    "256 bits",
+                    "512 bits"
+                ],
+                answer: "128 bits"
+            },
+             { // MCQ 16
+                question: "Which of the following is a characteristic of asymmetric cryptography?",
+                options: [
+                    "Uses the same key for encryption and decryption",
+                    "Provides confidentiality, authentication, and non-repudiation",
+                    "Faster than symmetric cryptography",
+                    "Uses a single key"
+                ],
+                answer: "Provides confidentiality, authentication, and non-repudiation"
+            },
+            { // MCQ 17
+                question: "What is the main disadvantage of brute-force attacks?",
+                options: [
+                    "They are too fast",
+                    "They require a lot of computational resources",
+                    "They are easy to implement",
+                    "They are only effective against weak algorithms"
+                ],
+                answer: "They require a lot of computational resources"
+            },
+            { // MCQ 18
+                question: "Which of the following is a modern encryption algorithm?",
+                options: [
+                    "Caesar Cipher",
+                    "DES",
+                    "AES",
+                    "Playfair Cipher"
+                ],
+                answer: "AES"
+            },
+            { // MCQ 19
+                question: "What is the purpose of the MixColumns step in AES?",
+                options: [
+                    "To substitute bytes",
+                    "To shift rows",
+                    "To mix columns for diffusion",
+                    "To add round keys"
+                ],
+                answer: "To mix columns for diffusion" // Corrected option based on PDF answer text
+            },
+            { // MCQ 20
+                question: "Which of the following is a characteristic of DES?",
+                options: [
+                    "It uses a 128-bit key",
+                    "It is a block cipher",
+                    "It is resistant to brute-force attacks",
+                    "It is an asymmetric algorithm"
+                ],
+                answer: "It is a block cipher"
+            },
+            // --- True/False Questions (Unit 2) ---
+            { // T/F 1
+                question: "Symmetric key cryptography uses the same key for encryption and decryption.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // T/F 2
+                question: "AES is a type of asymmetric key cryptography.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // T/F 3
+                question: "In Caesar Cipher, the decryption process involves shifting letters in the opposite direction of the encryption shift.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // T/F 4
+                question: "DES is considered secure against modern cryptographic attacks.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // T/F 5
+                question: "The Playfair Cipher is a polyalphabetic cipher.",
+                options: ["True", "False"],
+                answer: "False" // Playfair is monoalphabetic digraph substitution
+            },
+            { // T/F 6
+                question: "Brute-force attacks are effective against all encryption algorithms.",
+                options: ["True", "False"],
+                answer: "False" // Effectiveness depends heavily on key length
+            },
+            { // T/F 7
+                question: "The Hill Cipher uses matrix multiplication for encryption.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // T/F 8
+                question: "3DES is more secure than AES.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // T/F 9
+                question: "The Caesar Cipher is a type of transposition cipher.",
+                options: ["True", "False"],
+                answer: "False" // It's a substitution cipher
+            },
+            { // T/F 10
+                question: "AES supports key sizes of 128, 192, and 256 bits.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // T/F 11
+                question: "DES uses a 64-bit block size.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // T/F 12
+                question: "Asymmetric cryptography is faster than symmetric cryptography.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // T/F 13
+                question: "The Rail Fence Cipher is a type of transposition cipher.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // T/F 14
+                question: "AES is vulnerable to brute-force attacks.",
+                options: ["True", "False"],
+                answer: "False" // In practical terms with sufficient key length
+            },
+            { // T/F 15
+                question: "The Caesar Cipher is still widely used in modern cryptography.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // T/F 16
+                question: "The Playfair Cipher uses a 5x5 matrix for encryption.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+             { // T/F 17
+                question: "DES is an example of a stream cipher.",
+                options: ["True", "False"],
+                answer: "False" // It's a block cipher
+            },
+            { // T/F 18
+                question: "AES is an open-source encryption standard.",
+                options: ["True", "False"],
+                answer: "True" // The algorithm specification is public/open.
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz-container');
+
+        // Function to shuffle options (optional) - Not used here
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+        }
+
+        // Function to display questions - Identical to the previous examples
+        function displayQuiz() {
+            quizData.forEach((qData, index) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                questionBlock.setAttribute('data-question-index', index);
+
+                const questionText = document.createElement('p');
+                questionText.classList.add('question-text');
+                questionText.textContent = `${index + 1}. ${qData.question}`;
+                questionBlock.appendChild(questionText);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                const options = qData.options;
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.addEventListener('click', handleAnswer);
+                    optionsDiv.appendChild(button);
+                });
+
+                questionBlock.appendChild(optionsDiv);
+
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.classList.add('feedback');
+                questionBlock.appendChild(feedbackDiv);
+
+                quizContainer.appendChild(questionBlock);
+            });
+        }
+
+        // Function to handle answer selection - Identical to the previous examples
+        function handleAnswer(event) {
+            const selectedButton = event.target;
+            const selectedAnswer = selectedButton.textContent;
+            const questionBlock = selectedButton.closest('.question-block');
+            const questionIndex = parseInt(questionBlock.getAttribute('data-question-index'), 10);
+            const correctAnswer = quizData[questionIndex].answer;
+            const feedbackDiv = questionBlock.querySelector('.feedback');
+            const optionButtons = questionBlock.querySelectorAll('.options button');
+
+            optionButtons.forEach(button => {
+                button.disabled = true;
+            });
+
+            selectedButton.classList.add('selected');
+
+            if (selectedAnswer === correctAnswer) {
+                selectedButton.classList.add('correct');
+                feedbackDiv.textContent = 'Correct!';
+                feedbackDiv.classList.add('correct');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+                feedbackDiv.classList.add('incorrect');
+
+                optionButtons.forEach(button => {
+                    if (button.textContent === correctAnswer) {
+                        button.classList.add('reveal-correct');
+                    }
+                });
+            }
+        }
+
+        // Initial call to display the quiz when the page loads
+        displayQuiz();
+
+    </script>
+
+</body>
+</html>
