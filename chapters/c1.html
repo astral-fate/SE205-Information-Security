@@ -1,0 +1,1191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE205 Course Index - Information Security</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 85%; /* Slightly wider for more content */
+            max-width: 1400px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 25px 40px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3; /* Cairo Uni Blue */
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #007bff; /* Lighter Blue */
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em; /* Adjust font size for better fit */
+            table-layout: fixed; /* Helps control column widths */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 12px; /* Adjust padding */
+            text-align: left;
+            vertical-align: top; /* Align content to top */
+            word-wrap: break-word; /* Prevent long words from breaking layout */
+        }
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #495057;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+        tbody tr:hover {
+            background-color: #e2e6ea;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: bold; /* Make links stand out more */
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        /* Adjust column widths */
+        th:nth-child(1), td:nth-child(1) { width: 15%; } /* Module */
+        th:nth-child(2), td:nth-child(2) { width: 30%; } /* Main Topics */
+        th:nth-child(3), td:nth-child(3) { width: 40%; } /* Key Concepts / Algorithms */
+        th:nth-child(4), td:nth-child(4) { width: 15%; } /* Areas */
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        li {
+             margin-bottom: 5px;
+        }
+        strong { /* For grading percentages */
+            color: #28a745; /* Green */
+        }
+        .intro-link {
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SE205: Information Security</h1>
+
+        <p class="intro-link">
+            This course is part of the
+            <a href="https://github.com/astral-fate/Cairo-University-Software-Engineering-Professional-Master-s-Degree" target="_blank" rel="noopener noreferrer">Cairo University Software Engineering Professional Master's Degree</a> program.
+            (Presented by Dr. Hany Mohamed)
+        </p>
+
+        <h2>Course Syllabus & Objectives</h2>
+        <p>This course aims to cover the fundamental principles and practices of information security, including threats, cryptography, authentication, secure design, and network security mechanisms.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>Main Topics</th>
+                    <th>Key Concepts / Algorithms</th>
+                    <th>Areas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="unit1.html">Unit 1: Introduction</a></td>
+                    <td>
+                        - Need for Security<br>
+                        - Security Principles (CIA Triad)<br>
+                        - Security Attacks (Passive/Active)<br>
+                        - Security Services & Mechanisms<br>
+                        - Network Security Models
+                    </td>
+                    <td>
+                        - Confidentiality, Integrity, Availability (CIA)<br>
+                        - Threats vs. Attacks<br>
+                        - Passive Attacks (Eavesdropping, Traffic Analysis)<br>
+                        - Active Attacks (Masquerade, Modification, Replay, DoS)<br>
+                        - Security Mechanisms (Encipherment, Access Control, Data Integrity, Digital Signature, Traffic Padding)<br>
+                        - OSI Security Architecture Overview<br>
+                        - Basic Network Security Model<br>
+                        - Security Trinity (Prevention, Detection, Response)
+                    </td>
+                    <td>Foundations, Network Security</td>
+                </tr>
+                <tr>
+                    <td><a href="unit2.html">Unit 2: Cryptography (Symmetric)</a></td>
+                    <td>
+                        - Cryptography Basics<br>
+                        - Symmetric vs. Asymmetric<br>
+                        - Cryptanalysis (Brute-force)<br>
+                        - Classical Ciphers (Substitution, Transposition)<br>
+                        - Modern Symmetric Ciphers (Block/Stream)<br>
+                        - DES, 3DES, AES
+                    </td>
+                    <td>
+                        - Plaintext, Ciphertext, Key, Encrypt, Decrypt<br>
+                        - Substitution: Caesar, Monoalphabetic, Polyalphabetic (Vigenère concept), Playfair, Hill<br>
+                        - Transposition: Rail Fence<br>
+                        - Stream Cipher: XOR Example<br>
+                        - Block Ciphers: DES (Structure, 56-bit key, 16 rounds, 64-bit blocks), SDES Example, 3DES (EDE), AES (128/192/256 keys, 128-bit blocks, Rounds, Structure: SubBytes, ShiftRows, MixColumns, AddRoundKey)
+                    </td>
+                    <td>Cryptography, Algorithms</td>
+                </tr>
+                <tr>
+                    <td><a href="unit3.html">Unit 3: Cryptography (Asymmetric)</a></td>
+                    <td>
+                        - Public-Key Cryptography Principles<br>
+                        - RSA Algorithm<br>
+                        - Diffie-Hellman Key Exchange<br>
+                        - Other Asymmetric Systems
+                    </td>
+                    <td>
+                        - Public/Private Key Pairs<br>
+                        - One-way functions<br>
+                        - RSA: Key Generation (p, q, n, φ(n), e, d), Encryption (C=M^e mod n), Decryption (M=C^d mod n), Examples<br>
+                        - Diffie-Hellman: Concept (Shared Secret), Steps (P, G, private a/b, public keys, shared key calc), Example<br>
+                        - ElGamal, Elliptic Curve Cryptography (ECC) Concepts<br>
+                        - Symmetric vs. Asymmetric Comparison (Speed, Key Management, Use Cases)
+                    </td>
+                    <td>Cryptography, Algorithms, Key Management</td>
+                </tr>
+                <tr>
+                    <td><a href="unit4.html">Unit 4: Authentication & Hashing</a></td>
+                    <td>
+                        - Message Authentication<br>
+                        - Hash Functions (Properties, Requirements)<br>
+                        - MAC (Message Authentication Code)<br>
+                        - Digital Signatures<br>
+                        - SHA Algorithms<br>
+                        - Blockchain Hashing Intro
+                    </td>
+                    <td>
+                        - Data Integrity<br>
+                        - Hash Properties: One-way, Collision Resistance (Weak/Strong)<br>
+                        - Hash Uses: Passwords, Integrity Checks, Authentication<br>
+                        - MAC: HMAC, CMAC, MAC = f(Key, Message)<br>
+                        - Digital Signature: Hash + Asymmetric Encryption (Private Key)<br>
+                        - Birthday Attack Concept<br>
+                        - Merkle–Damgård construction<br>
+                        - SHA Family: SHA-1, SHA-2 (SHA-256, SHA-512 structure overview), SHA-3 (Keccak, Sponge Construction)<br>
+                        - Blockchain: Block Hash, Chaining, Proof-of-Work vs Proof-of-Stake
+                    </td>
+                    <td>Authentication, Integrity, Hashing, Blockchain</td>
+                </tr>
+                 <tr>
+                    <td><a href="unit5.html">Unit 5: Secure Computing</a></td>
+                    <td>
+                        - Secure Software Development (SSDLC)<br>
+                        - Secure Design Principles<br>
+                        - Web Application Security<br>
+                        - Common Web Threats<br>
+                        - Firewalls (Network & WAF)
+                    </td>
+                    <td>
+                        - SSDLC Phases & Integration of Security<br>
+                        - Principles: Security by Design, Continuous Monitoring, Risk Assessment, Education, Collaboration<br>
+                        - 7 Principles: Security as Code (SaC), Secure Defaults, Least Privilege, Separation of Duties (SoD), Minimize Attack Surface (ASA), Complete Mediation, Failing Securely<br>
+                        - Web Security Pillars: Authentication, Confidentiality, Integrity, Availability<br>
+                        - Threats: SQL Injection (SQLi), Cross-Site Scripting (XSS), Broken Authentication (Causes, Types: Brute Force, Credential Stuffing, Hijacking, Fixation)<br>
+                        - Firewall: Purpose, Types (Packet-Filtering, Stateful, Proxy, NGFW)<br>
+                        - Web Application Firewall (WAF): Purpose, Function (Reverse Proxy), Protection against App Layer Attacks
+                    </td>
+                    <td>Software Security, Web Security, Network Security</td>
+                </tr>
+                 <tr>
+                    <td>(Self-Study/Advanced)</td>
+                    <td>
+                        - Authentication Applications (Kerberos, X.509)<br>
+                        - Intrusion Detection Systems (IDS)<br>
+                        - Virus/Malware Countermeasures<br>
+                        - Security Case Studies
+                    </td>
+                    <td>
+                        - Kerberos Protocol Flow<br>
+                        - X.509 Certificates & PKI<br>
+                        - IDS Types (Signature-based, Anomaly-based)<br>
+                        - Malware Types & Protection<br>
+                        - Secure Transactions, Vulnerability Analysis
+                    </td>
+                    <td>Authentication, Intrusion Detection, Case Studies</td>
+                </tr>
+            </tbody>
+        </table>
+
+         <h2>Course References</h2>
+        <ul>
+            <li>Cryptography and Network Security: William Stallings, Pearson Education.</li>
+            <li>Cryptography and Network Security: Atul Kahate, Mc Graw Hill.</li>
+        </ul>
+
+       <!-- Add Grading section if applicable
+         <h2>Grading</h2>
+        <ul>
+            <li><strong>X%</strong>: Assignments, Quizzes</li>
+            <li><strong>Y%</strong>: Midterm Exam</li>
+            <li><strong>Z%</strong>: Final Exam</li>
+        </ul>
+        -->
+
+    </div>
+</body>
+</html>
+```
+--- END OF FILE index.html ---
+
+--- START OF FILE unit1.html ---
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE205 - Unit 1: Attacks on Computers and Computer Security</title>
+    <style>
+        /* Paste the CSS from the SE204 c1.html example here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #0056b3; /* Cairo University Blue */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            margin-top: 20px; /* Reduced top margin for sections */
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #007bff; /* Lighter Blue */
+        }
+         ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+         li {
+             margin-bottom: 8px;
+         }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.95em;
+        }
+        strong {
+             color: #dc3545; /* Red emphasis */
+        }
+
+        /* Main Tabs Styles */
+        .main-tabs {
+            display: flex;
+            justify-content: space-around; /* Or flex-start, center */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            margin-bottom: 25px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .main-tabs .tab-button {
+            padding: 12px 20px; /* Adjusted padding slightly */
+            border: none;
+            background: none;
+            color: #0056b3;
+            font-size: 0.95em; /* Slightly smaller font */
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: -2px; /* Overlap border */
+            border-bottom: 2px solid transparent;
+            text-align: center;
+        }
+
+        .main-tabs .tab-button.active {
+            background: #0056b3;
+            color: white;
+            border-bottom: 2px solid #0056b3;
+        }
+        .main-tabs .tab-button:hover:not(.active) {
+            background-color: #e9ecef;
+            border-bottom: 2px solid #adb5bd;
+        }
+
+        /* Content Sections */
+        .main-content {
+            display: none; /* Hide all main content sections by default */
+            animation: fadeIn 0.5s;
+        }
+
+        .main-content.active {
+            display: block; /* Show only the active one */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        /* --- Accordion Styles (for Glossary) --- */
+        .glossary-accordion {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow: hidden; /* Contain borders */
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid #dee2e6; /* Separator */
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            background-color: #f8f9fa;
+            color: #dc3545; /* Highlight Red for terms */
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            position: relative; /* For the indicator */
+        }
+
+        .accordion-header:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Indicator (+/-) */
+        .accordion-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .accordion-header.active::after {
+            content: "\2212"; /* - sign */
+            transform: rotate(180deg); /* Optional: animate the sign itself */
+        }
+        /* Optional: Slightly different style for active header */
+        .accordion-header.active {
+             background-color: #e7f1ff;
+        }
+
+
+        .accordion-panel {
+            padding: 0 20px; /* Start with 0 padding top/bottom */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+        }
+        .accordion-panel p, .accordion-panel ul { /* Apply margin to lists too */
+            margin: 15px 0; /* Add margin back when panel is open */
+            color: #333; /* Reset color for definition */
+        }
+
+        /* --- End Accordion Styles --- */
+
+        /* Concepts Section Styles */
+        #concepts .concept-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+         #concepts .concept-block h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* Quiz Styles (apply within #fill, #tf, #mc) */
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #ffffff; /* White background for questions */
+            position: relative; /* For feedback positioning */
+        }
+
+        .question p {
+            margin: 0 0 15px;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-button {
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            background: #f8f9fa; /* Light background for options */
+            color: #495057;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: left;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            width: 100%;
+        }
+        .option-button:hover {
+             background-color: #e9ecef;
+             border-color: #adb5bd;
+        }
+
+        .option-button.selected {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .check-answer {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            background: #28a745; /* Success Green */
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+        .check-answer:hover {
+             background-color: #218838;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SE205 - Unit 1: Attacks on Computers and Computer Security</h1>
+
+        <!-- Main Tab Buttons -->
+        <div class="main-tabs">
+            <button class="tab-button active" data-tab="glossary">Glossary</button>
+            <button class="tab-button" data-tab="concepts">Key Concepts</button>
+            <button class="tab-button" data-tab="fill">Fill in the Blank</button>
+            <button class="tab-button" data-tab="tf">True/False</button>
+            <button class="tab-button" data-tab="mc">Multiple Choice</button>
+        </div>
+
+        <!-- Glossary Section (Accordion) -->
+        <section id="glossary" class="main-content active">
+            <h2>Glossary of Terms</h2>
+            <div class="glossary-accordion">
+                <!-- Add terms based on Unit 1 slides -->
+                 <div class="accordion-item">
+                    <button class="accordion-header">Access Control</button>
+                    <div class="accordion-panel">
+                        <p>A security mechanism used to stop unattended/unauthorized access to data or resources. Techniques include passwords, firewalls, and PINs.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Active Attack</button>
+                    <div class="accordion-panel">
+                        <p>An attack where the attacker directly interacts with and attempts to alter system resources or affect their operation. Examples include modification of messages, replay, denial of service, and masquerade.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">ARPANET</button>
+                    <div class="accordion-panel">
+                        <p>Advanced Research Projects Agency Network. An early packet switching network and the first network to implement the protocol suite TCP/IP. Considered the foundation of the modern internet.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Availability</button>
+                    <div class="accordion-panel">
+                        <p>One of the three core principles of the CIA Triad. Ensures that systems and data are accessible and usable upon demand by authorized users.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Botnet</button>
+                    <div class="accordion-panel">
+                        <p>A network of private computers infected with malicious software and controlled as a group without the owners' knowledge, e.g., to send spam or conduct DDoS attacks (like the Mirai botnet).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">CIA Triad</button>
+                    <div class="accordion-panel">
+                        <p>A model designed to guide policies for information security within an organization, focusing on three core principles: Confidentiality, Integrity, and Availability.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Confidentiality</button>
+                    <div class="accordion-panel">
+                        <p>One of the three core principles of the CIA Triad. Ensures that sensitive information is not disclosed to unauthorized individuals, entities, or processes.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Data Integrity (Mechanism)</button>
+                    <div class="accordion-panel">
+                        <p>A security mechanism used to ensure that data has not been altered in an unauthorized manner during transmission or storage. Often involves appending a check value created from the data itself.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">DDoS Attack (Distributed Denial of Service)</button>
+                    <div class="accordion-panel">
+                        <p>An active attack where multiple compromised computer systems attack a target, such as a server, website or other network resource, and cause a denial of service for users of the targeted resource.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Denial of Service (DoS) Attack</button>
+                    <div class="accordion-panel">
+                        <p>An active attack intended to shut down a machine or network, making it inaccessible to its intended users. DoS attacks accomplish this by flooding the target with traffic or sending it information that triggers a crash.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Digital Signature</button>
+                    <div class="accordion-panel">
+                        <p>A security mechanism used to verify the authenticity and integrity of digital data. It typically involves cryptographic techniques (often asymmetric) to bind a sender's identity to the data.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Encipherment</button>
+                    <div class="accordion-panel">
+                        <p>A security mechanism that deals with hiding or covering data to ensure confidentiality, making it unreadable without authorization. Achieved using cryptography (encryption algorithms).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Information Security</button>
+                    <div class="accordion-panel">
+                        <p>The protection afforded to an automated information system to preserve the Confidentiality, Integrity, and Availability (CIA) of system resources (hardware, software, firmware, data, telecommunications).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Integrity</button>
+                    <div class="accordion-panel">
+                        <p>One of the three core principles of the CIA Triad. Ensures the accuracy and completeness of data, preventing unauthorized modifications, deletions, or additions.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">IoT (Internet of Things)</button>
+                    <div class="accordion-panel">
+                        <p>A system of interrelated computing devices, mechanical and digital machines, objects, animals or people that are provided with unique identifiers and the ability to transfer data over a network without requiring human-to-human or human-to-computer interaction. Often targeted in botnet attacks like Mirai.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Masquerade Attack</button>
+                    <div class="accordion-panel">
+                        <p>An active attack where one entity pretends to be a different entity. For example, an attacker might impersonate an authorized user to gain access.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Modification of Messages</button>
+                    <div class="accordion-panel">
+                        <p>An active attack where an attacker intercepts a message and alters its content before forwarding it to the intended recipient, violating data integrity.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Network Security Model</button>
+                    <div class="accordion-panel">
+                        <p>A framework describing how security services are implemented in a network to protect information during transmission between sender and receiver, considering potential opponents and trusted third parties.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">OSI Security Architecture</button>
+                    <div class="accordion-panel">
+                        <p>A framework that provides a systematic way of defining the requirements for security and characterizing the approaches to satisfying them. Focuses on security attacks, mechanisms, and services.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Passive Attack</button>
+                    <div class="accordion-panel">
+                        <p>An attack where the attacker attempts to learn or make use of information from the system but does not affect system resources. Examples include eavesdropping (release of message content) and traffic analysis.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Release of Message Content</button>
+                    <div class="accordion-panel">
+                        <p>A type of passive attack involving eavesdropping on communications to obtain message content (e.g., reading an email, listening to a phone call).</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Replay Attack</button>
+                    <div class="accordion-panel">
+                        <p>An active attack where an attacker passively captures data units from a legitimate transmission and retransmits them later to produce an unauthorized effect.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Repudiation</button>
+                    <div class="accordion-panel">
+                        <p>An attack where either the sender or receiver of a message attempts to deny the transmission or reception of the message. Security services like digital signatures help prevent this.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Security Attack</button>
+                    <div class="accordion-panel">
+                        <p>Any action that compromises the security of information owned by an organization. Categorized broadly as passive or active.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Security Mechanism</button>
+                    <div class="accordion-panel">
+                        <p>A process (or a device incorporating such a process) that is designed to detect, prevent, or recover from a security attack. Examples include encipherment, digital signatures, access controls.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Security Service</button>
+                    <div class="accordion-panel">
+                        <p>A service provided by a protocol layer of communicating open systems, which ensures adequate security of the systems or of data transfers. Often defined in terms of the CIA Triad (Confidentiality, Integrity, Availability).</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Security Threat</button>
+                    <div class="accordion-panel">
+                        <p>Any type of malicious activity or attack (physical or digital) that could potentially cause harm or damage to an organization, its data, or its personnel. Examples include theft, vandalism, malware, ransomware.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Security Trinity</button>
+                    <div class="accordion-panel">
+                        <p>A security model emphasizing that security is based on three key activities: Prevention, Detection, and Response. These should form the foundation for security policies.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Traffic Analysis</button>
+                    <div class="accordion-panel">
+                        <p>A type of passive attack involving the observation of traffic patterns (source, destination, frequency, length of messages) even if the content is encrypted, to infer information.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Traffic Padding</button>
+                    <div class="accordion-panel">
+                        <p>A security mechanism that involves inserting bogus data into a data stream to thwart traffic analysis attempts by masking actual traffic patterns.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Trusted Third Party</button>
+                    <div class="accordion-panel">
+                        <p>An entity trusted by two or more parties in a distributed system, often used in network security models to facilitate the distribution of secret information (like keys).</p>
+                    </div>
+                </div>
+
+            </div> <!-- End glossary-accordion -->
+        </section>
+
+        <!-- Key Concepts Section -->
+        <section id="concepts" class="main-content">
+            <h2>Key Concepts from Unit 1</h2>
+
+            <div class="concept-block">
+                <h3>Information Security Definition</h3>
+                <p>Information Security involves protecting information systems to preserve their <strong>Confidentiality</strong>, <strong>Integrity</strong>, and <strong>Availability</strong> (CIA). This protection extends to all system resources:</p>
+                <ul>
+                    <li>Hardware</li>
+                    <li>Software</li>
+                    <li>Firmware</li>
+                    <li>Information/Data</li>
+                    <li>Telecommunications</li>
+                </ul>
+            </div>
+
+             <div class="concept-block">
+                <h3>The CIA Triad</h3>
+                <p>These three principles form the cornerstone of information security:</p>
+                <ul>
+                    <li><strong>Confidentiality:</strong> Preventing unauthorized disclosure of information. Ensuring only authorized individuals can access sensitive data. Measures aim to maintain privacy.</li>
+                    <li><strong>Integrity:</strong> Preventing unauthorized modification or deletion of data. Ensuring data is accurate, trustworthy, and has not been tampered with.</li>
+                    <li><strong>Availability:</strong> Ensuring authorized users can access systems and data when needed. Concerns the functionality and responsiveness of hardware, software, and network infrastructure.</li>
+                </ul>
+                <p>All security controls and program elements should aim to achieve one or more of these principles.</p>
+             </div>
+
+             <div class="concept-block">
+                <h3>Security Threats vs. Security Attacks</h3>
+                 <p><strong>Security Threat:</strong> Any potential danger or malicious activity (physical or digital) that could harm an organization, its data, or personnel. Examples: theft, malware, ransomware, vandalism.</p>
+                <p><strong>Security Attack:</strong> An action that actively compromises the security of information. Attacks exploit vulnerabilities to realize threats.</p>
+             </div>
+
+            <div class="concept-block">
+                <h3>Types of Security Attacks</h3>
+                 <p>Attacks are broadly categorized into two types:</p>
+                 <h4>Passive Attacks</h4>
+                 <p>Involve observing or monitoring transmissions to obtain information without affecting system resources. The primary goal is learning information.</p>
+                 <ul>
+                     <li><strong>Release of Message Content:</strong> Eavesdropping to read the contents of a message (e.g., email, phone call). Violates Confidentiality.</li>
+                     <li><strong>Traffic Analysis:</strong> Observing patterns (who is talking to whom, how often, message lengths) even if content is hidden. Can reveal sensitive information indirectly. Violates Confidentiality.</li>
+                 </ul>
+                 <p>Passive attacks are difficult to detect but easier to prevent (e.g., through encryption).</p>
+
+                 <h4>Active Attacks</h4>
+                 <p>Involve modification of the data stream or the creation of a false stream. These attacks directly harm systems or alter data.</p>
+                 <ul>
+                     <li><strong>Masquerade:</strong> One entity pretends to be another (e.g., logging in with stolen credentials).</li>
+                     <li><strong>Modification of Messages:</strong> Changing, deleting, or delaying parts of a legitimate message. Violates Integrity.</li>
+                     <li><strong>Replay:</strong> Capturing a data unit and retransmitting it later to produce an unauthorized effect (e.g., resending a login sequence).</li>
+                     <li><strong>Denial of Service (DoS):</strong> Preventing or inhibiting the normal use or management of communication facilities (e.g., flooding a server with requests). Violates Availability.</li>
+                 </ul>
+                 <p>Active attacks are harder to prevent completely but easier to detect.</p>
+            </div>
+
+             <div class="concept-block">
+                <h3>Security Mechanisms</h3>
+                <p>Methods or technologies used to detect, prevent, or recover from security attacks. Key types include:</p>
+                <ul>
+                    <li><strong>Encipherment (Encryption):</strong> Hiding data content to ensure confidentiality.</li>
+                    <li><strong>Access Control:</strong> Preventing unauthorized use of resources (e.g., passwords, firewalls).</li>
+                    <li><strong>Data Integrity:</strong> Ensuring data hasn't been altered (e.g., using checksums, hash functions).</li>
+                    <li><strong>Digital Signature:</strong> Providing authentication of the source and data integrity, often ensuring non-repudiation.</li>
+                    <li><strong>Traffic Padding:</strong> Inserting bogus data to confuse traffic analysis.</li>
+                    <li><strong>Routing Control:</strong> Selecting specific network routes to avoid insecure paths.</li>
+                    <li><strong>Notarization:</strong> Using a trusted third party to assure properties of data exchange (e.g., timestamping).</li>
+                 </ul>
+            </div>
+
+             <div class="concept-block">
+                <h3>Network Security Model</h3>
+                <p>A model describing secure network communication involves several key components:</p>
+                <ul>
+                     <li><strong>Sender & Receiver:</strong> The communicating parties.</li>
+                     <li><strong>Information Channel:</strong> The medium used for transmission (e.g., the Internet), potentially vulnerable to opponents.</li>
+                     <li><strong>Opponent (Attacker):</strong> Human or software attempting to compromise security.</li>
+                     <li><strong>Security Transformation:</strong> Encrypting the message and/or adding codes for verification before sending.</li>
+                     <li><strong>Secret Information (Key):</strong> Information shared securely (often via a Trusted Third Party) used in the security transformation (e.g., encryption key).</li>
+                     <li><strong>Trusted Third Party:</strong> An entity responsible for securely distributing secret information (keys) between sender and receiver.</li>
+                </ul>
+                <p>Four basic tasks in designing security services:</p>
+                <ol>
+                    <li>Design a suitable security algorithm (e.g., encryption).</li>
+                    <li>Generate the secret information (keys) needed.</li>
+                    <li>Develop methods for secure distribution and sharing of secret information.</li>
+                    <li>Specify a protocol for how the communicating parties use the algorithm and secret information.</li>
+                </ol>
+                 <p>Two main threat categories in the network access model:</p>
+                 <ul>
+                    <li><strong>Information Access Threats:</strong> Intercepting or modifying data illegitimately.</li>
+                    <li><strong>Service Threats:</strong> Exploiting flaws to inhibit legitimate use (e.g., viruses, worms).</li>
+                 </ul>
+             </div>
+
+            <div class="concept-block">
+                <h3>Security Trinity</h3>
+                <p>A fundamental approach to security based on three pillars:</p>
+                <ul>
+                    <li><strong>Prevention:</strong> Measures taken to stop attacks from succeeding (e.g., firewalls, access controls, encryption).</li>
+                    <li><strong>Detection:</strong> Measures taken to identify when an attack is occurring or has occurred (e.g., intrusion detection systems, log monitoring).</li>
+                    <li><strong>Response:</strong> Actions taken after an attack is detected to contain damage, eradicate the cause, recover, and learn from the incident (e.g., incident response plan).</li>
+                </ul>
+                <p>This trinity should underpin all security policies.</p>
+            </div>
+
+        </section>
+
+        <!-- Quiz Sections -->
+        <div id="fill" class="main-content">
+            <h2>Fill in the Blank Questions</h2>
+            <div id="fill-questions"></div>
+        </div>
+
+        <div id="tf" class="main-content">
+            <h2>True/False Questions</h2>
+            <div id="tf-questions"></div>
+        </div>
+
+        <div id="mc" class="main-content">
+            <h2>Multiple Choice Questions</h2>
+            <div id="mc-questions"></div>
+        </div>
+
+    </div> <!-- End Container -->
+
+    <script>
+        // --- START OF QUIZ DATA (UNIT 1) ---
+        const fillInTheBlank = [
+            { question: "The three core principles of the CIA Triad are Confidentiality, _______, and Availability.", options: ["Authentication", "Integrity", "Authorization", "Accuracy"], answer: "Integrity" },
+            { question: "Protecting data from unauthorized disclosure relates to the principle of _______.", options: ["Integrity", "Availability", "Confidentiality", "Non-repudiation"], answer: "Confidentiality" },
+            { question: "Ensuring that data can be accessed by authorized users when needed refers to _______.", options: ["Confidentiality", "Integrity", "Availability", "Authenticity"], answer: "Availability" },
+            { question: "An attack where the adversary observes traffic but does not modify it is called a _______ attack.", options: ["Active", "Passive", "Replay", "DoS"], answer: "Passive" },
+            { question: "Eavesdropping on message content is an example of a _______ attack.", options: ["Modification", "Denial of Service", "Passive", "Masquerade"], answer: "Passive" },
+            { question: "An attack that involves altering system resources or data streams is known as an _______ attack.", options: ["Observation", "Passive", "Active", "Analysis"], answer: "Active" },
+            { question: "Flooding a server with requests to make it unavailable is a form of _______ attack.", options: ["Masquerade", "Replay", "Denial of Service", "Eavesdropping"], answer: "Denial of Service" },
+            { question: "A security _______ is a process designed to detect, prevent, or recover from an attack.", options: ["Service", "Policy", "Mechanism", "Threat"], answer: "Mechanism" },
+            { question: "_______ is a security mechanism that hides data content using algorithms.", options: ["Access Control", "Encipherment", "Data Integrity", "Traffic Padding"], answer: "Encipherment" },
+            { question: "A _______ attack involves capturing data and retransmitting it later.", options: ["Replay", "Masquerade", "Modification", "Passive"], answer: "Replay" },
+             { question: "The _______ provides a systematic way to define security requirements, focusing on attacks, mechanisms, and services.", options: ["Network Security Model", "OSI Security Architecture", "CIA Triad", "Security Trinity"], answer: "OSI Security Architecture" },
+            { question: "The Security Trinity consists of Prevention, Detection, and _______.", options: ["Analysis", "Recovery", "Response", "Mitigation"], answer: "Response" }
+        ];
+
+        const trueOrFalse = [
+            { question: "Integrity ensures that data is protected from unauthorized disclosure.", answer: false }, // Confidentiality does
+            { question: "Availability ensures that data has not been tampered with.", answer: false }, // Integrity does
+            { question: "Passive attacks aim to alter system resources.", answer: false }, // Active attacks do
+            { question: "Traffic analysis is considered an active attack.", answer: false }, // It's passive
+            { question: "Denial of Service (DoS) primarily targets data confidentiality.", answer: false }, // Targets Availability
+            { question: "Security Mechanisms are the same as Security Services.", answer: false }, // Mechanisms implement Services
+            { question: "Encryption is a primary method for ensuring data integrity.", answer: false }, // Primarily for Confidentiality; Hashing/MACs are for Integrity
+            { question: "A replay attack involves modifying the content of messages.", answer: false }, // It involves retransmitting captured messages
+            { question: "The CIA Triad stands for Confidentiality, Integrity, and Authentication.", answer: false }, // Availability, not Authentication
+            { question: "ARPANET was the foundation for the modern internet.", answer: true },
+            { question: "Detecting passive attacks is generally easier than detecting active attacks.", answer: false }, // Passive are harder to detect
+             { question: "A Trusted Third Party is often used for key distribution in network security models.", answer: true }
+        ];
+
+        const multipleChoice = [
+            { question: "Which principle of the CIA Triad ensures that data is accurate and trustworthy?", options: ["Confidentiality", "Integrity", "Availability", "Authentication"], answer: "Integrity" },
+            { question: "Which of the following is a PASSIVE attack?", options: ["Denial of Service", "Replay", "Traffic Analysis", "Masquerade"], answer: "Traffic Analysis" },
+            { question: "Which of the following is an ACTIVE attack?", options: ["Release of Message Content", "Traffic Analysis", "Eavesdropping", "Modification of Messages"], answer: "Modification of Messages" },
+            { question: "What security mechanism is primarily used to achieve Confidentiality?", options: ["Digital Signature", "Access Control", "Encipherment", "Data Integrity Check"], answer: "Encipherment" },
+            { question: "Which security attack involves pretending to be another entity?", options: ["Replay", "Denial of Service", "Masquerade", "Traffic Analysis"], answer: "Masquerade" },
+            { question: "The Network Security Model typically includes Sender, Receiver, Information Channel, and potentially a...", options: ["Firewall", "Intrusion Detection System", "Trusted Third Party", "Virus Scanner"], answer: "Trusted Third Party" },
+            { question: "Preventing attacks from succeeding falls under which component of the Security Trinity?", options: ["Detection", "Response", "Prevention", "Analysis"], answer: "Prevention" },
+            { question: "Which security mechanism specifically counters Traffic Analysis?", options: ["Encipherment", "Digital Signature", "Traffic Padding", "Access Control"], answer: "Traffic Padding" },
+            { question: "What was a major security failing identified in the early ARPANET?", options: ["Lack of encryption standards", "No procedures for dial-up connections", "Excessive use of firewalls", "Over-reliance on digital signatures"], answer: "No procedures for dial-up connections" },
+            { question: "A mechanism used to verify sender identity and message integrity, often using asymmetric crypto, is called:", options: ["MAC", "Hash Function", "Digital Signature", "Access Control List"], answer: "Digital Signature" },
+             { question: "Which component of the CIA triad is most affected by a Distributed Denial of Service (DDoS) attack?", options: ["Confidentiality", "Integrity", "Availability", "Authentication"], answer: "Availability" },
+             { question: "Observing the frequency and length of encrypted messages between two parties is what type of attack?", options: ["Masquerade", "Traffic Analysis", "Modification", "Replay"], answer: "Traffic Analysis" }
+        ];
+        // --- END OF QUIZ DATA ---
+
+        // --- START OF SCRIPT LOGIC (PASTE FROM c1.html) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select main tabs and content sections
+            const mainTabButtons = document.querySelectorAll('.main-tabs .tab-button');
+            const mainTabContents = document.querySelectorAll('.main-content');
+
+            // Select quiz content containers
+            const fillContainer = document.getElementById('fill-questions');
+            const tfContainer = document.getElementById('tf-questions');
+            const mcContainer = document.getElementById('mc-questions');
+
+             // Select accordion elements
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+
+            // --- Main Tab Switching Logic ---
+            mainTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab'); // Get the ID of the target content
+
+                    // Deactivate all main buttons and content
+                    mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                    mainTabContents.forEach(content => content.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Activate the corresponding content section
+                    const targetContent = document.getElementById(tabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            // --- Accordion Logic (for Glossary) ---
+             accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Toggle active class on the header for styling (+) (-) sign
+                    this.classList.toggle('active');
+
+                    // Get the panel sibling
+                    const panel = this.nextElementSibling;
+
+                    // Toggle the max-height for smooth transition
+                    if (panel.style.maxHeight) {
+                        // If panel is open, close it
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px"; // Remove padding when closing
+                    } else {
+                         // If panel is closed, open it
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add some buffer
+                        panel.style.padding = "15px 20px"; // Add padding back when opening
+                    }
+
+                    // --- Optional: Close other accordions ---
+                    accordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            otherHeader.nextElementSibling.style.maxHeight = null;
+                            otherHeader.nextElementSibling.style.padding = "0 20px";
+                        }
+                    });
+                    // --- End Optional Close Others ---
+                });
+            });
+
+
+            // --- Function to handle option selection within a question ---
+            function handleOptionSelection(button, questionDiv) {
+                // Deselect siblings within the same question
+                const siblings = questionDiv.querySelectorAll('.option-button.selected');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                // Select clicked button
+                button.classList.add('selected');
+                 // Clear previous feedback when a new option is selected
+                const existingFeedback = questionDiv.querySelector('.feedback');
+                if (existingFeedback) {
+                    existingFeedback.remove();
+                }
+            }
+
+            // --- Function to create and append feedback ---
+            function showFeedback(questionDiv, isCorrect, correctAnswer) {
+                 // Remove existing feedback first
+                const existingFeedback = questionDiv.querySelector('.feedback');
+                if (existingFeedback) {
+                    existingFeedback.remove();
+                }
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                if (isCorrect) {
+                    feedback.classList.add('correct');
+                    feedback.textContent = 'Correct!';
+                } else {
+                    feedback.classList.add('incorrect');
+                     // For T/F, explicitly show the boolean value
+                     let displayAnswer = correctAnswer;
+                     if (typeof correctAnswer === 'boolean') {
+                         displayAnswer = correctAnswer ? 'True' : 'False';
+                     }
+                    feedback.textContent = `Incorrect. Correct answer: ${displayAnswer}`;
+                }
+                // Append feedback after the check button
+                const checkButton = questionDiv.querySelector('.check-answer');
+                 if (checkButton) {
+                    // Insert after the check button if it exists
+                    checkButton.parentNode.insertBefore(feedback, checkButton.nextSibling);
+                } else {
+                     // Otherwise, append to the end of the question div
+                     questionDiv.appendChild(feedback);
+                }
+            }
+
+            // --- Load Fill in the Blank Questions ---
+            function loadFillInTheBlankQuestions() {
+                fillContainer.innerHTML = ''; // Clear previous content
+                fillInTheBlank.forEach((q, index) => { // Added index for unique IDs if needed
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `fill-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    // Find the blank spot indicated by _______ and replace it for display
+                    questionText.innerHTML = q.question.replace('_______', '<span style="color: #007bff; font-weight:bold;">_______</span>');
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options';
+
+                    q.options.forEach(option => {
+                        const optionButton = document.createElement('button');
+                        optionButton.className = 'option-button';
+                        optionButton.textContent = option;
+                        optionButton.addEventListener('click', () => handleOptionSelection(optionButton, questionDiv));
+                        optionsDiv.appendChild(optionButton);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            showFeedback(questionDiv, selected.textContent === q.answer, q.answer);
+                        } else {
+                             // Optionally show feedback that an answer must be selected
+                             showFeedback(questionDiv, false, q.answer); // Or provide specific feedback
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    fillContainer.appendChild(questionDiv);
+                });
+            }
+
+
+            // --- Load True/False Questions ---
+            function loadTrueFalseQuestions() {
+                tfContainer.innerHTML = ''; // Clear previous content
+                trueOrFalse.forEach((q, index) => { // Added index
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `tf-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+
+                     const optionsDiv = document.createElement('div'); // Keep consistent structure
+                    optionsDiv.className = 'options';
+
+                    const trueButton = document.createElement('button');
+                    trueButton.className = 'option-button';
+                    trueButton.textContent = 'True';
+                    trueButton.addEventListener('click', () => handleOptionSelection(trueButton, questionDiv));
+                    optionsDiv.appendChild(trueButton);
+
+                    const falseButton = document.createElement('button');
+                    falseButton.className = 'option-button';
+                    falseButton.textContent = 'False';
+                    falseButton.addEventListener('click', () => handleOptionSelection(falseButton, questionDiv));
+                    optionsDiv.appendChild(falseButton);
+
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            // Check boolean answer correctly
+                            const isCorrect = (selected.textContent === 'True' && q.answer === true) || (selected.textContent === 'False' && q.answer === false);
+                            showFeedback(questionDiv, isCorrect, q.answer); // Pass boolean directly
+                        } else {
+                            showFeedback(questionDiv, false, q.answer); // Pass boolean directly
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    tfContainer.appendChild(questionDiv);
+                });
+            }
+
+            // --- Load Multiple Choice Questions ---
+            function loadMultipleChoiceQuestions() {
+                mcContainer.innerHTML = ''; // Clear previous content
+                multipleChoice.forEach((q, index) => { // Added index
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `mc-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options';
+
+                    // Shuffle options for variety (optional)
+                    // const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+                    q.options.forEach(option => { // Use original options or shuffledOptions
+                        const optionButton = document.createElement('button');
+                        optionButton.className = 'option-button';
+                        optionButton.textContent = option;
+                        optionButton.addEventListener('click', () => handleOptionSelection(optionButton, questionDiv));
+                        optionsDiv.appendChild(optionButton);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            showFeedback(questionDiv, selected.textContent === q.answer, q.answer);
+                        } else {
+                             showFeedback(questionDiv, false, q.answer);
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    mcContainer.appendChild(questionDiv);
+                });
+            }
+
+            // --- Initial Load ---
+            // Load all quiz questions initially so they are ready when tabs are clicked
+            loadFillInTheBlankQuestions();
+            loadTrueFalseQuestions();
+            loadMultipleChoiceQuestions();
+
+             // Activate the default tab's content on load
+             document.querySelector('.main-content.active').style.display = 'block';
+
+
+        }); // End DOMContentLoaded
+        // --- END OF SCRIPT LOGIC ---
+    </script>
+</body>
+</html>
