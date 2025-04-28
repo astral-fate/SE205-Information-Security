@@ -1,1 +1,306 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE205 Course Index - Information Security</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 25px 40px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3; /* Cairo Uni Blue */
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #007bff; /* Lighter Blue */
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em; /* Adjust font size for better fit */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 12px; /* Adjust padding */
+            text-align: left;
+            vertical-align: top; /* Align content to top */
+        }
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+            color: #495057;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+        tbody tr:hover {
+            background-color: #e2e6ea;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        /* Adjust column widths */
+        th:nth-child(1), td:nth-child(1) { width: 10%; } /* Module */
+        th:nth-child(2), td:nth-child(2) { width: 30%; } /* Main Topics */
+        th:nth-child(3), td:nth-child(3) { width: 45%; } /* Key Concepts */
+        th:nth-child(4), td:nth-child(4) { width: 15%; } /* Algorithms/Tools */
+
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        li {
+             margin-bottom: 5px;
+        }
+        strong { /* For grading percentages */
+            color: #28a745; /* Green */
+        }
+        .course-desc {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SE205: Information Security</h1>
+        <p class="course-desc">
+            An overview of information security principles, threats, cryptography, and secure system design.
+        </p>
+
+        <h2>Course Syllabus</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Unit</th>
+                    <th>Main Topics</th>
+                    <th>Key Concepts</th>
+                    <th>Algorithms / Tools</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong><a href="chapters/c1.html">Unit 1</a></strong></td>
+                    <td>
+                        - Introduction to Information Security<br>
+                        - Security Threats & Attacks<br>
+                        - Security Services (CIA Triad)<br>
+                        - Security Mechanisms<br>
+                        - Network Security Models
+                    </td>
+                    <td>
+                        - Importance of Security (Big Data, Internet Growth)<br>
+                        - Historical Context (ARPANET)<br>
+                        - Information Security Definition<br>
+                        - Confidentiality, Integrity, Availability (CIA)<br>
+                        - Security Threats vs. Attacks<br>
+                        - Active vs. Passive Attacks (Masquerade, Replay, DoS, Eavesdropping, Traffic Analysis)<br>
+                        - Security Mechanisms (Encipherment, Access Control, Integrity, Digital Signature, Padding)<br>
+                        - OSI Security Architecture Overview<br>
+                        - General & Network Access Security Models<br>
+                        - Security Trinity (Prevention, Detection, Response)
+                    </td>
+                    <td>
+                        - CIA Triad<br>
+                        - Attack Classification<br>
+                        - Security Models
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong><a href="chapters/c2.html">Unit 2</a></strong></td>
+                    <td>
+                        - Cryptography Concepts<br>
+                        - Symmetric Key Ciphers<br>
+                        - Classical Encryption Techniques<br>
+                        - Modern Symmetric Block Ciphers
+                    </td>
+                    <td>
+                        - Cryptography Dimensions (Operations, Keys, Processing)<br>
+                        - Terminology (Plaintext, Ciphertext, Encrypt, Decrypt, Key, Cipher)<br>
+                        - Symmetric vs. Asymmetric Overview<br>
+                        - Cryptanalysis (Goals, Brute-Force)<br>
+                        - Substitution vs. Transposition<br>
+                        - Stream vs. Block Ciphers<br>
+                        - Classical Ciphers (Caesar, Monoalphabetic, Polyalphabetic, Playfair, Hill, Rail Fence)<br>
+                        - Simple Modern Ciphers (XOR)<br>
+                        - DES (Structure, Features, Weaknesses)<br>
+                        - SDES (Simplified DES for learning)<br>
+                        - 3DES (Structure, Keying Options)<br>
+                        - AES (Structure, Key Sizes, Rounds, Operations: SubBytes, ShiftRows, MixColumns, AddRoundKey)
+                    </td>
+                    <td>
+                        - Caesar Cipher<br>
+                        - Playfair Cipher<br>
+                        - Hill Cipher<br>
+                        - Rail Fence Cipher<br>
+                        - XOR Cipher<br>
+                        - DES / SDES<br>
+                        - 3DES<br>
+                        - AES
+                    </td>
+                </tr>
+                 <tr>
+                    <td><strong><a href="chapters/c3.html">Unit 3</a></strong></td>
+                    <td>
+                        - Asymmetric Key Cryptography<br>
+                        - Public Key Principles<br>
+                        - RSA Algorithm<br>
+                        - Diffie-Hellman Key Exchange<br>
+                        - Other Asymmetric Systems
+                    </td>
+                    <td>
+                        - Public/Private Key Pairs<br>
+                        - Encryption/Decryption Process<br>
+                        - Authentication with Asymmetric Keys<br>
+                        - Secrecy & Authentication Combined<br>
+                        - Applications (Encryption, Digital Signatures, Key Exchange)<br>
+                        - Requirements for Public Key Crypto<br>
+                        - Cryptanalysis (Brute-force, Factoring)<br>
+                        - Symmetric vs. Asymmetric (Comparison: Speed, Keys, Management, Use Cases)<br>
+                        - Hybrid Approach (e.g., TLS/SSL, PGP)<br>
+                        - RSA Algorithm Steps (Key Gen, Encrypt, Decrypt)<br>
+                        - Euler Totient Function<br>
+                        - Diffie-Hellman Steps (Setup, Key Calculation)<br>
+                        - Primitive Roots, Modulo Arithmetic<br>
+                        - ElGamal, ECC (Concepts)
+                    </td>
+                    <td>
+                        - RSA<br>
+                        - Diffie-Hellman<br>
+                        - ElGamal<br>
+                        - ECC
+                    </td>
+                </tr>
+                 <tr>
+                    <td><strong><a href="chapters/c4.html">Unit 4</a></strong></td>
+                    <td>
+                        - Message Authentication<br>
+                        - Hash Functions<br>
+                        - MAC Algorithms<br>
+                        - Digital Signatures<br>
+                        - SHA Algorithms<br>
+                        - Blockchain Hashing
+                    </td>
+                    <td>
+                        - Need for Authentication (Integrity, Sender ID, Replay Prevention)<br>
+                        - Authentication Functions Overview<br>
+                        - Hash Function Definition & Purpose<br>
+                        - Properties (One-way, Collision Resistance)<br>
+                        - Preimage vs. Collision<br>
+                        - Hash Applications (Integrity Check, Passwords, MACs, Signatures)<br>
+                        - Message Authentication Code (MAC) Process<br>
+                        - Keyed Hash Function<br>
+                        - HMAC vs. CMAC (Concept)<br>
+                        - Digital Signature Process (Hashing + Asymmetric Encryption)<br>
+                        - Simple Hash Functions (XOR-based)<br>
+                        - Security Requirements for Hash Functions<br>
+                        - Attacks (Brute-Force, Cryptanalysis, Birthday Attack)<br>
+                        - Secure Hash Structure (Merkle–Damgård)<br>
+                        - SHA Family (SHA-1, SHA-2 variants, SHA-3 Keccak/Sponge Construction)<br>
+                        - Blockchain Basics (Ledger, Blocks, Chaining, Hashes, Immutability)<br>
+                        - Block Structure (Header, Body, Merkle Root, Nonce)<br>
+                        - Proof-of-Work vs. Proof-of-Stake
+                    </td>
+                    <td>
+                        - MAC (HMAC, CMAC)<br>
+                        - Digital Signatures<br>
+                        - SHA-1<br>
+                        - SHA-2 (256, 512)<br>
+                        - SHA-3<br>
+                        - Merkle Trees<br>
+                        - PoW / PoS
+                    </td>
+                </tr>
+                 <tr>
+                    <td><strong><a href="chapters/c5.html">Unit 5</a></strong></td>
+                    <td>
+                        - Secure Software Design (SSDLC)<br>
+                        - Web Application Security<br>
+                        - Firewalls
+                    </td>
+                    <td>
+                        - Secure Software Development Life Cycle (SSDLC) vs. SDLC<br>
+                        - Importance of Early Security Integration<br>
+                        - Key Principles (Security by Design, Monitoring, Risk Assessment, Training, Collaboration)<br>
+                        - 7 Secure Design Principles (SaC, Secure Defaults, Least Privilege, SoD, Minimize Attack Surface, Complete Mediation, Fail Securely)<br>
+                        - Best Practices for Secure Development<br>
+                        - Web Security Principles (AuthN, Confidentiality, Integrity, Availability)<br>
+                        - Common Web Threats (SQL Injection, Cross-Site Scripting - XSS, Broken Authentication)<br>
+                        - Firewall Purpose & Function<br>
+                        - Firewall Types (Packet Filtering, Stateful, Proxy, NGFW)<br>
+                        - Web Application Firewall (WAF) - Purpose, How it works (Reverse Proxy), Relation to SQLi/XSS protection.
+                    </td>
+                    <td>
+                        - SSDLC Methodologies<br>
+                        - OWASP Top 10 (Implied)<br>
+                        - Firewalls (Various Types)<br>
+                        - WAF
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Course Objectives</h2>
+        <ul>
+            <li>Explain the objectives of information security (Confidentiality, Integrity, Availability - CIA Triad).</li>
+            <li>Understand basic categories of threats and attacks (passive, active).</li>
+            <li>Understand various cryptographic algorithms (Symmetric: DES, AES; Asymmetric: RSA, Diffie-Hellman; Hashing: SHA).</li>
+            <li>Describe public-key cryptosystems and their fundamental ideas.</li>
+            <li>Describe secure software design principles and programming techniques (SSDLC).</li>
+            <li>Discuss Web security concepts and common threats (SQLi, XSS).</li>
+            <li>Understand the role and types of Firewalls and WAFs.</li>
+            <li>Understand Intrusions and intrusion detection concepts (Covered implicitly, expanded in potential future units).</li>
+             <li>(Future Goal) Design Intrusion Detection System IDS (python).</li>
+
+        </ul>
+
+         <h2>Grading</h2>
+         <p><em>(Assumed based on SE204 example, adjust if different)</em></p>
+        <ul>
+            <li><strong>60%</strong>: Attendance, Assignments, Quizzes, Midterm Exam</li>
+            <li><strong>40%</strong>: Final Exam</li>
+        </ul>
+
+        <h2>Assignments (Examples from Slides)</h2>
+        <ul>
+            <li>**Assignment 1 (Unit 2):** Write Python code to decrypt messages using the Caesar cipher.</li>
+            <li>**Assignment 2 (Unit 2):** Encrypt various plaintexts using Caesar, Monoalphabetic, Polyalphabetic, Playfair, Hill, and XOR ciphers; Find SDES keys.</li>
+            <li>**Assignment 3 (Unit 3):** Perform RSA encryption/decryption and Diffie-Hellman key exchange calculations.</li>
+            <li>**Assignment 4 (Unit 4/5):** Explain hash functions & integrity; How digital signatures work; SHA-1 insecurity; Principles of secure software design; Best practices for secure development.</li>
+            <!-- Add other assignments if applicable -->
+        </ul>
+    </div>
+</body>
+</html>
