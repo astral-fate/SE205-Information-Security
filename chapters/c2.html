@@ -230,14 +230,67 @@
             border-radius: 5px;
             margin-bottom: 25px;
              box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px; /* Slightly reduce margin between blocks */
         }
-         #concepts .concept-block h3 {
+         #concepts .concept-block h3.concept-header { /* Target h3 as header */
             margin-top: 0;
             color: #007bff;
             border-bottom: 1px dotted #ccc;
             padding-bottom: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 0; /* Remove bottom margin to connect with content */
+            cursor: pointer;
+            position: relative; /* For indicator */
+            transition: background-color 0.3s ease;
+            padding: 15px 20px 8px 20px; /* Add padding like accordion header */
+            background-color: #f8f9fa; /* Light background */
+            border-radius: 5px 5px 0 0; /* Rounded top corners */
+            border: 1px solid #e9ecef; /* Add border */
+            border-bottom: none; /* Remove bottom border initially */
         }
+        #concepts .concept-block h3.concept-header:hover {
+            background-color: #e9ecef;
+        }
+         /* Indicator (+/-) for Concepts */
+        #concepts .concept-block h3.concept-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+            transition: transform 0.2s ease-in-out;
+            font-size: 1.2em; /* Make indicator slightly larger */
+            line-height: 1; /* Adjust vertical alignment */
+        }
+
+        #concepts .concept-block h3.concept-header.active::after {
+            content: "\2212"; /* - sign */
+            transform: rotate(180deg);
+        }
+        #concepts .concept-block h3.concept-header.active {
+             background-color: #e7f1ff;
+             border-bottom: none; /* Keep bottom border removed when active */
+             border-radius: 5px 5px 0 0; /* Keep top corners rounded */
+        }
+
+         /* Style for the content div */
+         .concept-content {
+            padding: 0 20px; /* Start with 0 padding top/bottom */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+            border: 1px solid #e9ecef; /* Add border */
+            border-top: none; /* Remove top border */
+            border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+            margin-bottom: 25px; /* Add margin below the content block */
+         }
+         .concept-content > *:first-child {
+             margin-top: 15px; /* Add space at the top inside the content */
+         }
+          .concept-content > *:last-child {
+             margin-bottom: 15px; /* Add space at the bottom inside the content */
+         }
+
          .matrix-table {
              border-collapse: collapse;
              margin: 10px 0;
@@ -521,55 +574,60 @@
             <h2>Key Concepts & Examples from Unit 2</h2>
 
             <div class="concept-block">
-                <h3>Cryptography Fundamentals</h3>
-                <p>Cryptography is the study of secure communication techniques.</p>
-                <ul>
-                    <li><strong>Dimensions of Classification:</strong>
-                        <ol>
-                            <li>Type of Operations: Substitution (replace elements) or Transposition (rearrange elements).</li>
-                            <li>Number of Keys: Symmetric (one shared key) or Asymmetric (public/private key pair).</li>
-                            <li>Way Plaintext is Processed: Block Cipher (process fixed-size blocks) or Stream Cipher (process continuously).</li>
-                        </ol>
-                    </li>
-                    <li><strong>Basic Terms:</strong> Plaintext (original), Ciphertext (coded), Cipher (algorithm), Key (secret parameter), Encrypt (plaintext to ciphertext), Decrypt (ciphertext to plaintext).</li>
-                    <li><strong>Symmetric Model:</strong> Uses a single shared secret key <code>K</code>. Encryption: <code>Y = E(K, X)</code>. Decryption: <code>X = D(K, Y)</code>. Requires secure key distribution.</li>
-                </ul>
-            </div>
-
-             <div class="concept-block">
-                <h3>Cryptanalysis</h3>
-                <p>The study of breaking ciphers. Main approaches:</p>
-                <ul>
-                    <li><strong>Cryptanalytic Attack:</strong> Exploits algorithm characteristics, possibly using known plaintext/ciphertext pairs.</li>
-                    <li><strong>Brute-Force Attack:</strong> Tries every possible key. Feasibility depends on key length (key space size). Longer keys make this harder.</li>
-                </ul>
-            </div>
-
-             <div class="concept-block">
-                <h3>Classical Encryption Techniques (Character-Oriented)</h3>
-                <h4>1. Substitution Techniques</h4>
-                <p>Replace plaintext letters with other letters, numbers, or symbols.</p>
-
-                <h5>Caesar Cipher</h5>
-                <p>Shift each letter by a fixed amount (key <code>k</code>).</p>
-                <p class="formula">Encryption: C = (p + k) mod 26</p>
-                <p class="formula">Decryption: P = (C - k) mod 26</p>
-                <div class="example">
-                     <p><strong>Example:</strong> Encrypt "HELLO" with key k=10.</p>
-                     <p>Map letters to numbers (A=0, B=1,... Z=25): H=7, E=4, L=11, L=11, O=14.</p>
-                     <p>Apply formula:</p>
-                     <ul>
-                        <li>(7 + 10) mod 26 = 17 -> R</li>
-                        <li>(4 + 10) mod 26 = 14 -> O</li>
-                        <li>(11 + 10) mod 26 = 21 -> V</li>
-                        <li>(11 + 10) mod 26 = 21 -> V</li>
-                        <li>(14 + 10) mod 26 = 24 -> Y</li>
-                     </ul>
-                     <div class="solution"><strong>Ciphertext:</strong> ROVVY</div>
+                <h3 class="concept-header">Cryptography Fundamentals</h3>
+                <div class="concept-content">
+                    <p>Cryptography is the study of secure communication techniques.</p>
+                    <ul>
+                        <li><strong>Dimensions of Classification:</strong>
+                            <ol>
+                                <li>Type of Operations: Substitution (replace elements) or Transposition (rearrange elements).</li>
+                                <li>Number of Keys: Symmetric (one shared key) or Asymmetric (public/private key pair).</li>
+                                <li>Way Plaintext is Processed: Block Cipher (process fixed-size blocks) or Stream Cipher (process continuously).</li>
+                            </ol>
+                        </li>
+                        <li><strong>Basic Terms:</strong> Plaintext (original), Ciphertext (coded), Cipher (algorithm), Key (secret parameter), Encrypt (plaintext to ciphertext), Decrypt (ciphertext to plaintext).</li>
+                        <li><strong>Symmetric Model:</strong> Uses a single shared secret key <code>K</code>. Encryption: <code>Y = E(K, X)</code>. Decryption: <code>X = D(K, Y)</code>. Requires secure key distribution.</li>
+                    </ul>
                 </div>
-                <div class="example">
-                     <p><strong>Python Code (Caesar Encrypt):</strong></p>
-                     <pre>
+            </div>
+
+             <div class="concept-block">
+                <h3 class="concept-header">Cryptanalysis</h3>
+                 <div class="concept-content">
+                    <p>The study of breaking ciphers. Main approaches:</p>
+                    <ul>
+                        <li><strong>Cryptanalytic Attack:</strong> Exploits algorithm characteristics, possibly using known plaintext/ciphertext pairs.</li>
+                        <li><strong>Brute-Force Attack:</strong> Tries every possible key. Feasibility depends on key length (key space size). Longer keys make this harder.</li>
+                    </ul>
+                 </div>
+            </div>
+
+             <div class="concept-block">
+                <h3 class="concept-header">Classical Encryption Techniques (Character-Oriented)</h3>
+                 <div class="concept-content">
+                    <h4>1. Substitution Techniques</h4>
+                    <p>Replace plaintext letters with other letters, numbers, or symbols.</p>
+
+                    <h5>Caesar Cipher</h5>
+                    <p>Shift each letter by a fixed amount (key <code>k</code>).</p>
+                    <p class="formula">Encryption: C = (p + k) mod 26</p>
+                    <p class="formula">Decryption: P = (C - k) mod 26</p>
+                    <div class="example">
+                         <p><strong>Example:</strong> Encrypt "HELLO" with key k=10.</p>
+                         <p>Map letters to numbers (A=0, B=1,... Z=25): H=7, E=4, L=11, L=11, O=14.</p>
+                         <p>Apply formula:</p>
+                         <ul>
+                            <li>(7 + 10) mod 26 = 17 -> R</li>
+                            <li>(4 + 10) mod 26 = 14 -> O</li>
+                            <li>(11 + 10) mod 26 = 21 -> V</li>
+                            <li>(11 + 10) mod 26 = 21 -> V</li>
+                            <li>(14 + 10) mod 26 = 24 -> Y</li>
+                         </ul>
+                         <div class="solution"><strong>Ciphertext:</strong> ROVVY</div>
+                    </div>
+                    <div class="example">
+                         <p><strong>Python Code (Caesar Encrypt):</strong></p>
+                         <pre>
 #enter the word to encrypt
 text = "hello world"
 #define the shift
@@ -597,244 +655,249 @@ print ('encrypted text :', encrypted)
                     </pre>
                  </div>
 
-                <h5>Monoalphabetic Cipher</h5>
-                <p>Each plaintext letter maps to a unique, fixed ciphertext letter (e.g., A->J, B->I, C->B...). Uses a fixed substitution alphabet (26! possible keys).</p>
-                <div class="example">
-                    <p><strong>Example:</strong> Plaintext "CRYPTOGRAPHY", Substitution: A->J, B->I, C->B, ..., R->S, Y->E, etc.</p>
-                    <p>(Using the specific table from slide 22: C->B, R->S, Y->E, P->U, T->W, O->A, G->C, R->S, A->J, P->U, H->N, Y->E)</p>
-                    <div class="solution"><strong>Ciphertext (using slide 22 table):</strong> BSEZ WUC SJZN E</div>
-                    <p><em>Note: The example calculation differs slightly from the slide's result, double-checking the specific substitutions is needed for exact match. The slide result was BSEZWUCSJZNE. Let's re-check: C->B, R->S, Y->E, P->U, T->W, O->A, G->C, R->S, A->J, P->U, H->N, Y->E. This still seems different. Let's use the slide's result as the intended example.</em></p>
-                     <div class="solution"><strong>Ciphertext (as per slide 22):</strong> BSEZWUCSJZNE</div>
-                     <p>Vulnerable to frequency analysis.</p>
-                </div>
+                    <h5>Monoalphabetic Cipher</h5>
+                    <p>Each plaintext letter maps to a unique, fixed ciphertext letter (e.g., A->J, B->I, C->B...). Uses a fixed substitution alphabet (26! possible keys).</p>
+                    <div class="example">
+                        <p><strong>Example:</strong> Plaintext "CRYPTOGRAPHY", Substitution: A->J, B->I, C->B, ..., R->S, Y->E, etc.</p>
+                        <p>(Using the specific table from slide 22: C->B, R->S, Y->E, P->U, T->W, O->A, G->C, R->S, A->J, P->U, H->N, Y->E)</p>
+                        <div class="solution"><strong>Ciphertext (using slide 22 table):</strong> BSEZ WUC SJZN E</div>
+                        <p><em>Note: The example calculation differs slightly from the slide's result, double-checking the specific substitutions is needed for exact match. The slide result was BSEZWUCSJZNE. Let's re-check: C->B, R->S, Y->E, P->U, T->W, O->A, G->C, R->S, A->J, P->U, H->N, Y->E. This still seems different. Let's use the slide's result as the intended example.</em></p>
+                         <div class="solution"><strong>Ciphertext (as per slide 22):</strong> BSEZWUCSJZNE</div>
+                         <p>Vulnerable to frequency analysis.</p>
+                    </div>
 
-                 <h5>Polyalphabetic Cipher</h5>
-                 <p>Uses multiple substitution alphabets, often determined by a keyword. Each occurrence of a character can map to a different character.</p>
-                 <div class="example">
-                     <p><strong>Example:</strong> Plaintext "SECURITY", Key: Shift 1st letter by 3, 2nd by 5, 3rd by 7 (repeating pattern).</p>
-                     <p>Map letters to numbers (A=0..Z=25): S=18, E=4, C=2, U=20, R=17, I=8, T=19, Y=24</p>
-                     <p>Apply shifts (3, 5, 7, 3, 5, 7, 3, 5):</p>
-                     <ul>
-                         <li>S (18) + 3 = 21 -> V</li>
-                         <li>E (4) + 5 = 9 -> J</li>
-                         <li>C (2) + 7 = 9 -> J</li>
-                         <li>U (20) + 3 = 23 -> X</li>
-                         <li>R (17) + 5 = 22 -> W</li>
-                         <li>I (8) + 7 = 15 -> P</li>
-                         <li>T (19) + 3 = 22 -> W</li>
-                         <li>Y (24) + 5 = 29 mod 26 = 3 -> D</li>
-                     </ul>
-                     <div class="solution"><strong>Ciphertext:</strong> VJJXWPWD</div>
-                 </div>
+                     <h5>Polyalphabetic Cipher</h5>
+                     <p>Uses multiple substitution alphabets, often determined by a keyword. Each occurrence of a character can map to a different character.</p>
+                     <div class="example">
+                         <p><strong>Example:</strong> Plaintext "SECURITY", Key: Shift 1st letter by 3, 2nd by 5, 3rd by 7 (repeating pattern).</p>
+                         <p>Map letters to numbers (A=0..Z=25): S=18, E=4, C=2, U=20, R=17, I=8, T=19, Y=24</p>
+                         <p>Apply shifts (3, 5, 7, 3, 5, 7, 3, 5):</p>
+                         <ul>
+                             <li>S (18) + 3 = 21 -> V</li>
+                             <li>E (4) + 5 = 9 -> J</li>
+                             <li>C (2) + 7 = 9 -> J</li>
+                             <li>U (20) + 3 = 23 -> X</li>
+                             <li>R (17) + 5 = 22 -> W</li>
+                             <li>I (8) + 7 = 15 -> P</li>
+                             <li>T (19) + 3 = 22 -> W</li>
+                             <li>Y (24) + 5 = 29 mod 26 = 3 -> D</li>
+                         </ul>
+                         <div class="solution"><strong>Ciphertext:</strong> VJJXWPWD</div>
+                     </div>
 
-                 <h5>Playfair Cipher</h5>
-                 <p>Encrypts digraphs (pairs of letters) using a 5x5 grid based on a keyword (I/J often share a cell).</p>
-                 <div class="example">
-                     <p><strong>Example:</strong> Keyword "MONARCHY", Plaintext "BALLON".</p>
-                     <p>1. Create 5x5 Grid (Fill keyword letters first, omit duplicates, then fill remaining alphabet):</p>
-                     <table class="matrix-table">
-                         <tr><td>M</td><td>O</td><td>N</td><td>A</td><td>R</td></tr>
-                         <tr><td>C</td><td>H</td><td>Y</td><td>B</td><td>D</td></tr>
-                         <tr><td>E</td><td>F</td><td>G</td><td>I/J</td><td>K</td></tr>
-                         <tr><td>L</td><td>P</td><td>Q</td><td>S</td><td>T</td></tr>
-                         <tr><td>U</td><td>V</td><td>W</td><td>X</td><td>Z</td></tr>
-                     </table>
-                     <p>2. Prepare Plaintext: Split into digraphs. If double letter, insert filler (e.g., 'X'). If odd length, append filler. "BALLON" -> BA LX LO NX (Assuming X filler for LL, and for odd length if needed - here ON doesn't need it).</p>
-                     <p>3. Encrypt Digraphs using grid rules:</p>
-                     <ul>
-                         <li><strong>BA:</strong> Same row (Row 2). Replace with letter to the right (wrap around). B->D, A->R? <em>Re-checking slide example: slide used different rules/grid? Slide says BA->IB. Let's follow slide's rules based on output. Rule 1 (Same Column): Shift down. Rule 2 (Same Row): Shift right. Rule 3 (Rectangle): Use opposite corners on same row.</em></li>
-                         <li>BA -> IB (Rectangle rule: B(2,4), A(1,4). Corners are I(3,4), R(1,1)? No, I(3,4) and C(2,1)? Still doesn't match. Let's use slide result directly.) <strong>BA -> IB</strong> (Implies B and A are rectangle corners, replaced by I and B? Check grid: A(1,4), B(2,4). Same column! Shift down: A->S, B->D? Still no match. There might be an error in the slide example or a specific Playfair variant used.) <strong>Using slide's result: BA -> IB</strong></li>
-                         <li><strong>LX:</strong> Rectangle L(4,1), X(5,4). Corners are U(5,1), T(4,4)? Slide says: <strong>LX -> SU</strong> (Implies corners are S and U. Let's assume these are the rules.)</li>
-                          <li><strong>LO:</strong> Same row (Row 4). Shift right. L->P, O->? O is row 1. This pair isn't in same row. Rectangle L(4,1), O(1,2). Corners are M(1,1) P(4,2)? Slide says: <strong>LO -> PM</strong>.</li>
-                          <li><strong>ON:</strong> Rectangle O(1,2), N(1,3). Same row! Shift right. O->N, N->A. Slide says: <strong>ON -> NA</strong>. (This one matches the rule!)</li>
-                     </ul>
-                      <p><em>Conclusion: The Playfair example on the slide seems inconsistent with standard rules or uses a different grid/rule interpretation for some pairs. Following the slide's provided transformations:</em></p>
-                     <div class="solution"><strong>Ciphertext (based on slide transformations):</strong> IBSUPMNA</div>
-                 </div>
+                     <h5>Playfair Cipher</h5>
+                     <p>Encrypts digraphs (pairs of letters) using a 5x5 grid based on a keyword (I/J often share a cell).</p>
+                     <div class="example">
+                         <p><strong>Example:</strong> Keyword "MONARCHY", Plaintext "BALLON".</p>
+                         <p>1. Create 5x5 Grid (Fill keyword letters first, omit duplicates, then fill remaining alphabet):</p>
+                         <table class="matrix-table">
+                             <tr><td>M</td><td>O</td><td>N</td><td>A</td><td>R</td></tr>
+                             <tr><td>C</td><td>H</td><td>Y</td><td>B</td><td>D</td></tr>
+                             <tr><td>E</td><td>F</td><td>G</td><td>I/J</td><td>K</td></tr>
+                             <tr><td>L</td><td>P</td><td>Q</td><td>S</td><td>T</td></tr>
+                             <tr><td>U</td><td>V</td><td>W</td><td>X</td><td>Z</td></tr>
+                         </table>
+                         <p>2. Prepare Plaintext: Split into digraphs. If double letter, insert filler (e.g., 'X'). If odd length, append filler. "BALLON" -> BA LX LO NX (Assuming X filler for LL, and for odd length if needed - here ON doesn't need it).</p>
+                         <p>3. Encrypt Digraphs using grid rules:</p>
+                         <ul>
+                             <li><strong>BA:</strong> Same row (Row 2). Replace with letter to the right (wrap around). B->D, A->R? <em>Re-checking slide example: slide used different rules/grid? Slide says BA->IB. Let's follow slide's rules based on output. Rule 1 (Same Column): Shift down. Rule 2 (Same Row): Shift right. Rule 3 (Rectangle): Use opposite corners on same row.</em></li>
+                             <li>BA -> IB (Rectangle rule: B(2,4), A(1,4). Corners are I(3,4), R(1,1)? No, I(3,4) and C(2,1)? Still doesn't match. Let's use slide result directly.) <strong>BA -> IB</strong> (Implies B and A are rectangle corners, replaced by I and B? Check grid: A(1,4), B(2,4). Same column! Shift down: A->S, B->D? Still no match. There might be an error in the slide example or a specific Playfair variant used.) <strong>Using slide's result: BA -> IB</strong></li>
+                             <li><strong>LX:</strong> Rectangle L(4,1), X(5,4). Corners are U(5,1), T(4,4)? Slide says: <strong>LX -> SU</strong> (Implies corners are S and U. Let's assume these are the rules.)</li>
+                              <li><strong>LO:</strong> Same row (Row 4). Shift right. L->P, O->? O is row 1. This pair isn't in same row. Rectangle L(4,1), O(1,2). Corners are M(1,1) P(4,2)? Slide says: <strong>LO -> PM</strong>.</li>
+                              <li><strong>ON:</strong> Rectangle O(1,2), N(1,3). Same row! Shift right. O->N, N->A. Slide says: <strong>ON -> NA</strong>. (This one matches the rule!)</li>
+                         </ul>
+                          <p><em>Conclusion: The Playfair example on the slide seems inconsistent with standard rules or uses a different grid/rule interpretation for some pairs. Following the slide's provided transformations:</em></p>
+                         <div class="solution"><strong>Ciphertext (based on slide transformations):</strong> IBSUPMNA</div>
+                     </div>
 
-                 <h5>Hill Cipher</h5>
-                 <p>Uses matrix multiplication for encryption. Key is an invertible matrix.</p>
-                <p class="formula">Encryption: C = P * K mod 26</p>
-                 <p>Decryption: P = C * K<sup>-1</sup> mod 26</p>
-                 <div class="example">
-                     <p><strong>Example:</strong> Plaintext "HATS", Key K = [[3, 3], [2, 5]].</p>
-                     <p>Map letters: H=7, A=0, T=19, S=18.</p>
-                     <p>Process digraphs: HA = [7, 0], TS = [19, 18].</p>
-                     <p>Encrypt HA:</p>
-                     <code>[7, 0] * [[3, 3], [2, 5]] mod 26</code><br/>
-                     <code>= [(7*3 + 0*2), (7*3 + 0*5)] mod 26</code><br/>
-                     <code>= [21, 21] mod 26</code><br/>
-                     <code>= [21, 21] -> VV (V=21)</code>
-                     <p><em>Correction: Slide shows HA -> VO. Let's recheck slide calculation:</em></p>
-                     <p>HA: [7 0] * K = [(7*3 + 0*2) (7*3 + 0*5)] mod 26 = [21 21] mod 26 -> VV.</p>
-                     <p>TS: [19 18] * K = [(19*3 + 18*2) (19*3 + 18*5)] mod 26 = [ (57+36) (57+90) ] mod 26 = [93 147] mod 26.</p>
-                     <p>93 mod 26 = 15 (P)</p>
-                     <p>147 mod 26 = 17 (R)</p>
-                     <p>Result: VVPR. Slide shows VOHY. Let's check slide's calculation steps.</p>
-                     <p>Slide HA calc: [(7*3 + 0*3) (7*2 + 0*5)] mod 26 = [21 14] mod 26 -> VO. <em>Ah, the matrix multiplication order/setup in the slide seems different (applying key columns?). Or maybe P is represented as column vector? Let's assume slide uses P as column vector [P1 P2]^T, so C = K * P.</em></p>
-                     <p>HA (H=7, A=0): K * [7 0]^T = [[3, 3], [2, 5]] * [7 0]^T = [ (3*7+3*0) (2*7+5*0) ]^T mod 26 = [21 14]^T mod 26 -> VO (Matches slide)</p>
-                     <p>TS (T=19, S=18): K * [19 18]^T = [[3, 3], [2, 5]] * [19 18]^T = [ (3*19+3*18) (2*19+5*18) ]^T mod 26 = [ (57+54) (38+90) ]^T mod 26 = [111 128]^T mod 26.</p>
-                     <p>111 mod 26 = 7 (H)</p>
-                     <p>128 mod 26 = 24 (Y)</p>
-                      <p>Result: HY (Matches slide calculation for TS)</p>
-                     <div class="solution"><strong>Ciphertext (following slide's matrix multiplication method):</strong> VOHY</div>
-                 </div>
+                     <h5>Hill Cipher</h5>
+                     <p>Uses matrix multiplication for encryption. Key is an invertible matrix.</p>
+                    <p class="formula">Encryption: C = P * K mod 26</p>
+                     <p>Decryption: P = C * K<sup>-1</sup> mod 26</p>
+                     <div class="example">
+                         <p><strong>Example:</strong> Plaintext "HATS", Key K = [[3, 3], [2, 5]].</p>
+                         <p>Map letters: H=7, A=0, T=19, S=18.</p>
+                         <p>Process digraphs: HA = [7, 0], TS = [19, 18].</p>
+                         <p>Encrypt HA:</p>
+                         <code>[7, 0] * [[3, 3], [2, 5]] mod 26</code><br/>
+                         <code>= [(7*3 + 0*2), (7*3 + 0*5)] mod 26</code><br/>
+                         <code>= [21, 21] mod 26</code><br/>
+                         <code>= [21, 21] -> VV (V=21)</code>
+                         <p><em>Correction: Slide shows HA -> VO. Let's recheck slide calculation:</em></p>
+                         <p>HA: [7 0] * K = [(7*3 + 0*2) (7*3 + 0*5)] mod 26 = [21 21] mod 26 -> VV.</p>
+                         <p>TS: [19 18] * K = [(19*3 + 18*2) (19*3 + 18*5)] mod 26 = [ (57+36) (57+90) ] mod 26 = [93 147] mod 26.</p>
+                         <p>93 mod 26 = 15 (P)</p>
+                         <p>147 mod 26 = 17 (R)</p>
+                         <p>Result: VVPR. Slide shows VOHY. Let's check slide's calculation steps.</p>
+                         <p>Slide HA calc: [(7*3 + 0*3) (7*2 + 0*5)] mod 26 = [21 14] mod 26 -> VO. <em>Ah, the matrix multiplication order/setup in the slide seems different (applying key columns?). Or maybe P is represented as column vector? Let's assume slide uses P as column vector [P1 P2]^T, so C = K * P.</em></p>
+                         <p>HA (H=7, A=0): K * [7 0]^T = [[3, 3], [2, 5]] * [7 0]^T = [ (3*7+3*0) (2*7+5*0) ]^T mod 26 = [21 14]^T mod 26 -> VO (Matches slide)</p>
+                         <p>TS (T=19, S=18): K * [19 18]^T = [[3, 3], [2, 5]] * [19 18]^T = [ (3*19+3*18) (2*19+5*18) ]^T mod 26 = [ (57+54) (38+90) ]^T mod 26 = [111 128]^T mod 26.</p>
+                         <p>111 mod 26 = 7 (H)</p>
+                         <p>128 mod 26 = 24 (Y)</p>
+                          <p>Result: HY (Matches slide calculation for TS)</p>
+                         <div class="solution"><strong>Ciphertext (following slide's matrix multiplication method):</strong> VOHY</div>
+                     </div>
 
-                <h4>2. Transposition Techniques</h4>
-                <p>Rearrange the letters of the plaintext without changing the letters themselves.</p>
+                    <h4>2. Transposition Techniques</h4>
+                    <p>Rearrange the letters of the plaintext without changing the letters themselves.</p>
 
-                 <h5>Rail Fence Cipher</h5>
-                 <p>Write plaintext diagonally on 'rails' and read off row by row.</p>
-                 <div class="example">
-                     <p><strong>Example:</strong> Plaintext "meet me after the party", Depth (rails) = 2.</p>
-                     <p>Write on rails:</p>
-                     <code>
+                     <h5>Rail Fence Cipher</h5>
+                     <p>Write plaintext diagonally on 'rails' and read off row by row.</p>
+                     <div class="example">
+                         <p><strong>Example:</strong> Plaintext "meet me after the party", Depth (rails) = 2.</p>
+                         <p>Write on rails:</p>
+                         <code>
 m . e . m . a . t . r . h . p . r . y <br/>
 . e . t . m . e . f . e . t . e . a . t
-                     </code>
-                     <p>Read Row 1: mematrhpry</p>
-                     <p>Read Row 2: etmefeteat</p>
-                     <p><em>Correction: Slide example shows different spacing/result. Let's follow slide.</em></p>
-                     <p>Slide method:</p>
-                     <code>
+                         </code>
+                         <p>Read Row 1: mematrhpry</p>
+                         <p>Read Row 2: etmefeteat</p>
+                         <p><em>Correction: Slide example shows different spacing/result. Let's follow slide.</em></p>
+                         <p>Slide method:</p>
+                         <code>
 m e m a t r h p r y <br/>
 e t e f e t e a t
-                     </code>
-                     <p>Read Row 1: mematrhpry</p>
-                     <p>Read Row 2: etefeteat</p>
-                     <div class="solution"><strong>Ciphertext:</strong> mematrhpryetefeteat</div>
+                         </code>
+                         <p>Read Row 1: mematrhpry</p>
+                         <p>Read Row 2: etefeteat</p>
+                         <div class="solution"><strong>Ciphertext:</strong> mematrhpryetefeteat</div>
+                     </div>
                  </div>
             </div>
 
             <div class="concept-block">
-                 <h3>Simple Modern Encryption (Bit-Oriented)</h3>
-                 <h4>XOR Cipher (Stream Cipher)</h4>
-                 <p>Combines plaintext bits with key bits using XOR.</p>
-                 <p class="formula">Cipher = Plaintext XOR Key</p>
-                 <p class="formula">Plaintext = Cipher XOR Key</p>
-                 <p>(XOR: 0^0=0, 0^1=1, 1^0=1, 1^1=0)</p>
-                 <div class="example">
-                     <p><strong>Example:</strong> Encrypt M = 1110101010, Key K = 1100110101.</p>
-                     <pre>
+                 <h3 class="concept-header">Simple Modern Encryption (Bit-Oriented)</h3>
+                 <div class="concept-content">
+                     <h4>XOR Cipher (Stream Cipher)</h4>
+                     <p>Combines plaintext bits with key bits using XOR.</p>
+                     <p class="formula">Cipher = Plaintext XOR Key</p>
+                     <p class="formula">Plaintext = Cipher XOR Key</p>
+                     <p>(XOR: 0^0=0, 0^1=1, 1^0=1, 1^1=0)</p>
+                     <div class="example">
+                         <p><strong>Example:</strong> Encrypt M = 1110101010, Key K = 1100110101.</p>
+                         <pre>
    1110101010 (Plaintext)
 XOR 1100110101 (Key)
 ------------------
    0010011111 (Ciphertext)
-                     </pre>
-                     <div class="solution"><strong>Ciphertext:</strong> 0010011111</div>
+                         </pre>
+                         <div class="solution"><strong>Ciphertext:</strong> 0010011111</div>
+                     </div>
                  </div>
             </div>
 
             <div class="concept-block">
-                <h3>Modern Round Ciphers (Block Ciphers)</h3>
-                <p>Operate on fixed-size blocks using multiple rounds of substitution and permutation.</p>
+                <h3 class="concept-header">Modern Round Ciphers (Block Ciphers)</h3>
+                <div class="concept-content">
+                    <p>Operate on fixed-size blocks using multiple rounds of substitution and permutation.</p>
 
-                <h4>DES (Data Encryption Standard)</h4>
-                 <ul>
-                    <li>Outdated symmetric key block cipher (retired 2005).</li>
-                    <li>Key: 64 bits (56 effective + 8 parity).</li>
-                    <li>Block Size: 64 bits.</li>
-                    <li>Rounds: 16 rounds of substitution and permutation.</li>
-                    <li>Structure: Initial Permutation, 16 rounds using subkeys generated from the main key, Final Permutation.</li>
-                    <li>Considered insecure due to short key length (vulnerable to brute-force).</li>
-                 </ul>
-
-                 <h4>SDES (Simplified DES) - Educational</h4>
-                  <ul>
-                     <li>Simplified version for teaching.</li>
-                     <li>Key: 10 bits.</li>
-                     <li>Block Size: 8 bits.</li>
-                     <li>Rounds: 2.</li>
-                     <li>Process involves: Initial Permutation (IP), Round function (f<sub>k</sub>) involving Expansion/Permutation (E/P), Key XOR, S-Boxes, P4 permutation, Switch (SW) halves, Round function (f<sub>k</sub>) with second subkey, Inverse Initial Permutation (IP<sup>-1</sup>).</li>
-                     <li><strong>Key Generation:</strong> P10 permute -> Split 5 bits + 5 bits -> LS-1 (Left Shift 1) on each half -> P8 permute (yields K1) -> LS-2 (Left Shift 2) on halves from after LS-1 -> P8 permute (yields K2).</li>
-                 </ul>
-                 <div class="example">
-                    <p><strong>SDES Example Walkthrough (Key Gen & Encrypt from slides 34-44):</strong></p>
-                    <p><strong>Given:</strong> Plaintext M=00101000, Key=1100011110, IP=[2 6 3 1 4 8 5 7], P10=[3 5 2 7 4 10 1 9 8 6], P8=[6 3 7 4 8 5 10 9], E/P=[4 1 2 3 2 3 4 1], S0=[[1,0,3,2],[3,2,1,0],[0,2,1,3],[3,1,3,2]], S1=[[0,1,2,3],[2,0,1,3],[3,0,1,0],[2,1,0,3]], P4=[2 4 3 1], IP<sup>-1</sup>=[4 1 3 5 7 2 8 6]</p>
-                    <p><strong>1. Key Generation:</strong></p>
-                    <ul>
-                        <li>Key = 11000 11110</li>
-                        <li>P10(Key) = 00110 01111 (Applying P10 indices: 3rd=0, 5th=0, 2nd=1, 7th=1, 4th=0 | 10th=0, 1st=1, 9th=1, 8th=1, 6th=1) -> 00110 01111</li>
-                        <li>Split: Left=00110, Right=01111</li>
-                        <li>LS-1: Left=01100, Right=11110</li>
-                        <li>Combine: 0110011110</li>
-                        <li>P8(Combined LS-1): K1 = 11100111 (Applying P8 indices: 6th=1, 3rd=1, 7th=1, 4th=0 | 8th=1, 5th=0, 10th=0, 9th=1) -> 1110 0111 <em>(Slide shows K1=11101001, slide 37 shows K1=11101001 - checking slide 37 P8 calculation: Key=1100011110 -> P10=0011001111 -> LS1=0110011110 -> P8(0110011110) = 11101001. Let's use this.)</em> <strong>K1 = 11101001</strong></li>
-                        <li>Halves after LS-1: Left=01100, Right=11110</li>
-                        <li>LS-2: Left=10001, Right=11011 (Shift by 2)</li>
-                        <li>Combine: 1000111011</li>
-                         <li>P8(Combined LS-2): K2 = 10100111 (Applying P8: 6th=1, 3rd=0, 7th=1, 4th=0 | 8th=0, 5th=1, 10th=1, 9th=1) -> 1010 0111. <strong>K2 = 10100111</strong> (Matches slide 37)</li>
-                    </ul>
-                     <p><strong>2. Encryption: M=00101000</strong></p>
-                    <ul>
-                        <li>IP(M): 00100010 (Applying IP indices: 2nd=0, 6th=0, 3rd=1, 1st=0 | 4th=0, 8th=0, 5th=1, 7th=0) -> 0010 0010</li>
-                        <li>Split: L0=0010, R0=0010</li>
-                        <li><strong>Round 1 (f<sub>K1</sub>):</strong> Use R0=0010, K1=11101001
-                            <ul>
-                                <li>E/P(R0) = 0100 0010 (Applying E/P indices: 4th=0, 1st=0, 2nd=0, 3rd=1 -> 0001; 2nd=0, 3rd=1, 4th=0, 1st=0 -> 0100) -> 0001 0100 <em>(Slide 40 shows E/P(0010)=00010100. Let's use slide result.)</em> <strong>E/P(R0) = 0001 0100</strong></li>
-                                <li>E/P(R0) XOR K1 = 00010100 XOR 11101001 = 11111101</li>
-                                <li>S-Box Input: Left=1111, Right=1101</li>
-                                <li>S0(1111): Row=(11)<sub>2</sub>=3, Col=(11)<sub>2</sub>=3. S0[3][3]=2=(10)<sub>2</sub></li>
-                                <li>S1(1101): Row=(11)<sub>2</sub>=3, Col=(10)<sub>2</sub>=2. S1[3][2]=0=(00)<sub>2</sub></li>
-                                <li>Combine S-Box output: 1000</li>
-                                <li>P4(1000) = 0001 (Applying P4 indices: 2nd=0, 4th=0, 3rd=0, 1st=1) -> 0001</li>
-                                <li>Result F = 0001</li>
-                             </ul>
-                         </li>
-                         <li>L1 = L0 XOR F = 0010 XOR 0001 = 0011</li>
-                         <li>R1 = R0 = 0010</li>
-                         <li><strong>Switch (SW):</strong> Input to Round 2 is L=0010, R=0011</li>
-                         <li><strong>Round 2 (f<sub>K2</sub>):</strong> Use R=0011, K2=10100111
-                            <ul>
-                                 <li>E/P(R) = 1001 0110 (Apply E/P to 0011: 4th=1, 1st=0, 2nd=0, 3rd=1 -> 1001; 2nd=0, 3rd=1, 4th=1, 1st=0 -> 0110) -> <strong>1001 0110</strong></li>
-                                 <li>E/P(R) XOR K2 = 10010110 XOR 10100111 = 00110001</li>
-                                 <li>S-Box Input: Left=0011, Right=0001</li>
-                                 <li>S0(0011): Row=(01)<sub>2</sub>=1, Col=(01)<sub>2</sub>=1. S0[1][1]=2=(10)<sub>2</sub></li>
-                                 <li>S1(0001): Row=(01)<sub>2</sub>=1, Col=(00)<sub>2</sub>=0. S1[1][0]=2=(10)<sub>2</sub> <em>(Check S1 Table: S1[1][0]=2. Correct)</em></li>
-                                 <li>Combine S-Box output: 1010</li>
-                                 <li>P4(1010) = 0011 (Applying P4: 2nd=0, 4th=0, 3rd=1, 1st=1) -> 0011</li>
-                                 <li>Result F = 0011</li>
-                             </ul>
-                         </li>
-                          <li>L2 = L(from SW) XOR F = 0010 XOR 0011 = 0001</li>
-                          <li>R2 = R(from SW) = 0011</li>
-                         <li>Combine: L2 R2 = 0001 0011</li>
-                         <li>IP<sup>-1</sup>(00010011) = 10001010 (Applying IP<sup>-1</sup>: 4th=1, 1st=0, 3rd=0, 5th=0 | 7th=1, 2nd=0, 8th=1, 6th=0) -> 1000 1010</li>
+                    <h4>DES (Data Encryption Standard)</h4>
+                     <ul>
+                        <li>Outdated symmetric key block cipher (retired 2005).</li>
+                        <li>Key: 64 bits (56 effective + 8 parity).</li>
+                        <li>Block Size: 64 bits.</li>
+                        <li>Rounds: 16 rounds of substitution and permutation.</li>
+                        <li>Structure: Initial Permutation, 16 rounds using subkeys generated from the main key, Final Permutation.</li>
+                        <li>Considered insecure due to short key length (vulnerable to brute-force).</li>
                      </ul>
-                     <div class="solution"><strong>Final Ciphertext:</strong> 10001010 <em>(Slide 44 shows 10001010. Matches!)</em></div>
-                 </div>
 
-                <h4>3DES (Triple DES)</h4>
-                 <ul>
-                    <li>Applies DES three times: Encrypt(K1) -> Decrypt(K2) -> Encrypt(K3).</li>
-                    <li>Modes:
+                     <h4>SDES (Simplified DES) - Educational</h4>
+                      <ul>
+                         <li>Simplified version for teaching.</li>
+                         <li>Key: 10 bits.</li>
+                         <li>Block Size: 8 bits.</li>
+                         <li>Rounds: 2.</li>
+                         <li>Process involves: Initial Permutation (IP), Round function (f<sub>k</sub>) involving Expansion/Permutation (E/P), Key XOR, S-Boxes, P4 permutation, Switch (SW) halves, Round function (f<sub>k</sub>) with second subkey, Inverse Initial Permutation (IP<sup>-1</sup>).</li>
+                         <li><strong>Key Generation:</strong> P10 permute -> Split 5 bits + 5 bits -> LS-1 (Left Shift 1) on each half -> P8 permute (yields K1) -> LS-2 (Left Shift 2) on halves from after LS-1 -> P8 permute (yields K2).</li>
+                     </ul>
+                     <div class="example">
+                        <p><strong>SDES Example Walkthrough (Key Gen & Encrypt from slides 34-44):</strong></p>
+                        <p><strong>Given:</strong> Plaintext M=00101000, Key=1100011110, IP=[2 6 3 1 4 8 5 7], P10=[3 5 2 7 4 10 1 9 8 6], P8=[6 3 7 4 8 5 10 9], E/P=[4 1 2 3 2 3 4 1], S0=[[1,0,3,2],[3,2,1,0],[0,2,1,3],[3,1,3,2]], S1=[[0,1,2,3],[2,0,1,3],[3,0,1,0],[2,1,0,3]], P4=[2 4 3 1], IP<sup>-1</sup>=[4 1 3 5 7 2 8 6]</p>
+                        <p><strong>1. Key Generation:</strong></p>
                         <ul>
-                            <li>3-Key 3DES: K1, K2, K3 are independent (Strongest, 168-bit effective key).</li>
-                            <li>2-Key 3DES: K1 = K3, K2 is different (112-bit effective key, still common).</li>
+                            <li>Key = 11000 11110</li>
+                            <li>P10(Key) = 00110 01111 (Applying P10 indices: 3rd=0, 5th=0, 2nd=1, 7th=1, 4th=0 | 10th=0, 1st=1, 9th=1, 8th=1, 6th=1) -> 00110 01111</li>
+                            <li>Split: Left=00110, Right=01111</li>
+                            <li>LS-1: Left=01100, Right=11110</li>
+                            <li>Combine: 0110011110</li>
+                            <li>P8(Combined LS-1): K1 = 11100111 (Applying P8 indices: 6th=1, 3rd=1, 7th=1, 4th=0 | 8th=1, 5th=0, 10th=0, 9th=1) -> 1110 0111 <em>(Slide shows K1=11101001, slide 37 shows K1=11101001 - checking slide 37 P8 calculation: Key=1100011110 -> P10=0011001111 -> LS1=0110011110 -> P8(0110011110) = 11101001. Let's use this.)</em> <strong>K1 = 11101001</strong></li>
+                            <li>Halves after LS-1: Left=01100, Right=11110</li>
+                            <li>LS-2: Left=10001, Right=11011 (Shift by 2)</li>
+                            <li>Combine: 1000111011</li>
+                             <li>P8(Combined LS-2): K2 = 10100111 (Applying P8: 6th=1, 3rd=0, 7th=1, 4th=0 | 8th=0, 5th=1, 10th=1, 9th=1) -> 1010 0111. <strong>K2 = 10100111</strong> (Matches slide 37)</li>
                         </ul>
-                    </li>
-                     <li>Provides backward compatibility with DES (if K1=K2=K3).</li>
-                     <li>Slower than AES but still used.</li>
-                 </ul>
+                         <p><strong>2. Encryption: M=00101000</strong></p>
+                        <ul>
+                            <li>IP(M): 00100010 (Applying IP indices: 2nd=0, 6th=0, 3rd=1, 1st=0 | 4th=0, 8th=0, 5th=1, 7th=0) -> 0010 0010</li>
+                            <li>Split: L0=0010, R0=0010</li>
+                            <li><strong>Round 1 (f<sub>K1</sub>):</strong> Use R0=0010, K1=11101001
+                                <ul>
+                                    <li>E/P(R0) = 0100 0010 (Applying E/P indices: 4th=0, 1st=0, 2nd=0, 3rd=1 -> 0001; 2nd=0, 3rd=1, 4th=0, 1st=0 -> 0100) -> 0001 0100 <em>(Slide 40 shows E/P(0010)=00010100. Let's use slide result.)</em> <strong>E/P(R0) = 0001 0100</strong></li>
+                                    <li>E/P(R0) XOR K1 = 00010100 XOR 11101001 = 11111101</li>
+                                    <li>S-Box Input: Left=1111, Right=1101</li>
+                                    <li>S0(1111): Row=(11)<sub>2</sub>=3, Col=(11)<sub>2</sub>=3. S0[3][3]=2=(10)<sub>2</sub></li>
+                                    <li>S1(1101): Row=(11)<sub>2</sub>=3, Col=(10)<sub>2</sub>=2. S1[3][2]=0=(00)<sub>2</sub></li>
+                                    <li>Combine S-Box output: 1000</li>
+                                    <li>P4(1000) = 0001 (Applying P4 indices: 2nd=0, 4th=0, 3rd=0, 1st=1) -> 0001</li>
+                                    <li>Result F = 0001</li>
+                                 </ul>
+                             </li>
+                             <li>L1 = L0 XOR F = 0010 XOR 0001 = 0011</li>
+                             <li>R1 = R0 = 0010</li>
+                             <li><strong>Switch (SW):</strong> Input to Round 2 is L=0010, R=0011</li>
+                             <li><strong>Round 2 (f<sub>K2</sub>):</strong> Use R=0011, K2=10100111
+                                <ul>
+                                     <li>E/P(R) = 1001 0110 (Apply E/P to 0011: 4th=1, 1st=0, 2nd=0, 3rd=1 -> 1001; 2nd=0, 3rd=1, 4th=1, 1st=0 -> 0110) -> <strong>1001 0110</strong></li>
+                                     <li>E/P(R) XOR K2 = 10010110 XOR 10100111 = 00110001</li>
+                                     <li>S-Box Input: Left=0011, Right=0001</li>
+                                     <li>S0(0011): Row=(01)<sub>2</sub>=1, Col=(01)<sub>2</sub>=1. S0[1][1]=2=(10)<sub>2</sub></li>
+                                     <li>S1(0001): Row=(01)<sub>2</sub>=1, Col=(00)<sub>2</sub>=0. S1[1][0]=2=(10)<sub>2</sub> <em>(Check S1 Table: S1[1][0]=2. Correct)</em></li>
+                                     <li>Combine S-Box output: 1010</li>
+                                     <li>P4(1010) = 0011 (Applying P4: 2nd=0, 4th=0, 3rd=1, 1st=1) -> 0011</li>
+                                     <li>Result F = 0011</li>
+                                 </ul>
+                             </li>
+                              <li>L2 = L(from SW) XOR F = 0010 XOR 0011 = 0001</li>
+                              <li>R2 = R(from SW) = 0011</li>
+                             <li>Combine: L2 R2 = 0001 0011</li>
+                             <li>IP<sup>-1</sup>(00010011) = 10001010 (Applying IP<sup>-1</sup>: 4th=1, 1st=0, 3rd=0, 5th=0 | 7th=1, 2nd=0, 8th=1, 6th=0) -> 1000 1010</li>
+                         </ul>
+                         <div class="solution"><strong>Final Ciphertext:</strong> 10001010 <em>(Slide 44 shows 10001010. Matches!)</em></div>
+                     </div>
 
-                <h4>AES (Advanced Encryption Standard)</h4>
-                <ul>
-                    <li>Current standard, widely used (SSL/TLS, VPNs, file encryption).</li>
-                     <li>Symmetric block cipher.</li>
-                    <li>Block Size: 128 bits.</li>
-                    <li>Key Sizes: 128, 192, or 256 bits.</li>
-                    <li>Rounds: 10 (for 128-bit key), 12 (for 192), 14 (for 256).</li>
-                    <li>Structure: Not a Feistel cipher like DES. Operates on a 4x4 byte matrix (State).</li>
-                     <li>Round Operations:
-                        <ol>
-                            <li><strong>SubBytes:</strong> Non-linear byte substitution using an S-box.</li>
-                            <li><strong>ShiftRows:</strong> Cyclically shifts bytes within rows of the State matrix.</li>
-                            <li><strong>MixColumns:</strong> Mixes bytes within columns using matrix multiplication in Galois Field GF(2<sup>8</sup>). (Omitted in final round).</li>
-                             <li><strong>AddRoundKey:</strong> XORs the State with a round key derived from the main key.</li>
-                        </ol>
-                     </li>
-                     <li>Initial AddRoundKey before first round.</li>
-                     <li>Considered secure and efficient.</li>
-                 </ul>
+                    <h4>3DES (Triple DES)</h4>
+                     <ul>
+                        <li>Applies DES three times: Encrypt(K1) -> Decrypt(K2) -> Encrypt(K3).</li>
+                        <li>Modes:
+                            <ul>
+                                <li>3-Key 3DES: K1, K2, K3 are independent (Strongest, 168-bit effective key).</li>
+                                <li>2-Key 3DES: K1 = K3, K2 is different (112-bit effective key, still common).</li>
+                            </ul>
+                        </li>
+                         <li>Provides backward compatibility with DES (if K1=K2=K3).</li>
+                         <li>Slower than AES but still used.</li>
+                     </ul>
+
+                    <h4>AES (Advanced Encryption Standard)</h4>
+                    <ul>
+                        <li>Current standard, widely used (SSL/TLS, VPNs, file encryption).</li>
+                         <li>Symmetric block cipher.</li>
+                        <li>Block Size: 128 bits.</li>
+                        <li>Key Sizes: 128, 192, or 256 bits.</li>
+                        <li>Rounds: 10 (for 128-bit key), 12 (for 192), 14 (for 256).</li>
+                        <li>Structure: Not a Feistel cipher like DES. Operates on a 4x4 byte matrix (State).</li>
+                         <li>Round Operations:
+                            <ol>
+                                <li><strong>SubBytes:</strong> Non-linear byte substitution using an S-box.</li>
+                                <li><strong>ShiftRows:</strong> Cyclically shifts bytes within rows of the State matrix.</li>
+                                <li><strong>MixColumns:</strong> Mixes bytes within columns using matrix multiplication in Galois Field GF(2<sup>8</sup>). (Omitted in final round).</li>
+                                 <li><strong>AddRoundKey:</strong> XORs the State with a round key derived from the main key.</li>
+                            </ol>
+                         </li>
+                         <li>Initial AddRoundKey before first round.</li>
+                         <li>Considered secure and efficient.</li>
+                     </ul>
+                 </div>
             </div>
 
         </section>
@@ -910,6 +973,7 @@ XOR 1100110101 (Key)
             // Select main tabs and content sections
             const mainTabButtons = document.querySelectorAll('.main-tabs .tab-button');
             const mainTabContents = document.querySelectorAll('.main-content');
+            const mainTabsDiv = document.querySelector('.main-tabs'); // Get the tabs div for scrolling
 
             // Select quiz content containers
             const fillContainer = document.getElementById('fill-questions');
@@ -918,16 +982,24 @@ XOR 1100110101 (Key)
 
              // Select accordion elements
             const accordionHeaders = document.querySelectorAll('.accordion-header');
+            // Select concept accordion elements
+            const conceptHeaders = document.querySelectorAll('#concepts .concept-header');
 
 
             // --- Main Tab Switching Logic ---
             mainTabButtons.forEach(button => {
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (event) => {
+                    // Optional: Prevent any potential default behavior if buttons were links
+                    // event.preventDefault(); 
+
                     const tabId = button.getAttribute('data-tab'); // Get the ID of the target content
 
-                    // Deactivate all main buttons and content
+                    // Deactivate all main buttons and content sections
                     mainTabButtons.forEach(btn => btn.classList.remove('active'));
-                    mainTabContents.forEach(content => content.classList.remove('active'));
+                    mainTabContents.forEach(content => {
+                         content.classList.remove('active');
+                         // CSS rule .main-content { display: none; } handles hiding
+                    });
 
                     // Activate the clicked button
                     button.classList.add('active');
@@ -936,6 +1008,14 @@ XOR 1100110101 (Key)
                     const targetContent = document.getElementById(tabId);
                     if (targetContent) {
                         targetContent.classList.add('active');
+                         // CSS rule .main-content.active { display: block; } handles showing
+
+                        // Scroll the main tabs div into view smoothly
+                        // This keeps the tabs visible after switching
+                        if (mainTabsDiv) {
+                             // Use 'nearest' to avoid unnecessary scrolling if already visible
+                            mainTabsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
                     }
                 });
             });
@@ -966,6 +1046,39 @@ XOR 1100110101 (Key)
                             otherHeader.classList.remove('active');
                             otherHeader.nextElementSibling.style.maxHeight = null;
                             otherHeader.nextElementSibling.style.padding = "0 20px";
+                        }
+                    });
+                    // --- End Optional Close Others ---
+                });
+            });
+
+            // --- Accordion Logic (for Concepts) ---
+             conceptHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Toggle active class on the header
+                    this.classList.toggle('active');
+
+                    // Get the content panel sibling
+                    const panel = this.nextElementSibling; // Assumes div.concept-content is immediately after h3
+
+                    // Toggle the max-height for smooth transition
+                    if (panel.style.maxHeight) {
+                        // If panel is open, close it
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px"; // Remove padding when closing
+                    } else {
+                         // If panel is closed, open it
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add buffer
+                        panel.style.padding = "15px 20px"; // Add padding back when opening
+                    }
+
+                    // --- Optional: Close other concept accordions ---
+                    conceptHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            const otherPanel = otherHeader.nextElementSibling;
+                            otherPanel.style.maxHeight = null;
+                            otherPanel.style.padding = "0 20px";
                         }
                     });
                     // --- End Optional Close Others ---
@@ -1162,8 +1275,9 @@ XOR 1100110101 (Key)
             loadTrueFalseQuestions();
             loadMultipleChoiceQuestions();
 
-             // Activate the default tab's content on load
-             document.querySelector('.main-content.active').style.display = 'block';
+             // Activate the default tab's content on load - CSS handles the display via .active class
+             // The line below is removed as CSS should handle the display based on the 'active' class.
+             // document.querySelector('.main-content.active').style.display = 'block';
 
 
         }); // End DOMContentLoaded
