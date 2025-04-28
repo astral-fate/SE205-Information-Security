@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE205 - Unit 5: Secure Computing: Software Design, Web Security & Firewalls</title>
+     <style>
+        /* Paste the CSS from the SE205 unit1/2/3/4.html example here */
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3, h4 { /* Added h4 */
+            color: #0056b3; /* Cairo University Blue */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #007bff; /* Lighter Blue */
+        }
+        h4 { /* Style for sub-sections within concepts */
+             margin-top: 20px;
+             margin-bottom: 10px;
+             color: #17a2b8; /* Info Blue */
+        }
+
+         ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+         li {
+             margin-bottom: 8px;
+         }
+         ol { /* Style ordered lists too */
+             padding-left: 25px;
+             margin-top: 10px;
+         }
+        code, pre { /* Apply styling to pre for code blocks */
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.95em;
+            display: block; /* Make pre block-level */
+            overflow-x: auto; /* Add scroll for long code lines */
+            padding: 10px; /* More padding for pre */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #dee2e6;
+        }
+        strong { /* Use default strong for emphasis, specific class for keywords */
+             /*color: #dc3545; */ /* Red emphasis */
+        }
+        .keyword { /* Class for highlighting keywords */
+            font-weight: bold;
+            color: #dc3545; /* Red */
+        }
+         .formula { /* Specific style for formula display */
+            font-weight: bold;
+            color: #28a745; /* Green */
+            margin: 10px 0;
+            padding: 5px;
+            background-color: #f0fff0;
+            border-left: 3px solid #28a745;
+         }
+         .example {
+             margin-top: 15px;
+             padding-left: 15px;
+             border-left: 3px solid #17a2b8; /* Info Blue */
+             background-color: #f8f9fa;
+             padding: 15px;
+             border-radius: 4px;
+         }
+          .solution {
+             margin-top: 10px;
+             padding-left: 15px;
+             font-style: italic;
+             color: #555;
+         }
+         .solution code, .solution pre {
+            font-style: normal; /* Keep code normal style */
+            background-color: #e0e0e0; /* Slightly darker bg for solution code */
+         }
+        .diagram img { /* Style for embedded images */
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+         }
+         figcaption {
+             text-align: center;
+             font-style: italic;
+             color: #666;
+             font-size: 0.9em;
+             margin-bottom: 15px;
+         }
+
+        /* Main Tabs Styles */
+        .main-tabs {
+            display: flex;
+            justify-content: space-around; /* Or flex-start, center */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            margin-bottom: 25px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .main-tabs .tab-button {
+            padding: 12px 20px; /* Adjusted padding slightly */
+            border: none;
+            background: none;
+            color: #0056b3;
+            font-size: 0.95em; /* Slightly smaller font */
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: -2px; /* Overlap border */
+            border-bottom: 2px solid transparent;
+            text-align: center;
+        }
+
+        .main-tabs .tab-button.active {
+            background: #0056b3;
+            color: white;
+            border-bottom: 2px solid #0056b3;
+        }
+        .main-tabs .tab-button:hover:not(.active) {
+            background-color: #e9ecef;
+            border-bottom: 2px solid #adb5bd;
+        }
+
+        /* Content Sections */
+        .main-content {
+            display: none; /* Hide all main content sections by default */
+            animation: fadeIn 0.5s;
+        }
+
+        .main-content.active {
+            display: block; /* Show only the active one */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        /* --- Accordion Styles (for Glossary) --- */
+        .glossary-accordion {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow: hidden; /* Contain borders */
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid #dee2e6; /* Separator */
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            background-color: #f8f9fa;
+            color: #dc3545; /* Highlight Red for terms */
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            position: relative; /* For the indicator */
+        }
+
+        .accordion-header:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Indicator (+/-) */
+        .accordion-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .accordion-header.active::after {
+            content: "\2212"; /* - sign */
+            transform: rotate(180deg); /* Optional: animate the sign itself */
+        }
+        /* Optional: Slightly different style for active header */
+        .accordion-header.active {
+             background-color: #e7f1ff;
+        }
+
+
+        .accordion-panel {
+            padding: 0 20px; /* Start with 0 padding top/bottom */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+        }
+        .accordion-panel p, .accordion-panel ul { /* Apply margin to lists too */
+            margin: 15px 0; /* Add margin back when panel is open */
+            color: #333; /* Reset color for definition */
+        }
+        .accordion-panel pre { /* Style code blocks inside accordion */
+             margin: 15px 0;
+             background-color: #f1f1f1;
+        }
+
+        /* --- End Accordion Styles --- */
+
+        /* Concepts Section Styles */
+        #concepts .concept-block {
+            background-color: #ffffff; /* White background for concept blocks */
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+         #concepts .concept-block h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+
+        /* Quiz Styles (apply within #fill, #tf, #mc) */
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #ffffff; /* White background for questions */
+            position: relative; /* For feedback positioning */
+        }
+
+        .question p {
+            margin: 0 0 15px;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-button {
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            background: #f8f9fa; /* Light background for options */
+            color: #495057;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: left;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            width: 100%;
+        }
+        .option-button:hover {
+             background-color: #e9ecef;
+             border-color: #adb5bd;
+        }
+
+        .option-button.selected {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .check-answer {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            background: #28a745; /* Success Green */
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+        .check-answer:hover {
+             background-color: #218838;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SE205 - Unit 5: Secure Computing: Software Design, Web Security & Firewalls</h1>
+
+        <!-- Main Tab Buttons -->
+        <div class="main-tabs">
+            <button class="tab-button active" data-tab="glossary">Glossary</button>
+            <button class="tab-button" data-tab="concepts">Key Concepts & Examples</button>
+            <button class="tab-button" data-tab="fill">Fill in the Blank</button>
+            <button class="tab-button" data-tab="tf">True/False</button>
+            <button class="tab-button" data-tab="mc">Multiple Choice</button>
+        </div>
+
+        <!-- Glossary Section (Accordion) -->
+        <section id="glossary" class="main-content active">
+            <h2>Glossary of Terms</h2>
+            <div class="glossary-accordion">
+                 <div class="accordion-item">
+                    <button class="accordion-header">Attack Surface Area (ASA)</button>
+                    <div class="accordion-panel">
+                        <p>Represents all the points (entry points) where an unauthorized user (attacker) can try to enter data to or extract data from an environment or system. Minimizing ASA is a key secure design principle.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Broken Authentication</button>
+                    <div class="accordion-panel">
+                        <p>A web security vulnerability where authentication and session management functions are implemented incorrectly, allowing attackers to compromise passwords, keys, session tokens, or exploit other implementation flaws to assume other users' identities.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Brute Force Attack</button>
+                    <div class="accordion-panel">
+                        <p>A trial-and-error method used to obtain information such as a user password or PIN. In an authentication context, it involves systematically checking all possible passwords or keys until the correct one is found.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Complete Mediation</button>
+                    <div class="accordion-panel">
+                        <p>A secure design principle stating that every access request to any system resource must be fully authenticated and authorized every single time, without exception. No access decisions should rely on cached permissions.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Credential Stuffing</button>
+                    <div class="accordion-panel">
+                        <p>A type of cyberattack where stolen account credentials (usernames/passwords) typically obtained from a data breach are used to gain unauthorized access to user accounts through large-scale automated login requests directed against a web application.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Cross-Site Scripting (XSS)</button>
+                    <div class="accordion-panel">
+                        <p>A type of web security vulnerability that allows an attacker to inject malicious scripts (usually JavaScript) into content from otherwise trusted websites, which are then executed in the victim's browser. Can be used to steal session tokens, deface websites, or redirect users.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">DevSecOps</button>
+                    <div class="accordion-panel">
+                        <p>An extension of DevOps principles that integrates security practices within the DevOps process ("shifting security left"). Security as Code (SaC) is a key enabler.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Failing Securely</button>
+                    <div class="accordion-panel">
+                        <p>A secure design principle dictating that systems should default to a secure state when an error or failure occurs, rather than exposing vulnerabilities or sensitive information. Error messages should be generic and not leak internal details.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Firewall</button>
+                    <div class="accordion-panel">
+                        <p>A network security device (hardware or software) that monitors and filters incoming and outgoing network traffic based on predetermined security rules, establishing a barrier between a trusted internal network and untrusted external networks.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Least Privilege</button>
+                    <div class="accordion-panel">
+                        <p>A fundamental security principle requiring that users, programs, or processes are granted only the minimum levels of access – or permissions – necessary to perform their required functions.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Minimize Attack Surface Area</button>
+                    <div class="accordion-panel">
+                        <p>A secure design principle focused on reducing the number of potential entry points for attackers by limiting code, services, open ports, APIs, and features to only what is essential.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Next-Generation Firewall (NGFW)</button>
+                    <div class="accordion-panel">
+                        <p>An advanced type of firewall that goes beyond traditional packet filtering and stateful inspection by incorporating features like application awareness, intrusion prevention (IPS), and deep packet inspection (DPI).</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Packet-Filtering Firewall</button>
+                    <div class="accordion-panel">
+                        <p>The simplest type of firewall (First Generation). It inspects individual packets based on information in the network/transport layer headers (IP addresses, ports, protocols) and allows or blocks them based on static rules.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Proxy Firewall</button>
+                    <div class="accordion-panel">
+                        <p>Acts as an intermediary (gateway) between internal users and external servers (or vice versa). It inspects traffic at the application layer and can provide more granular control and caching. (Third Generation concept).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Reverse Proxy</button>
+                    <div class="accordion-panel">
+                        <p>A type of proxy server that sits in front of web servers and forwards client (e.g., web browser) requests to those web servers. Often used for load balancing, caching, SSL encryption/decryption, and security (as in WAFs).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Secure by Design</button>
+                    <div class="accordion-panel">
+                        <p>An approach to software development that seeks to design software from the beginning to be secure, embedding security measures early in the lifecycle rather than adding them later.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Secure Defaults</button>
+                    <div class="accordion-panel">
+                        <p>A secure design principle mandating that the default configuration of a system should be the most secure configuration possible, minimizing risk for users who do not change settings.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Security as Code (SaC)</button>
+                    <div class="accordion-panel">
+                        <p>The practice of codifying and automating security controls, policies, and processes within the software development lifecycle, often as part of a DevSecOps approach. Uses scripts, templates, and automated tools.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Separation of Duties (SoD)</button>
+                    <div class="accordion-panel">
+                        <p>A security principle that prevents any single individual or component from having excessive privileges that could lead to misuse or error. Involves dividing tasks and associated privileges among multiple users or systems.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Session Fixation</button>
+                    <div class="accordion-panel">
+                        <p>An attack technique that permits an attacker to hijack a valid user session. The attack explores a limitation in the way the web application manages the session ID, more specifically the vulnerable session ID.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Session Hijacking</button>
+                    <div class="accordion-panel">
+                        <p>An attack where an attacker takes over a valid user session to gain unauthorized access to a system or service. This often involves stealing or predicting a valid session token.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">SQL Injection (SQLi)</button>
+                    <div class="accordion-panel">
+                        <p>A code injection technique used to attack data-driven applications, in which malicious SQL statements are inserted into an entry field for execution (e.g., to dump database contents). Often occurs via user input fields.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">SSDLC (Secure Software Development Life Cycle)</button>
+                    <div class="accordion-panel">
+                        <p>A process that integrates security practices and considerations into each phase of the traditional software development lifecycle (planning, design, coding, testing, deployment, maintenance) to build more secure applications from the outset.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Stateful Inspection Firewall</button>
+                    <div class="accordion-panel">
+                        <p>A firewall technology (Second Generation) that monitors the state of active network connections (e.g., TCP streams) and uses this context to determine which network packets should be allowed through the firewall. More advanced than packet filtering.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Web Application Firewall (WAF)</button>
+                    <div class="accordion-panel">
+                        <p>A specific type of firewall that filters, monitors, and blocks HTTP/S traffic to and from a web application. It sits in front of web apps (often as a reverse proxy) and protects against application-layer attacks like XSS, SQL injection, and cookie poisoning.</p>
+                    </div>
+                </div>
+
+            </div> <!-- End glossary-accordion -->
+        </section>
+
+        <!-- Key Concepts & Examples Section -->
+        <section id="concepts" class="main-content">
+            <h2>Key Concepts & Examples from Unit 5</h2>
+
+             <div class="concept-block">
+                <h3>Secure Software Design & Programming</h3>
+                <h4>SSDLC (Secure Software Development Life Cycle)</h4>
+                <p>Ensures software is built with security considered from the beginning.</p>
+                <ul>
+                    <li>Integrates security into planning, designing, coding, testing, deploying, and maintaining phases.</li>
+                    <li>Aims to identify and fix issues early, reducing cyber risk.</li>
+                    <li>Creates safer, more trustworthy applications.</li>
+                </ul>
+                <div class="diagram">
+                     <img src="https://via.placeholder.com/700x350.png?text=SDLC+vs+SSDLC+Diagram+(Slide+4)" alt="SDLC vs SSDLC Comparison">
+                     <figcaption>Standard SDLC vs. Secure SDLC (SSDLC)</figcaption>
+                 </div>
+                <h4>Key Principles of Secure SDLC</h4>
+                 <ul>
+                     <li><span class="keyword">Security by Design:</span> Integrate security requirements early in planning/design.</li>
+                     <li><span class="keyword">Continuous Monitoring:</span> Ongoing security checks and issue resolution.</li>
+                     <li><span class="keyword">Risk Assessment:</span> Identify, prioritize, and mitigate security risks.</li>
+                     <li><span class="keyword">Education and Training:</span> Developers need comprehensive security training.</li>
+                     <li><span class="keyword">Collaboration:</span> Teamwork encourages shared security goals and knowledge sharing.</li>
+                 </ul>
+                 <h4>7 Principles of Secure Design</h4>
+                 <ol>
+                    <li><strong>Security as Code (SaC):</strong> Automate security practices (policy enforcement, vulnerability scanning, remediation) using scripts and templates within the development lifecycle (DevSecOps).</li>
+                    <li><strong>Secure Defaults:</strong> Configure systems to be secure by default (e.g., strong passwords required, unnecessary services off). Example: Modern WordPress vs older versions.</li>
+                    <li><strong>Least Privilege:</strong> Grant users and system components only the minimum permissions necessary to function. Use Role-Based Access Control (RBAC) and regular audits.</li>
+                     <li><strong>Separation of Duties (SoD):</strong> Divide critical tasks and privileges to prevent unilateral misuse. Example: Developer writes code, separate person/system deploys to production.</li>
+                     <li><strong>Minimize Attack Surface Area (ASA):</strong> Limit potential entry points by reducing non-essential code, services, ports, and API endpoints. Close unused ports, avoid overly generic APIs.</li>
+                     <li><strong>Complete Mediation:</strong> Authenticate and authorize *every* access request to *every* resource, every time. Example: Microservices validating user permissions on each API call, even after initial gateway authentication.</li>
+                     <li><strong>Failing Securely:</strong> Ensure systems default to a secure state upon failure. Avoid leaking sensitive information in error messages. Example: Generic "Authentication Failed" message instead of "Incorrect Password".</li>
+                 </ol>
+                 <h4>Best Practices for Secure Software Development (Summary from Slide 18)</h4>
+                 <ul>
+                    <li>Create a Secure Development Policy.</li>
+                    <li>Address Vulnerabilities Promptly.</li>
+                    <li>Remain Agile and Active (Adapt to new threats).</li>
+                    <li>Monitor and Respond to Threats.</li>
+                    <li>Use a Secure Software Framework.</li>
+                    <li>Have Secure Coding Guidelines/Standards.</li>
+                    <li>Protect Code Integrity (e.g., version control security).</li>
+                    <li>Conduct Security Awareness Training.</li>
+                    <li>Keep Software/Systems Updated (Patching).</li>
+                    <li>Run Code Reviews and Test Early/Often.</li>
+                 </ul>
+             </div>
+
+             <div class="concept-block">
+                 <h3>Web Application Security</h3>
+                 <h4>Principles (CIA applied to Web)</h4>
+                 <ul>
+                     <li><strong>Authentication:</strong> Verifying user identity.</li>
+                     <li><strong>Confidentiality:</strong> Protecting data from unauthorized access (e.g., using HTTPS).</li>
+                     <li><strong>Integrity:</strong> Ensuring data hasn't been tampered with.</li>
+                     <li><strong>Availability:</strong> Ensuring the application is accessible to authorized users.</li>
+                 </ul>
+                  <h4>Common Threats & Vulnerabilities</h4>
+                 <ul>
+                     <li><strong>SQL Injection (SQLi):</strong>
+                         <ul>
+                             <li>Injecting malicious SQL code via input fields to manipulate database queries.</li>
+                             <li>Can destroy database, steal data, bypass authentication.</li>
+                             <li>Prevention: Filter database inputs (input validation, parameterized queries/prepared statements), restrict database permissions, monitor queries.</li>
+                               <div class="diagram">
+                                   <img src="https://via.placeholder.com/700x400.png?text=SQL+Injection+Diagram+(Slide+22)" alt="SQL Injection Example Flow">
+                                   <figcaption>SQL Injection Attack Flow</figcaption>
+                               </div>
+                         </ul>
+                     </li>
+                     <li><strong>Cross-Site Scripting (XSS):</strong>
+                        <ul>
+                            <li>Injecting malicious client-side scripts (e.g., JavaScript) into web pages viewed by other users.</li>
+                            <li>Allows attacker to hijack user sessions, deface sites, steal credentials, redirect users.</li>
+                             <li>Typically exploits flaws where user input is not properly sanitized before being displayed.</li>
+                              <div class="diagram">
+                                  <img src="https://via.placeholder.com/700x400.png?text=XSS+Attack+Diagram+(Slide+24)" alt="XSS Attack Flow">
+                                  <figcaption>Cross-Site Scripting (XSS) Attack Flow</figcaption>
+                              </div>
+                        </ul>
+                     </li>
+                    <li><strong>Broken Authentication:</strong>
+                        <ul>
+                             <li>Flaws in identity/access control implementation allowing attackers to compromise accounts.</li>
+                             <li>Risk Factors: Predictable credentials, storing credentials insecurely, exposing session IDs (e.g., in URL), session IDs not expiring/invalidating on logout, sessions not rotated after login, sending credentials unencrypted.</li>
+                             <li>Attack Types: Brute Force, Credential Stuffing, Session Hijacking, Session Fixation.</li>
+                             <li>Prevention: Disallow weak passwords, enforce MFA, protect stored credentials (hashing/salting), secure session management (HTTPS only cookies, invalidate on logout, rotate IDs), follow Least Privilege.</li>
+                               <div class="diagram">
+                                   <img src="https://via.placeholder.com/700x300.png?text=Broken+Auth+Attack+Types+(Slide+27)" alt="Types of Broken Authentication Attacks">
+                                   <figcaption>Types of Broken Authentication Attacks</figcaption>
+                               </div>
+                                <div class="diagram">
+                                   <img src="https://via.placeholder.com/700x400.png?text=Broken+Auth+Prevention+Tips+(Slide+28)" alt="Tips to Prevent Broken Authentication">
+                                   <figcaption>Tips to Prevent Broken Authentication</figcaption>
+                               </div>
+                         </ul>
+                    </li>
+                 </ul>
+             </div>
+
+             <div class="concept-block">
+                 <h3>Firewalls</h3>
+                 <h4>Overview</h4>
+                 <ul>
+                     <li>Network security device (HW/SW) monitoring and controlling traffic based on rules.</li>
+                     <li>Establishes barrier between trusted (internal) and untrusted (external) networks.</li>
+                     <li>Inspects packets, allows/blocks based on criteria (IPs, ports, protocols).</li>
+                     <li>Protects against external threats (viruses, DoS) and internal threats (data exfiltration).</li>
+                 </ul>
+                  <div class="diagram">
+                     <img src="https://via.placeholder.com/700x400.png?text=Firewall+Placement+Diagram+(Slide+31)" alt="Firewall Placement Diagram">
+                     <figcaption>Typical Firewall Placement (WAN/LAN Barrier)</figcaption>
+                 </div>
+                 <h4>Types / Generations</h4>
+                  <ul>
+                     <li><strong>Packet-Filtering (Gen 1):</strong> Basic, checks headers based on static rules. No connection state awareness.</li>
+                     <li><strong>Stateful Inspection (Gen 2):</strong> Tracks connection state (TCP handshake). Allows return traffic for established connections.</li>
+                     <li><strong>Proxy Firewall (Application Gateway - Gen 3 concept):</strong> Acts as intermediary, inspects at application layer. Can be slow.</li>
+                     <li><strong>Next-Generation Firewall (NGFW - Gen 4):</strong> Adds application awareness, IPS, DPI, threat intelligence feeds. More advanced inspection.</li>
+                  </ul>
+                   <div class="diagram">
+                     <img src="https://via.placeholder.com/800x400.png?text=Firewall+Generations+Diagram+(Slide+33)" alt="Firewall Generations Comparison">
+                     <figcaption>Firewall Generations Overview</figcaption>
+                 </div>
+
+                 <h4>Web Application Firewall (WAF)</h4>
+                 <ul>
+                     <li>Specialized firewall protecting <span class="keyword">web applications</span> from application-layer attacks (XSS, SQLi, etc.).</li>
+                     <li>Filters, monitors, blocks malicious <span class="keyword">HTTP/S traffic</span>.</li>
+                     <li>Operates as a <span class="keyword">reverse proxy</span>, sitting in front of web servers.</li>
+                     <li>Uses policies (rulesets) to identify malicious traffic. Some use ML for automatic updates.</li>
+                     <li>Can also provide caching to improve performance.</li>
+                 </ul>
+             </div>
+
+
+        </section>
+
+        <!-- Quiz Sections -->
+        <div id="fill" class="main-content">
+            <h2>Fill in the Blank Questions</h2>
+            <div id="fill-questions"></div>
+        </div>
+
+        <div id="tf" class="main-content">
+            <h2>True/False Questions</h2>
+            <div id="tf-questions"></div>
+        </div>
+
+        <div id="mc" class="main-content">
+            <h2>Multiple Choice Questions</h2>
+            <div id="mc-questions"></div>
+        </div>
+
+    </div> <!-- End Container -->
+
+     <script>
+        // --- START OF QUIZ DATA (UNIT 5) ---
+        const fillInTheBlank = [
+            { question: "The _______ integrates security practices into each phase of software development.", options: ["SDLC", "SSDLC", "DevOps", "Agile"], answer: "SSDLC" },
+            { question: "The principle of granting users only the necessary permissions is called _______ Privilege.", options: ["Maximum", "Separation", "Least", "Default"], answer: "Least" },
+            { question: "Minimizing potential entry points for attackers relates to reducing the _______ Surface Area.", options: ["Attack", "Risk", "Vulnerability", "Threat"], answer: "Attack" },
+            { question: "_______ involves injecting malicious SQL commands via web input fields.", options: ["XSS", "CSRF", "SQL Injection", "Broken Authentication"], answer: "SQL Injection" },
+            { question: "Injecting malicious client-side scripts into trusted websites describes _______.", options: ["SQL Injection", "Cross-Site Scripting", "Session Fixation", "Credential Stuffing"], answer: "Cross-Site Scripting" },
+            { question: "A _______ monitors and filters network traffic based on predefined security rules.", options: ["Router", "Switch", "Firewall", "Load Balancer"], answer: "Firewall" },
+            { question: "A _______ Firewall specifically protects web applications from attacks like XSS and SQLi.", options: ["Packet-Filtering", "Stateful", "NGFW", "Web Application Firewall"], answer: "Web Application Firewall" },
+            { question: "The secure design principle ensuring systems revert to a safe state on error is called Failing _______.", options: ["Open", "Closed", "Securely", "Gracefully"], answer: "Securely" },
+            { question: "Automating security checks and policies using scripts within the development pipeline is known as Security as _______.", options: ["Design", "Code", "Default", "Practice"], answer: "Code" },
+            { question: "A _______ firewall tracks the state of active network connections.", options: ["Proxy", "Packet-Filtering", "Stateless", "Stateful Inspection"], answer: "Stateful Inspection" },
+            { question: "Using stolen credentials from data breaches to try logging into other sites is called _______ Stuffing.", options: ["Password", "Account", "Session", "Credential"], answer: "Credential" },
+             { question: "A WAF often functions as a _______ proxy, sitting in front of web servers.", options: ["Forward", "Transparent", "Reverse", "Caching"], answer: "Reverse" }
+        ];
+
+        const trueOrFalse = [
+            { question: "SSDLC means adding security only during the testing phase.", answer: false }, // Integrated throughout
+            { question: "The principle of Least Privilege suggests giving developers admin rights by default.", answer: false },
+            { question: "Separation of Duties aims to concentrate critical permissions onto one trusted individual.", answer: false },
+            { question: "SQL Injection attacks target the client's browser.", answer: false }, // Targets the backend database
+            { question: "XSS attacks involve injecting server-side code.", answer: false }, // Injects client-side scripts (e.g., JavaScript)
+            { question: "Packet-filtering firewalls inspect the application layer data content.", answer: false }, // Inspect network/transport headers
+            { question: "A WAF is designed to protect against network layer attacks like IP spoofing.", answer: false }, // Protects application layer (HTTP/S)
+            { question: "Failing Securely means the application should provide detailed error messages to help debugging.", answer: false }, // Should provide generic errors
+            { question: "Secure Defaults principle means software should ship with all features enabled.", answer: false }, // Should ship with secure config, often meaning features off
+            { question: "Complete Mediation requires checking authorization only at the initial login.", answer: false }, // Requires checking every access
+            { question: "Broken Authentication can result from weak session management.", answer: true },
+             { question: "NGFWs offer capabilities beyond traditional stateful inspection.", answer: true }
+        ];
+
+        const multipleChoice = [
+            { question: "Which is NOT a core principle of Secure SDLC mentioned in the slides?", options: ["Security by Design", "Continuous Monitoring", "Maximum Performance", "Risk Assessment"], answer: "Maximum Performance" },
+            { question: "Which secure design principle involves configuring systems to be inherently safe out-of-the-box?", options: ["Least Privilege", "Secure Defaults", "Separation of Duties", "Failing Securely"], answer: "Secure Defaults" },
+            { question: "What does 'Minimize Attack Surface Area' primarily aim to reduce?", options: ["Number of users", "Amount of encrypted data", "Potential entry points for attackers", "Number of security logs"], answer: "Potential entry points for attackers" },
+            { question: "Which web vulnerability allows execution of arbitrary SQL commands?", options: ["XSS", "Broken Authentication", "SQL Injection", "Insecure Deserialization"], answer: "SQL Injection" },
+            { question: "What type of attack involves tricking a user's browser into executing malicious scripts?", options: ["SQL Injection", "DoS", "XSS", "Session Fixation"], answer: "XSS" },
+            { question: "Which type of firewall operates by acting as an intermediary at the application layer?", options: ["Packet-Filtering", "Stateful Inspection", "Proxy Firewall", "Stateless Firewall"], answer: "Proxy Firewall" },
+            { question: "What is the main function of a Web Application Firewall (WAF)?", options: ["Block network-level intrusions", "Filter email spam", "Protect web apps from app-layer attacks", "Manage user passwords"], answer: "Protect web apps from app-layer attacks" },
+            { question: "The principle that dictates checking permissions for every resource access is:", options: ["Least Privilege", "Complete Mediation", "Separation of Duties", "Secure Defaults"], answer: "Complete Mediation" },
+            { question: "Which attack type exploits improperly managed session tokens?", options: ["SQL Injection", "XSS", "Broken Authentication", "DoS"], answer: "Broken Authentication" },
+            { question: "Which firewall generation introduced application awareness and IPS capabilities?", options: ["First Generation (Packet Filtering)", "Second Generation (Stateful)", "Third Generation (Proxy/App Gateway)", "Fourth Generation (NGFW)"], answer: "Fourth Generation (NGFW)" },
+            { question: "Security as Code (SaC) is most closely associated with which development methodology?", options: ["Waterfall", "Agile", "DevSecOps", "Spiral"], answer: "DevSecOps" },
+             { question: "Allowing a developer to write code and deploy it directly to production violates which principle?", options: ["Least Privilege", "Separation of Duties", "Failing Securely", "Minimize Attack Surface"], answer: "Separation of Duties" }
+        ];
+        // --- END OF QUIZ DATA ---
+
+        // --- START OF SCRIPT LOGIC (PASTE FROM previous units) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select main tabs and content sections
+            const mainTabButtons = document.querySelectorAll('.main-tabs .tab-button');
+            const mainTabContents = document.querySelectorAll('.main-content');
+
+            // Select quiz content containers
+            const fillContainer = document.getElementById('fill-questions');
+            const tfContainer = document.getElementById('tf-questions');
+            const mcContainer = document.getElementById('mc-questions');
+
+             // Select accordion elements
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+
+            // --- Main Tab Switching Logic ---
+            mainTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab'); // Get the ID of the target content
+
+                    // Deactivate all main buttons and content
+                    mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                    mainTabContents.forEach(content => content.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Activate the corresponding content section
+                    const targetContent = document.getElementById(tabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            // --- Accordion Logic (for Glossary) ---
+             accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Toggle active class on the header for styling (+) (-) sign
+                    this.classList.toggle('active');
+
+                    // Get the panel sibling
+                    const panel = this.nextElementSibling;
+
+                    // Toggle the max-height for smooth transition
+                    if (panel.style.maxHeight) {
+                        // If panel is open, close it
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px"; // Remove padding when closing
+                    } else {
+                         // If panel is closed, open it
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add some buffer
+                        panel.style.padding = "15px 20px"; // Add padding back when opening
+                    }
+
+                    // --- Optional: Close other accordions ---
+                    accordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            otherHeader.nextElementSibling.style.maxHeight = null;
+                            otherHeader.nextElementSibling.style.padding = "0 20px";
+                        }
+                    });
+                    // --- End Optional Close Others ---
+                });
+            });
+
+
+            // --- Function to handle option selection within a question ---
+            function handleOptionSelection(button, questionDiv) {
+                // Deselect siblings within the same question
+                const siblings = questionDiv.querySelectorAll('.option-button.selected');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                // Select clicked button
+                button.classList.add('selected');
+                 // Clear previous feedback when a new option is selected
+                const existingFeedback = questionDiv.querySelector('.feedback');
+                if (existingFeedback) {
+                    existingFeedback.remove();
+                }
+            }
+
+            // --- Function to create and append feedback ---
+            function showFeedback(questionDiv, isCorrect, correctAnswer) {
+                 // Remove existing feedback first
+                const existingFeedback = questionDiv.querySelector('.feedback');
+                if (existingFeedback) {
+                    existingFeedback.remove();
+                }
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                if (isCorrect) {
+                    feedback.classList.add('correct');
+                    feedback.textContent = 'Correct!';
+                } else {
+                    feedback.classList.add('incorrect');
+                     // For T/F, explicitly show the boolean value
+                     let displayAnswer = correctAnswer;
+                     if (typeof correctAnswer === 'boolean') {
+                         displayAnswer = correctAnswer ? 'True' : 'False';
+                     }
+                    feedback.textContent = `Incorrect. Correct answer: ${displayAnswer}`;
+                }
+                // Append feedback after the check button
+                const checkButton = questionDiv.querySelector('.check-answer');
+                 if (checkButton) {
+                    // Insert after the check button if it exists
+                    checkButton.parentNode.insertBefore(feedback, checkButton.nextSibling);
+                } else {
+                     // Otherwise, append to the end of the question div
+                     questionDiv.appendChild(feedback);
+                }
+            }
+
+            // --- Load Fill in the Blank Questions ---
+            function loadFillInTheBlankQuestions() {
+                fillContainer.innerHTML = ''; // Clear previous content
+                fillInTheBlank.forEach((q, index) => { // Added index for unique IDs if needed
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `fill-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    // Find the blank spot indicated by _______ and replace it for display
+                    questionText.innerHTML = q.question.replace('_______', '<span style="color: #007bff; font-weight:bold;">_______</span>');
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options';
+
+                    q.options.forEach(option => {
+                        const optionButton = document.createElement('button');
+                        optionButton.className = 'option-button';
+                        optionButton.textContent = option;
+                        optionButton.addEventListener('click', () => handleOptionSelection(optionButton, questionDiv));
+                        optionsDiv.appendChild(optionButton);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            showFeedback(questionDiv, selected.textContent === q.answer, q.answer);
+                        } else {
+                             // Optionally show feedback that an answer must be selected
+                             showFeedback(questionDiv, false, q.answer); // Or provide specific feedback
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    fillContainer.appendChild(questionDiv);
+                });
+            }
+
+
+            // --- Load True/False Questions ---
+            function loadTrueFalseQuestions() {
+                tfContainer.innerHTML = ''; // Clear previous content
+                trueOrFalse.forEach((q, index) => { // Added index
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `tf-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+
+                     const optionsDiv = document.createElement('div'); // Keep consistent structure
+                    optionsDiv.className = 'options';
+
+                    const trueButton = document.createElement('button');
+                    trueButton.className = 'option-button';
+                    trueButton.textContent = 'True';
+                    trueButton.addEventListener('click', () => handleOptionSelection(trueButton, questionDiv));
+                    optionsDiv.appendChild(trueButton);
+
+                    const falseButton = document.createElement('button');
+                    falseButton.className = 'option-button';
+                    falseButton.textContent = 'False';
+                    falseButton.addEventListener('click', () => handleOptionSelection(falseButton, questionDiv));
+                    optionsDiv.appendChild(falseButton);
+
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            // Check boolean answer correctly
+                            const isCorrect = (selected.textContent === 'True' && q.answer === true) || (selected.textContent === 'False' && q.answer === false);
+                            showFeedback(questionDiv, isCorrect, q.answer); // Pass boolean directly
+                        } else {
+                            showFeedback(questionDiv, false, q.answer); // Pass boolean directly
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    tfContainer.appendChild(questionDiv);
+                });
+            }
+
+            // --- Load Multiple Choice Questions ---
+            function loadMultipleChoiceQuestions() {
+                mcContainer.innerHTML = ''; // Clear previous content
+                multipleChoice.forEach((q, index) => { // Added index
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `mc-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options';
+
+                    // Shuffle options for variety (optional)
+                    // const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+                    q.options.forEach(option => { // Use original options or shuffledOptions
+                        const optionButton = document.createElement('button');
+                        optionButton.className = 'option-button';
+                        optionButton.textContent = option;
+                        optionButton.addEventListener('click', () => handleOptionSelection(optionButton, questionDiv));
+                        optionsDiv.appendChild(optionButton);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            showFeedback(questionDiv, selected.textContent === q.answer, q.answer);
+                        } else {
+                             showFeedback(questionDiv, false, q.answer);
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    mcContainer.appendChild(questionDiv);
+                });
+            }
+
+            // --- Initial Load ---
+            // Load all quiz questions initially so they are ready when tabs are clicked
+            loadFillInTheBlankQuestions();
+            loadTrueFalseQuestions();
+            loadMultipleChoiceQuestions();
+
+             // Activate the default tab's content on load
+             document.querySelector('.main-content.active').style.display = 'block';
+
+
+        }); // End DOMContentLoaded
+        // --- END OF SCRIPT LOGIC ---
+    </script>
+</body>
+</html>
