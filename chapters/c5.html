@@ -258,15 +258,59 @@
             border-radius: 5px;
             margin-bottom: 25px;
              box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+             /* Removed h3 styling from here, handled by concept-header */
         }
-         #concepts .concept-block h3 {
-            margin-top: 0;
+        /* Style for Concept Accordion Headers (h3) */
+        .concept-header {
+            margin-top: 0; /* Reset margin if needed */
             color: #007bff;
             border-bottom: 1px dotted #ccc;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+            padding: 15px 0 10px 0; /* Adjusted padding */
+            margin-bottom: 0; /* Remove bottom margin, panel handles spacing */
+            cursor: pointer;
+            position: relative; /* For indicator */
+            transition: background-color 0.3s ease;
+            font-size: 1.2em; /* Make concept titles slightly larger */
         }
-
+        .concept-header:hover {
+            background-color: #f8f9fa; /* Subtle hover */
+        }
+        /* Indicator for Concept Accordion */
+        .concept-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 10px;
+            transition: transform 0.2s ease-in-out;
+            font-size: 1.1em; /* Match header size */
+            line-height: 1.2; /* Adjust vertical alignment */
+        }
+        .concept-header.active::after {
+            content: "\2212"; /* - sign */
+            /* transform: rotate(180deg); /* Optional rotation */
+        }
+        /* Style for Concept Accordion Panels (content) */
+        .concept-panel {
+            padding: 0 15px; /* Start with 0 top/bottom padding */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            border-top: 1px solid #eee; /* Separator line when open */
+            margin-top: 0; /* Ensure no gap */
+        }
+        /* Add padding back when panel is open */
+        .concept-panel.open {
+             padding: 15px 15px;
+        }
+        /* Adjust margins for elements inside the panel */
+        .concept-panel > *:first-child {
+            margin-top: 15px;
+        }
+        .concept-panel > *:last-child {
+            margin-bottom: 10px;
+        }
 
         /* Quiz Styles (apply within #fill, #tf, #mc) */
         .question {
@@ -276,75 +320,75 @@
             border-radius: 8px;
             background-color: #ffffff; /* White background for questions */
             position: relative; /* For feedback positioning */
-        }
-
-        .question p {
-            margin: 0 0 15px;
-            font-weight: bold;
-            font-size: 1.05em;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle shadow */
         }
 
         .option-button {
-            padding: 10px 15px;
+            padding: 12px 18px; /* Increased padding */
             border: 1px solid #ced4da;
-            background: #f8f9fa; /* Light background for options */
+            background: #fdfdff; /* Slightly brighter background */
             color: #495057;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 6px; /* Slightly more rounded */
             text-align: left;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; /* Added shadow transition */
             width: 100%;
+            font-size: 1em; /* Ensure consistent font size */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03); /* Subtle shadow */
         }
         .option-button:hover {
-             background-color: #e9ecef;
+             background-color: #eef2f7; /* Lighter blue hover */
              border-color: #adb5bd;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Slightly more shadow on hover */
         }
 
         .option-button.selected {
             background: #007bff;
             color: white;
             border-color: #0056b3;
+            font-weight: bold; /* Make selected text bold */
+            box-shadow: 0 1px 3px rgba(0, 91, 179, 0.3); /* Shadow matching the blue */
+        }
+        /* Optional: Add a checkmark or indicator for selected */
+        .option-button.selected::before {
+            content: '✔ '; /* Add a checkmark before the text */
+            margin-right: 5px;
+            font-weight: bold;
         }
 
         .check-answer {
-            margin-top: 15px;
-            padding: 10px 20px;
+            margin-top: 20px; /* Increased margin */
+            padding: 12px 25px; /* Adjusted padding */
             border: none;
             background: #28a745; /* Success Green */
             color: white;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 6px; /* Match option buttons */
             font-weight: bold;
-            transition: background-color 0.2s ease;
+            font-size: 1em; /* Match option buttons */
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease; /* Added transform and shadow */
+            box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3); /* Shadow matching green */
         }
         .check-answer:hover {
-             background-color: #218838;
+             background-color: #218838; /* Darker green */
+             transform: translateY(-1px); /* Slight lift effect */
+             box-shadow: 0 3px 6px rgba(40, 167, 69, 0.4); /* Enhanced shadow on hover */
+        }
+        .check-answer:active {
+            transform: translateY(0px); /* Press down effect */
+            box-shadow: 0 1px 2px rgba(40, 167, 69, 0.3);
         }
 
         .feedback {
             margin-top: 15px;
-            padding: 10px;
+            padding: 12px 15px; /* Adjusted padding */
             border-radius: 5px;
             font-weight: bold;
+            font-size: 0.95em; /* Slightly smaller feedback text */
+            animation: fadeIn 0.3s ease; /* Add fade-in */
         }
 
-        .feedback.correct {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .feedback.incorrect {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+        /* ... rest of existing styles ... */
     </style>
 </head>
 <body>
@@ -523,136 +567,142 @@
             <h2>Key Concepts & Examples from Unit 5</h2>
 
              <div class="concept-block">
-                <h3>Secure Software Design & Programming</h3>
-                <h4>SSDLC (Secure Software Development Life Cycle)</h4>
-                <p>Ensures software is built with security considered from the beginning.</p>
-                <ul>
-                    <li>Integrates security into planning, designing, coding, testing, deploying, and maintaining phases.</li>
-                    <li>Aims to identify and fix issues early, reducing cyber risk.</li>
-                    <li>Creates safer, more trustworthy applications.</li>
-                </ul>
-                <div class="diagram">
-                     <img src="https://via.placeholder.com/700x350.png?text=SDLC+vs+SSDLC+Diagram+(Slide+4)" alt="SDLC vs SSDLC Comparison">
-                     <figcaption>Standard SDLC vs. Secure SDLC (SSDLC)</figcaption>
-                 </div>
-                <h4>Key Principles of Secure SDLC</h4>
-                 <ul>
-                     <li><span class="keyword">Security by Design:</span> Integrate security requirements early in planning/design.</li>
-                     <li><span class="keyword">Continuous Monitoring:</span> Ongoing security checks and issue resolution.</li>
-                     <li><span class="keyword">Risk Assessment:</span> Identify, prioritize, and mitigate security risks.</li>
-                     <li><span class="keyword">Education and Training:</span> Developers need comprehensive security training.</li>
-                     <li><span class="keyword">Collaboration:</span> Teamwork encourages shared security goals and knowledge sharing.</li>
-                 </ul>
-                 <h4>7 Principles of Secure Design</h4>
-                 <ol>
-                    <li><strong>Security as Code (SaC):</strong> Automate security practices (policy enforcement, vulnerability scanning, remediation) using scripts and templates within the development lifecycle (DevSecOps).</li>
-                    <li><strong>Secure Defaults:</strong> Configure systems to be secure by default (e.g., strong passwords required, unnecessary services off). Example: Modern WordPress vs older versions.</li>
-                    <li><strong>Least Privilege:</strong> Grant users and system components only the minimum permissions necessary to function. Use Role-Based Access Control (RBAC) and regular audits.</li>
-                     <li><strong>Separation of Duties (SoD):</strong> Divide critical tasks and privileges to prevent unilateral misuse. Example: Developer writes code, separate person/system deploys to production.</li>
-                     <li><strong>Minimize Attack Surface Area (ASA):</strong> Limit potential entry points by reducing non-essential code, services, ports, and API endpoints. Close unused ports, avoid overly generic APIs.</li>
-                     <li><strong>Complete Mediation:</strong> Authenticate and authorize *every* access request to *every* resource, every time. Example: Microservices validating user permissions on each API call, even after initial gateway authentication.</li>
-                     <li><strong>Failing Securely:</strong> Ensure systems default to a secure state upon failure. Avoid leaking sensitive information in error messages. Example: Generic "Authentication Failed" message instead of "Incorrect Password".</li>
-                 </ol>
-                 <h4>Best Practices for Secure Software Development (Summary from Slide 18)</h4>
-                 <ul>
-                    <li>Create a Secure Development Policy.</li>
-                    <li>Address Vulnerabilities Promptly.</li>
-                    <li>Remain Agile and Active (Adapt to new threats).</li>
-                    <li>Monitor and Respond to Threats.</li>
-                    <li>Use a Secure Software Framework.</li>
-                    <li>Have Secure Coding Guidelines/Standards.</li>
-                    <li>Protect Code Integrity (e.g., version control security).</li>
-                    <li>Conduct Security Awareness Training.</li>
-                    <li>Keep Software/Systems Updated (Patching).</li>
-                    <li>Run Code Reviews and Test Early/Often.</li>
-                 </ul>
+                <h3 class="concept-header">Secure Software Design & Programming</h3>
+                <div class="concept-panel">
+                    <h4>SSDLC (Secure Software Development Life Cycle)</h4>
+                    <p>Ensures software is built with security considered from the beginning.</p>
+                    <ul>
+                        <li>Integrates security into planning, designing, coding, testing, deploying, and maintaining phases.</li>
+                        <li>Aims to identify and fix issues early, reducing cyber risk.</li>
+                        <li>Creates safer, more trustworthy applications.</li>
+                    </ul>
+                    <div class="diagram">
+                         <img src="https://via.placeholder.com/700x350.png?text=SDLC+vs+SSDLC+Diagram+(Slide+4)" alt="SDLC vs SSDLC Comparison">
+                         <figcaption>Standard SDLC vs. Secure SDLC (SSDLC)</figcaption>
+                     </div>
+                    <h4>Key Principles of Secure SDLC</h4>
+                     <ul>
+                         <li><span class="keyword">Security by Design:</span> Integrate security requirements early in planning/design.</li>
+                         <li><span class="keyword">Continuous Monitoring:</span> Ongoing security checks and issue resolution.</li>
+                         <li><span class="keyword">Risk Assessment:</span> Identify, prioritize, and mitigate security risks.</li>
+                         <li><span class="keyword">Education and Training:</span> Developers need comprehensive security training.</li>
+                         <li><span class="keyword">Collaboration:</span> Teamwork encourages shared security goals and knowledge sharing.</li>
+                     </ul>
+                     <h4>7 Principles of Secure Design</h4>
+                     <ol>
+                        <li><strong>Security as Code (SaC):</strong> Automate security practices (policy enforcement, vulnerability scanning, remediation) using scripts and templates within the development lifecycle (DevSecOps).</li>
+                        <li><strong>Secure Defaults:</strong> Configure systems to be secure by default (e.g., strong passwords required, unnecessary services off). Example: Modern WordPress vs older versions.</li>
+                        <li><strong>Least Privilege:</strong> Grant users and system components only the minimum permissions necessary to function. Use Role-Based Access Control (RBAC) and regular audits.</li>
+                         <li><strong>Separation of Duties (SoD):</strong> Divide critical tasks and privileges to prevent unilateral misuse. Example: Developer writes code, separate person/system deploys to production.</li>
+                         <li><strong>Minimize Attack Surface Area (ASA):</strong> Limit potential entry points by reducing non-essential code, services, ports, and API endpoints. Close unused ports, avoid overly generic APIs.</li>
+                         <li><strong>Complete Mediation:</strong> Authenticate and authorize *every* access request to *every* resource, every time. Example: Microservices validating user permissions on each API call, even after initial gateway authentication.</li>
+                         <li><strong>Failing Securely:</strong> Ensure systems default to a secure state upon failure. Avoid leaking sensitive information in error messages. Example: Generic "Authentication Failed" message instead of "Incorrect Password".</li>
+                     </ol>
+                     <h4>Best Practices for Secure Software Development (Summary from Slide 18)</h4>
+                     <ul>
+                        <li>Create a Secure Development Policy.</li>
+                        <li>Address Vulnerabilities Promptly.</li>
+                        <li>Remain Agile and Active (Adapt to new threats).</li>
+                        <li>Monitor and Respond to Threats.</li>
+                        <li>Use a Secure Software Framework.</li>
+                        <li>Have Secure Coding Guidelines/Standards.</li>
+                        <li>Protect Code Integrity (e.g., version control security).</li>
+                        <li>Conduct Security Awareness Training.</li>
+                        <li>Keep Software/Systems Updated (Patching).</li>
+                        <li>Run Code Reviews and Test Early/Often.</li>
+                     </ul>
+                </div> <!-- End concept-panel -->
              </div>
 
              <div class="concept-block">
-                 <h3>Web Application Security</h3>
-                 <h4>Principles (CIA applied to Web)</h4>
-                 <ul>
-                     <li><strong>Authentication:</strong> Verifying user identity.</li>
-                     <li><strong>Confidentiality:</strong> Protecting data from unauthorized access (e.g., using HTTPS).</li>
-                     <li><strong>Integrity:</strong> Ensuring data hasn't been tampered with.</li>
-                     <li><strong>Availability:</strong> Ensuring the application is accessible to authorized users.</li>
-                 </ul>
-                  <h4>Common Threats & Vulnerabilities</h4>
-                 <ul>
-                     <li><strong>SQL Injection (SQLi):</strong>
-                         <ul>
-                             <li>Injecting malicious SQL code via input fields to manipulate database queries.</li>
-                             <li>Can destroy database, steal data, bypass authentication.</li>
-                             <li>Prevention: Filter database inputs (input validation, parameterized queries/prepared statements), restrict database permissions, monitor queries.</li>
-                               <div class="diagram">
-                                   <img src="https://via.placeholder.com/700x400.png?text=SQL+Injection+Diagram+(Slide+22)" alt="SQL Injection Example Flow">
-                                   <figcaption>SQL Injection Attack Flow</figcaption>
-                               </div>
-                         </ul>
-                     </li>
-                     <li><strong>Cross-Site Scripting (XSS):</strong>
-                        <ul>
-                            <li>Injecting malicious client-side scripts (e.g., JavaScript) into web pages viewed by other users.</li>
-                            <li>Allows attacker to hijack user sessions, deface sites, steal credentials, redirect users.</li>
-                             <li>Typically exploits flaws where user input is not properly sanitized before being displayed.</li>
-                              <div class="diagram">
-                                  <img src="https://via.placeholder.com/700x400.png?text=XSS+Attack+Diagram+(Slide+24)" alt="XSS Attack Flow">
-                                  <figcaption>Cross-Site Scripting (XSS) Attack Flow</figcaption>
-                              </div>
-                        </ul>
-                     </li>
-                    <li><strong>Broken Authentication:</strong>
-                        <ul>
-                             <li>Flaws in identity/access control implementation allowing attackers to compromise accounts.</li>
-                             <li>Risk Factors: Predictable credentials, storing credentials insecurely, exposing session IDs (e.g., in URL), session IDs not expiring/invalidating on logout, sessions not rotated after login, sending credentials unencrypted.</li>
-                             <li>Attack Types: Brute Force, Credential Stuffing, Session Hijacking, Session Fixation.</li>
-                             <li>Prevention: Disallow weak passwords, enforce MFA, protect stored credentials (hashing/salting), secure session management (HTTPS only cookies, invalidate on logout, rotate IDs), follow Least Privilege.</li>
-                               <div class="diagram">
-                                   <img src="https://via.placeholder.com/700x300.png?text=Broken+Auth+Attack+Types+(Slide+27)" alt="Types of Broken Authentication Attacks">
-                                   <figcaption>Types of Broken Authentication Attacks</figcaption>
-                               </div>
-                                <div class="diagram">
-                                   <img src="https://via.placeholder.com/700x400.png?text=Broken+Auth+Prevention+Tips+(Slide+28)" alt="Tips to Prevent Broken Authentication">
-                                   <figcaption>Tips to Prevent Broken Authentication</figcaption>
-                               </div>
-                         </ul>
-                    </li>
-                 </ul>
+                 <h3 class="concept-header">Web Application Security</h3>
+                 <div class="concept-panel">
+                     <h4>Principles (CIA applied to Web)</h4>
+                     <ul>
+                         <li><strong>Authentication:</strong> Verifying user identity.</li>
+                         <li><strong>Confidentiality:</strong> Protecting data from unauthorized access (e.g., using HTTPS).</li>
+                         <li><strong>Integrity:</strong> Ensuring data hasn't been tampered with.</li>
+                         <li><strong>Availability:</strong> Ensuring the application is accessible to authorized users.</li>
+                     </ul>
+                      <h4>Common Threats & Vulnerabilities</h4>
+                     <ul>
+                         <li><strong>SQL Injection (SQLi):</strong>
+                             <ul>
+                                 <li>Injecting malicious SQL code via input fields to manipulate database queries.</li>
+                                 <li>Can destroy database, steal data, bypass authentication.</li>
+                                 <li>Prevention: Filter database inputs (input validation, parameterized queries/prepared statements), restrict database permissions, monitor queries.</li>
+                                   <div class="diagram">
+                                       <img src="https://via.placeholder.com/700x400.png?text=SQL+Injection+Diagram+(Slide+22)" alt="SQL Injection Example Flow">
+                                       <figcaption>SQL Injection Attack Flow</figcaption>
+                                   </div>
+                             </ul>
+                         </li>
+                         <li><strong>Cross-Site Scripting (XSS):</strong>
+                            <ul>
+                                <li>Injecting malicious client-side scripts (e.g., JavaScript) into web pages viewed by other users.</li>
+                                <li>Allows attacker to hijack user sessions, deface sites, steal credentials, redirect users.</li>
+                                 <li>Typically exploits flaws where user input is not properly sanitized before being displayed.</li>
+                                  <div class="diagram">
+                                      <img src="https://via.placeholder.com/700x400.png?text=XSS+Attack+Diagram+(Slide+24)" alt="XSS Attack Flow">
+                                      <figcaption>Cross-Site Scripting (XSS) Attack Flow</figcaption>
+                                  </div>
+                            </ul>
+                         </li>
+                        <li><strong>Broken Authentication:</strong>
+                            <ul>
+                                 <li>Flaws in identity/access control implementation allowing attackers to compromise accounts.</li>
+                                 <li>Risk Factors: Predictable credentials, storing credentials insecurely, exposing session IDs (e.g., in URL), session IDs not expiring/invalidating on logout, sessions not rotated after login, sending credentials unencrypted.</li>
+                                 <li>Attack Types: Brute Force, Credential Stuffing, Session Hijacking, Session Fixation.</li>
+                                 <li>Prevention: Disallow weak passwords, enforce MFA, protect stored credentials (hashing/salting), secure session management (HTTPS only cookies, invalidate on logout, rotate IDs), follow Least Privilege.</li>
+                                   <div class="diagram">
+                                       <img src="https://via.placeholder.com/700x300.png?text=Broken+Auth+Attack+Types+(Slide+27)" alt="Types of Broken Authentication Attacks">
+                                       <figcaption>Types of Broken Authentication Attacks</figcaption>
+                                   </div>
+                                    <div class="diagram">
+                                       <img src="https://via.placeholder.com/700x400.png?text=Broken+Auth+Prevention+Tips+(Slide+28)" alt="Tips to Prevent Broken Authentication">
+                                       <figcaption>Tips to Prevent Broken Authentication</figcaption>
+                                   </div>
+                             </ul>
+                        </li>
+                     </ul>
+                 </div> <!-- End concept-panel -->
              </div>
 
              <div class="concept-block">
-                 <h3>Firewalls</h3>
-                 <h4>Overview</h4>
-                 <ul>
-                     <li>Network security device (HW/SW) monitoring and controlling traffic based on rules.</li>
-                     <li>Establishes barrier between trusted (internal) and untrusted (external) networks.</li>
-                     <li>Inspects packets, allows/blocks based on criteria (IPs, ports, protocols).</li>
-                     <li>Protects against external threats (viruses, DoS) and internal threats (data exfiltration).</li>
-                 </ul>
-                  <div class="diagram">
-                     <img src="https://via.placeholder.com/700x400.png?text=Firewall+Placement+Diagram+(Slide+31)" alt="Firewall Placement Diagram">
-                     <figcaption>Typical Firewall Placement (WAN/LAN Barrier)</figcaption>
-                 </div>
-                 <h4>Types / Generations</h4>
-                  <ul>
-                     <li><strong>Packet-Filtering (Gen 1):</strong> Basic, checks headers based on static rules. No connection state awareness.</li>
-                     <li><strong>Stateful Inspection (Gen 2):</strong> Tracks connection state (TCP handshake). Allows return traffic for established connections.</li>
-                     <li><strong>Proxy Firewall (Application Gateway - Gen 3 concept):</strong> Acts as intermediary, inspects at application layer. Can be slow.</li>
-                     <li><strong>Next-Generation Firewall (NGFW - Gen 4):</strong> Adds application awareness, IPS, DPI, threat intelligence feeds. More advanced inspection.</li>
-                  </ul>
-                   <div class="diagram">
-                     <img src="https://via.placeholder.com/800x400.png?text=Firewall+Generations+Diagram+(Slide+33)" alt="Firewall Generations Comparison">
-                     <figcaption>Firewall Generations Overview</figcaption>
-                 </div>
+                 <h3 class="concept-header">Firewalls</h3>
+                 <div class="concept-panel">
+                     <h4>Overview</h4>
+                     <ul>
+                         <li>Network security device (HW/SW) monitoring and controlling traffic based on rules.</li>
+                         <li>Establishes barrier between trusted (internal) and untrusted (external) networks.</li>
+                         <li>Inspects packets, allows/blocks based on criteria (IPs, ports, protocols).</li>
+                         <li>Protects against external threats (viruses, DoS) and internal threats (data exfiltration).</li>
+                     </ul>
+                      <div class="diagram">
+                         <img src="https://via.placeholder.com/700x400.png?text=Firewall+Placement+Diagram+(Slide+31)" alt="Firewall Placement Diagram">
+                         <figcaption>Typical Firewall Placement (WAN/LAN Barrier)</figcaption>
+                     </div>
+                     <h4>Types / Generations</h4>
+                      <ul>
+                         <li><strong>Packet-Filtering (Gen 1):</strong> Basic, checks headers based on static rules. No connection state awareness.</li>
+                         <li><strong>Stateful Inspection (Gen 2):</strong> Tracks connection state (TCP handshake). Allows return traffic for established connections.</li>
+                         <li><strong>Proxy Firewall (Application Gateway - Gen 3 concept):</strong> Acts as intermediary, inspects at application layer. Can be slow.</li>
+                         <li><strong>Next-Generation Firewall (NGFW - Gen 4):</strong> Adds application awareness, IPS, DPI, threat intelligence feeds. More advanced inspection.</li>
+                      </ul>
+                       <div class="diagram">
+                         <img src="https://via.placeholder.com/800x400.png?text=Firewall+Generations+Diagram+(Slide+33)" alt="Firewall Generations Comparison">
+                         <figcaption>Firewall Generations Overview</figcaption>
+                     </div>
 
-                 <h4>Web Application Firewall (WAF)</h4>
-                 <ul>
-                     <li>Specialized firewall protecting <span class="keyword">web applications</span> from application-layer attacks (XSS, SQLi, etc.).</li>
-                     <li>Filters, monitors, blocks malicious <span class="keyword">HTTP/S traffic</span>.</li>
-                     <li>Operates as a <span class="keyword">reverse proxy</span>, sitting in front of web servers.</li>
-                     <li>Uses policies (rulesets) to identify malicious traffic. Some use ML for automatic updates.</li>
-                     <li>Can also provide caching to improve performance.</li>
-                 </ul>
+                     <h4>Web Application Firewall (WAF)</h4>
+                     <ul>
+                         <li>Specialized firewall protecting <span class="keyword">web applications</span> from application-layer attacks (XSS, SQLi, etc.).</li>
+                         <li>Filters, monitors, blocks malicious <span class="keyword">HTTP/S traffic</span>.</li>
+                         <li>Operates as a <span class="keyword">reverse proxy</span>, sitting in front of web servers.</li>
+                         <li>Uses policies (rulesets) to identify malicious traffic. Some use ML for automatic updates.</li>
+                         <li>Can also provide caching to improve performance.</li>
+                     </ul>
+                 </div> <!-- End concept-panel -->
              </div>
 
 
@@ -735,8 +785,11 @@
             const tfContainer = document.getElementById('tf-questions');
             const mcContainer = document.getElementById('mc-questions');
 
-             // Select accordion elements
+             // Select accordion elements (Glossary)
             const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+            // Select concept accordion elements
+            const conceptHeaders = document.querySelectorAll('.concept-header');
 
 
             // --- Main Tab Switching Logic ---
@@ -746,7 +799,11 @@
 
                     // Deactivate all main buttons and content
                     mainTabButtons.forEach(btn => btn.classList.remove('active'));
-                    mainTabContents.forEach(content => content.classList.remove('active'));
+                    mainTabContents.forEach(content => {
+                        content.classList.remove('active');
+                        // Ensure inactive tabs are hidden (CSS should handle this, but belt-and-suspenders)
+                        content.style.display = 'none';
+                    });
 
                     // Activate the clicked button
                     button.classList.add('active');
@@ -755,6 +812,8 @@
                     const targetContent = document.getElementById(tabId);
                     if (targetContent) {
                         targetContent.classList.add('active');
+                        // Ensure active tab is shown
+                        targetContent.style.display = 'block';
                     }
                 });
             });
@@ -762,32 +821,61 @@
             // --- Accordion Logic (for Glossary) ---
              accordionHeaders.forEach(header => {
                 header.addEventListener('click', function() {
-                    // Toggle active class on the header for styling (+) (-) sign
-                    this.classList.toggle('active');
-
-                    // Get the panel sibling
-                    const panel = this.nextElementSibling;
-
-                    // Toggle the max-height for smooth transition
-                    if (panel.style.maxHeight) {
-                        // If panel is open, close it
-                        panel.style.maxHeight = null;
-                        panel.style.padding = "0 20px"; // Remove padding when closing
-                    } else {
-                         // If panel is closed, open it
-                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add some buffer
-                        panel.style.padding = "15px 20px"; // Add padding back when opening
-                    }
-
-                    // --- Optional: Close other accordions ---
+                    const isActive = this.classList.contains('active');
+                    // Optional: Close all other glossary accordions first
                     accordionHeaders.forEach(otherHeader => {
-                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                        if (otherHeader !== this) {
                             otherHeader.classList.remove('active');
-                            otherHeader.nextElementSibling.style.maxHeight = null;
-                            otherHeader.nextElementSibling.style.padding = "0 20px";
+                            const otherPanel = otherHeader.nextElementSibling;
+                            otherPanel.style.maxHeight = null;
+                            otherPanel.style.padding = "0 20px";
                         }
                     });
-                    // --- End Optional Close Others ---
+
+                    // Toggle the current one
+                    this.classList.toggle('active', !isActive); // Toggle based on previous state
+                    const panel = this.nextElementSibling;
+                    if (!isActive) {
+                        // Open it
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add buffer
+                        panel.style.padding = "15px 20px";
+                    } else {
+                        // Close it
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px";
+                    }
+                });
+            });
+
+            // --- Accordion Logic (for Key Concepts) ---
+            conceptHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const isActive = this.classList.contains('active');
+                    // Optional: Close other concept accordions within the same block or globally if desired
+                    // Example: Close all concept accordions before opening the new one
+                    // conceptHeaders.forEach(otherHeader => {
+                    //     if (otherHeader !== this) {
+                    //         otherHeader.classList.remove('active');
+                    //         const otherPanel = otherHeader.nextElementSibling;
+                    //         otherPanel.style.maxHeight = null;
+                    //         otherPanel.classList.remove('open'); // Remove open class for padding
+                    //     }
+                    // });
+
+
+                    // Toggle the current one
+                    this.classList.toggle('active', !isActive);
+                    const panel = this.nextElementSibling; // The .concept-panel div
+
+                    if (!isActive) {
+                        // Open it
+                        panel.style.maxHeight = panel.scrollHeight + 30 + "px"; // Add buffer
+                        panel.classList.add('open'); // Add class for padding transition
+                    } else {
+                        // Close it
+                        panel.style.maxHeight = null;
+                        panel.classList.remove('open'); // Remove class for padding transition
+                    }
                 });
             });
 
@@ -976,13 +1064,18 @@
             }
 
             // --- Initial Load ---
-            // Load all quiz questions initially so they are ready when tabs are clicked
             loadFillInTheBlankQuestions();
             loadTrueFalseQuestions();
             loadMultipleChoiceQuestions();
 
-             // Activate the default tab's content on load
-             document.querySelector('.main-content.active').style.display = 'block';
+             // Activate the default tab's content on load and hide others
+             mainTabContents.forEach(content => {
+                 if (content.classList.contains('active')) {
+                     content.style.display = 'block';
+                 } else {
+                     content.style.display = 'none';
+                 }
+             });
 
 
         }); // End DOMContentLoaded
