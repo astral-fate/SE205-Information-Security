@@ -2,7 +2,7 @@
 
 This course is part of [Cairo University Software Engineering Professional Master's Degree](https://github.com/astral-fate/Cairo-University-Software-Engineering-Professional-Master-s-Degree) 
 
-(interactive matrial)[https://astral-fate.github.io/SE205-Information-Security/]
+[interactive matrial](https://astral-fate.github.io/SE205-Information-Security/)
 ## Course Syllabus
 
 | Unit | Main Topics | Key Concepts |
