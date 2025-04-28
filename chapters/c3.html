@@ -237,18 +237,71 @@
         #concepts .concept-block {
             background-color: #ffffff; /* White background for concept blocks */
             border: 1px solid #e9ecef;
-            padding: 20px;
+            /* padding: 20px; */ /* Remove padding here, apply to panel */
             border-radius: 5px;
             margin-bottom: 25px;
              box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+             overflow: hidden; /* Contain borders for header/panel */
         }
-         #concepts .concept-block h3 {
-            margin-top: 0;
+         /* #concepts .concept-block h3 { */ /* Style .concept-header instead */
+            /* margin-top: 0;
             color: #007bff;
             border-bottom: 1px dotted #ccc;
             padding-bottom: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 15px; */
+        /* } */
+
+        /* --- Concept Accordion Styles --- */
+        .concept-header {
+            background-color: #e7f1ff; /* Light blue background */
+            color: #0056b3; /* Darker blue text */
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #dee2e6; /* Separator line */
+            text-align: left;
+            outline: none;
+            font-size: 1.2em; /* Make concept titles slightly larger */
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            position: relative; /* For the indicator */
+            margin: 0; /* Remove default h3 margin */
         }
+        .concept-header:hover {
+            background-color: #d0e1f9; /* Slightly darker blue on hover */
+        }
+        .concept-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .concept-header.active::after {
+            content: "\2212"; /* - sign */
+            /* transform: rotate(180deg); */ /* Optional rotation */
+        }
+        .concept-header.active {
+             background-color: #c0d6f3; /* Even darker when active */
+             border-bottom-color: transparent; /* Hide border when open */
+        }
+        .concept-panel {
+            padding: 0 20px; /* Start with 0 padding top/bottom */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+            border-bottom: 1px solid #dee2e6; /* Add border to bottom of panel */
+        }
+         .concept-panel > *:first-child {
+             margin-top: 15px; /* Add margin to first element inside panel */
+         }
+         .concept-panel > *:last-child {
+             margin-bottom: 15px; /* Add margin to last element inside panel */
+         }
+        /* --- End Concept Accordion Styles --- */
 
 
         /* Quiz Styles (apply within #fill, #tf, #mc) */
@@ -494,154 +547,162 @@
             <h2>Key Concepts & Examples from Unit 3</h2>
 
              <div class="concept-block">
-                <h3>Asymmetric (Public-Key) Cryptography Principles</h3>
-                <p>Based on mathematical functions rather than simple substitution/permutation.</p>
-                <ul>
-                    <li>Uses two separate, mathematically related keys:
-                        <ul>
-                            <li><span class="keyword">Public Key:</span> Shared openly, used for encryption or signature verification.</li>
-                            <li><span class="keyword">Private Key:</span> Kept secret, used for decryption or signature creation.</li>
-                        </ul>
-                    </li>
-                    <li><span class="keyword">Key Principle:</span> Data encrypted with one key can only be decrypted with the other key in the pair.</li>
-                    <li>Relies on <span class="keyword">one-way functions:</span> easy to compute forward (encrypt), computationally infeasible to reverse without the private key.</li>
-                    <li>Essential Steps:
-                        <ol>
-                            <li><strong>Key Generation:</strong> Each party generates a public/private key pair.</li>
-                            <li><strong>Key Exchange:</strong> Parties exchange *public* keys (private keys are never shared).</li>
-                            <li><strong>Encryption:</strong> Sender encrypts data using the *recipient's* public key.</li>
-                            <li><strong>Sending:</strong> Encrypted data transmitted over insecure channel.</li>
-                            <li><strong>Decryption:</strong> Recipient decrypts data using their *own* private key.</li>
-                        </ol>
-                    </li>
-                     <li><strong>Applications:</strong>
-                        <ul>
-                            <li><span class="keyword">Encryption/Decryption:</span> Sender encrypts with recipient's public key (Confidentiality).</li>
-                             <li><span class="keyword">Digital Signature:</span> Sender signs (encrypts hash) with their private key (Authentication, Integrity, Non-repudiation).</li>
-                            <li><span class="keyword">Key Exchange:</span> Establish a shared symmetric (session) key (e.g., Diffie-Hellman).</li>
-                        </ul>
-                     </li>
-                </ul>
-                 <p><strong>Comparison: Symmetric vs. Asymmetric</strong> (See slide 15 for table)</p>
-                 <ul>
-                     <li><strong>Speed:</strong> Symmetric is much faster.</li>
-                     <li><strong>Key Management:</strong> Asymmetric simplifies distribution (only public keys shared), Symmetric requires secure channel for shared key.</li>
-                     <li><strong>Use Cases:</strong> Symmetric for bulk data encryption (files, VPNs), Asymmetric for key exchange, digital signatures, authentication (SSL/TLS, PGP).</li>
-                    <li><strong>Security (Key Length):</strong> Asymmetric keys need to be much longer for equivalent security (e.g., 3072-bit RSA ≈ 256-bit AES).</li>
-                 </ul>
-                  <p><strong>Common Practice (Hybrid Approach):</strong> Use asymmetric crypto to securely exchange a symmetric session key, then use the faster symmetric crypto for bulk data encryption (e.g., SSL/TLS, PGP).</p>
-            </div>
+                <h3 class="concept-header">Asymmetric (Public-Key) Cryptography Principles</h3>
+                <div class="concept-panel">
+                    <p>Based on mathematical functions rather than simple substitution/permutation.</p>
+                    <ul>
+                        <li>Uses two separate, mathematically related keys:
+                            <ul>
+                                <li><span class="keyword">Public Key:</span> Shared openly, used for encryption or signature verification.</li>
+                                <li><span class="keyword">Private Key:</span> Kept secret, used for decryption or signature creation.</li>
+                            </ul>
+                        </li>
+                        <li><span class="keyword">Key Principle:</span> Data encrypted with one key can only be decrypted with the other key in the pair.</li>
+                        <li>Relies on <span class="keyword">one-way functions:</span> easy to compute forward (encrypt), computationally infeasible to reverse without the private key.</li>
+                        <li>Essential Steps:
+                            <ol>
+                                <li><strong>Key Generation:</strong> Each party generates a public/private key pair.</li>
+                                <li><strong>Key Exchange:</strong> Parties exchange *public* keys (private keys are never shared).</li>
+                                <li><strong>Encryption:</strong> Sender encrypts data using the *recipient's* public key.</li>
+                                <li><strong>Sending:</strong> Encrypted data transmitted over insecure channel.</li>
+                                <li><strong>Decryption:</strong> Recipient decrypts data using their *own* private key.</li>
+                            </ol>
+                        </li>
+                         <li><strong>Applications:</strong>
+                            <ul>
+                                <li><span class="keyword">Encryption/Decryption:</span> Sender encrypts with recipient's public key (Confidentiality).</li>
+                                 <li><span class="keyword">Digital Signature:</span> Sender signs (encrypts hash) with their private key (Authentication, Integrity, Non-repudiation).</li>
+                                <li><span class="keyword">Key Exchange:</span> Establish a shared symmetric (session) key (e.g., Diffie-Hellman).</li>
+                            </ul>
+                         </li>
+                    </ul>
+                     <p><strong>Comparison: Symmetric vs. Asymmetric</strong> (See slide 15 for table)</p>
+                     <ul>
+                         <li><strong>Speed:</strong> Symmetric is much faster.</li>
+                         <li><strong>Key Management:</strong> Asymmetric simplifies distribution (only public keys shared), Symmetric requires secure channel for shared key.</li>
+                         <li><strong>Use Cases:</strong> Symmetric for bulk data encryption (files, VPNs), Asymmetric for key exchange, digital signatures, authentication (SSL/TLS, PGP).</li>
+                        <li><strong>Security (Key Length):</strong> Asymmetric keys need to be much longer for equivalent security (e.g., 3072-bit RSA ≈ 256-bit AES).</li>
+                     </ul>
+                      <p><strong>Common Practice (Hybrid Approach):</strong> Use asymmetric crypto to securely exchange a symmetric session key, then use the faster symmetric crypto for bulk data encryption (e.g., SSL/TLS, PGP).</p>
+                </div> <!-- End concept-panel -->
+            </div> <!-- End concept-block -->
 
              <div class="concept-block">
-                 <h3>RSA Algorithm (Rivest, Shamir, Adleman)</h3>
-                 <p>Most widely used public-key algorithm. Can be used for encryption and digital signatures.</p>
-                 <h4>RSA Key Generation Steps</h4>
-                 <ol>
-                     <li><strong>Select two large distinct prime numbers, <var>p</var> and <var>q</var>.</strong> (Must be kept secret).</li>
-                     <li><strong>Calculate modulus <var>n</var> = <var>p</var> * <var>q</var>.</strong> (<var>n</var> is part of the public/private key, its bit length determines key size).</li>
-                     <li><strong>Calculate Euler's Totient Function: φ(<var>n</var>) = (<var>p</var>-1) * (<var>q</var>-1).</strong> (Must be kept secret).</li>
-                     <li><strong>Choose public exponent <var>e</var> such that:</strong>
-                         <ul>
-                             <li>1 < <var>e</var> < φ(<var>n</var>)</li>
-                             <li><var>e</var> and φ(<var>n</var>) are relatively prime (gcd(<var>e</var>, φ(<var>n</var>)) = 1). (Common values are 3, 65537).</li>
-                         </ul>
-                     </li>
-                     <li><strong>Calculate private exponent <var>d</var> such that:</strong>
-                         <ul>
-                              <li>(<var>d</var> * <var>e</var>) mod φ(<var>n</var>) = 1. (i.e., <var>d</var> is the modular multiplicative inverse of <var>e</var> modulo φ(<var>n</var>)).</li>
-                         </ul>
-                     </li>
-                     <li><strong>Public Key: KU = {<var>e</var>, <var>n</var>}</strong></li>
-                     <li><strong>Private Key: KR = {<var>d</var>, <var>n</var>}</strong></li>
-                 </ol>
-                 <h4>RSA Encryption/Decryption</h4>
-                 <p>Plaintext M and Ciphertext C are integers (M < n).</p>
-                 <p class="formula">Encryption: C = M<sup>e</sup> mod n</p>
-                 <p class="formula">Decryption: M = C<sup>d</sup> mod n</p>
-
-                 <div class="example">
-                     <p><strong>RSA Example (from slide 26-27):</strong></p>
+                 <h3 class="concept-header">RSA Algorithm (Rivest, Shamir, Adleman)</h3>
+                 <div class="concept-panel">
+                     <p>Most widely used public-key algorithm. Can be used for encryption and digital signatures.</p>
+                     <h4>RSA Key Generation Steps</h4>
                      <ol>
-                        <li>Select p = 13, q = 11.</li>
-                        <li>Calculate n = p * q = 13 * 11 = 143.</li>
-                        <li>Calculate φ(n) = (p-1)*(q-1) = (12)*(10) = 120.</li>
-                        <li>Choose e = 13 (Check: 1 < 13 < 120, gcd(13, 120)=1. OK).</li>
-                        <li>Calculate d such that (d * 13) mod 120 = 1.
-                            <ul><li>Using Extended Euclidean Algorithm or trial: d = ((φ(n) * i) + 1) / e</li>
-                                <li>i=1: (120*1+1)/13 = 9.30</li>
-                                <li>i=2: (120*2+1)/13 = 18.53</li>
-                                <li>i=3: (120*3+1)/13 = 27.76</li>
-                                <li>i=4: (120*4+1)/13 = 481 / 13 = 37. <strong>So, d = 37</strong>.</li>
+                         <li><strong>Select two large distinct prime numbers, <var>p</var> and <var>q</var>.</strong> (Must be kept secret).</li>
+                         <li><strong>Calculate modulus <var>n</var> = <var>p</var> * <var>q</var>.</strong> (<var>n</var> is part of the public/private key, its bit length determines key size).</li>
+                         <li><strong>Calculate Euler's Totient Function: φ(<var>n</var>) = (<var>p</var>-1) * (<var>q</var>-1).</strong> (Must be kept secret).</li>
+                         <li><strong>Choose public exponent <var>e</var> such that:</strong>
+                             <ul>
+                                 <li>1 < <var>e</var> < φ(<var>n</var>)</li>
+                                 <li><var>e</var> and φ(<var>n</var>) are relatively prime (gcd(<var>e</var>, φ(<var>n</var>)) = 1). (Common values are 3, 65537).</li>
                              </ul>
                          </li>
-                         <li>Public Key KU = {13, 143}.</li>
-                         <li>Private Key KR = {37, 143}.</li>
+                         <li><strong>Calculate private exponent <var>d</var> such that:</strong>
+                             <ul>
+                                  <li>(<var>d</var> * <var>e</var>) mod φ(<var>n</var>) = 1. (i.e., <var>d</var> is the modular multiplicative inverse of <var>e</var> modulo φ(<var>n</var>)).</li>
+                             </ul>
+                         </li>
+                         <li><strong>Public Key: KU = {<var>e</var>, <var>n</var>}</strong></li>
+                         <li><strong>Private Key: KR = {<var>d</var>, <var>n</var>}</strong></li>
                      </ol>
-                     <p><strong>Encryption Example:</strong> Plaintext M = 13.</p>
-                     <p class="formula">C = M<sup>e</sup> mod n = 13<sup>13</sup> mod 143</p>
-                     <p><em>(Calculation requires modular exponentiation)</em></p>
-                     <div class="solution"><strong>Ciphertext C = 52</strong> (as per slide)</div>
-                     <p><strong>Decryption Example:</strong> Ciphertext C = 52.</p>
-                      <p class="formula">M = C<sup>d</sup> mod n = 52<sup>37</sup> mod 143</p>
-                     <div class="solution"><strong>Plaintext M = 13</strong> (as per slide)</div>
-                 </div>
+                     <h4>RSA Encryption/Decryption</h4>
+                     <p>Plaintext M and Ciphertext C are integers (M < n).</p>
+                     <p class="formula">Encryption: C = M<sup>e</sup> mod n</p>
+                     <p class="formula">Decryption: M = C<sup>d</sup> mod n</p>
 
-                 <div class="example">
-                      <p><strong>Exercise 1 (Slide 28):</strong> p=7, q=17, e=5. Encrypt M=? (Need M). Decrypt C=? (Need C). Let's find keys first.</p>
-                      <p>n = 7 * 17 = 119</p>
-                      <p>φ(n) = (7-1)*(17-1) = 6 * 16 = 96</p>
-                      <p>e = 5 (Given, gcd(5, 96)=1)</p>
-                      <p>Find d: (d * 5) mod 96 = 1. (96*i + 1) / 5</p>
-                      <p>i=1: 97/5 X, i=2: 193/5 X, i=3: 289/5 X, i=4: 385/5 = 77. <strong>d = 77</strong>.</p>
-                      <p>Public Key = {5, 119}, Private Key = {77, 119}.</p>
-                       <p><em>Slide encrypts M=6:</em> C = 6<sup>5</sup> mod 119 = 7776 mod 119. 7776 / 119 = 65.34... 7776 - 65*119 = 7776 - 7735 = 41. <strong>C = 41</strong>.</p>
-                       <p><em>Slide decrypts C=41:</em> M = 41<sup>77</sup> mod 119. (Requires modular exponentiation). <strong>M = 6</strong>.</p>
-                       <div class="solution">Keys: KU={5, 119}, KR={77, 119}. If M=6, C=41. If C=41, M=6.</div>
-                 </div>
-                 <!-- Add Exercises 2 and 3 similarly -->
+                     <div class="example">
+                         <p><strong>RSA Example (from slide 26-27):</strong></p>
+                         <ol>
+                            <li>Select p = 13, q = 11.</li>
+                            <li>Calculate n = p * q = 13 * 11 = 143.</li>
+                            <li>Calculate φ(n) = (p-1)*(q-1) = (12)*(10) = 120.</li>
+                            <li>Choose e = 13 (Check: 1 < 13 < 120, gcd(13, 120)=1. OK).</li>
+                            <li>Calculate d such that (d * 13) mod 120 = 1.
+                                <ul><li>Using Extended Euclidean Algorithm or trial: d = ((φ(n) * i) + 1) / e</li>
+                                    <li>i=1: (120*1+1)/13 = 9.30</li>
+                                    <li>i=2: (120*2+1)/13 = 18.53</li>
+                                    <li>i=3: (120*3+1)/13 = 27.76</li>
+                                    <li>i=4: (120*4+1)/13 = 481 / 13 = 37. <strong>So, d = 37</strong>.</li>
+                                 </ul>
+                             </li>
+                             <li>Public Key KU = {13, 143}.</li>
+                             <li>Private Key KR = {37, 143}.</li>
+                         </ol>
+                         <p><strong>Encryption Example:</strong> Plaintext M = 13.</p>
+                         <p class="formula">C = M<sup>e</sup> mod n = 13<sup>13</sup> mod 143</p>
+                         <p><em>(Calculation requires modular exponentiation)</em></p>
+                         <div class="solution"><strong>Ciphertext C = 52</strong> (as per slide)</div>
+                         <p><strong>Decryption Example:</strong> Ciphertext C = 52.</p>
+                          <p class="formula">M = C<sup>d</sup> mod n = 52<sup>37</sup> mod 143</p>
+                         <div class="solution"><strong>Plaintext M = 13</strong> (as per slide)</div>
+                     </div>
 
-                  <h4>RSA Pros & Cons</h4>
-                 <ul>
-                     <li><strong>Advantages:</strong> Very secure (if key is large), Public-key mechanism (key exchange, digital sig), Widely used standard.</li>
-                     <li><strong>Disadvantages:</strong> Slow processing speed, Requires large key sizes (computationally expensive), Vulnerable to side-channel attacks (implementation issue), Vulnerable to quantum computing (future threat), Key management of private key critical.</li>
-                 </ul>
-             </div>
+                     <div class="example">
+                          <p><strong>Exercise 1 (Slide 28):</strong> p=7, q=17, e=5. Encrypt M=? (Need M). Decrypt C=? (Need C). Let's find keys first.</p>
+                          <p>n = 7 * 17 = 119</p>
+                          <p>φ(n) = (7-1)*(17-1) = 6 * 16 = 96</p>
+                          <p>e = 5 (Given, gcd(5, 96)=1)</p>
+                          <p>Find d: (d * 5) mod 96 = 1. (96*i + 1) / 5</p>
+                          <p>i=1: 97/5 X, i=2: 193/5 X, i=3: 289/5 X, i=4: 385/5 = 77. <strong>d = 77</strong>.</p>
+                          <p>Public Key = {5, 119}, Private Key = {77, 119}.</p>
+                           <p><em>Slide encrypts M=6:</em> C = 6<sup>5</sup> mod 119 = 7776 mod 119. 7776 / 119 = 65.34... 7776 - 65*119 = 7776 - 7735 = 41. <strong>C = 41</strong>.</p>
+                           <p><em>Slide decrypts C=41:</em> M = 41<sup>77</sup> mod 119. (Requires modular exponentiation). <strong>M = 6</strong>.</p>
+                           <div class="solution">Keys: KU={5, 119}, KR={77, 119}. If M=6, C=41. If C=41, M=6.</div>
+                     </div>
+                     <!-- Add Exercises 2 and 3 similarly -->
+
+                      <h4>RSA Pros & Cons</h4>
+                     <ul>
+                         <li><strong>Advantages:</strong> Very secure (if key is large), Public-key mechanism (key exchange, digital sig), Widely used standard.</li>
+                         <li><strong>Disadvantages:</strong> Slow processing speed, Requires large key sizes (computationally expensive), Vulnerable to side-channel attacks (implementation issue), Vulnerable to quantum computing (future threat), Key management of private key critical.</li>
+                     </ul>
+                 </div> <!-- End concept-panel -->
+            </div> <!-- End concept-block -->
 
             <div class="concept-block">
-                <h3>Diffie-Hellman Key Exchange</h3>
-                <p>Allows two parties to establish a shared secret (symmetric key) over an insecure channel.</p>
-                <h4>Algorithm Steps</h4>
-                <ol>
-                    <li>Alice and Bob agree on large prime <var>P</var> and a primitive root generator <var>G</var> (both public).</li>
-                    <li>Alice chooses a secret random integer <var>a</var>. Bob chooses a secret random integer <var>b</var>.</li>
-                    <li>Alice computes her public key: A = G<sup>a</sup> mod P. Sends A to Bob.</li>
-                    <li>Bob computes his public key: B = G<sup>b</sup> mod P. Sends B to Alice.</li>
-                    <li>Alice computes the shared secret: S = B<sup>a</sup> mod P = (G<sup>b</sup>)<sup>a</sup> mod P.</li>
-                     <li>Bob computes the shared secret: S = A<sup>b</sup> mod P = (G<sup>a</sup>)<sup>b</sup> mod P.</li>
-                    <li>Both now share the same secret key S = G<sup>ab</sup> mod P, which was never transmitted directly.</li>
-                </ol>
-                <div class="example">
-                    <p><strong>Diffie-Hellman Example (Slide 36):</strong></p>
+                <h3 class="concept-header">Diffie-Hellman Key Exchange</h3>
+                <div class="concept-panel">
+                    <p>Allows two parties to establish a shared secret (symmetric key) over an insecure channel.</p>
+                    <h4>Algorithm Steps</h4>
                     <ol>
-                        <li>Public numbers: P = 23, G = 9.</li>
-                        <li>Alice secret a = 4. Bob secret b = 3.</li>
-                        <li>Alice computes public key: A = G<sup>a</sup> mod P = 9<sup>4</sup> mod 23 = 6561 mod 23 = 6.</li>
-                        <li>Bob computes public key: B = G<sup>b</sup> mod P = 9<sup>3</sup> mod 23 = 729 mod 23 = 16.</li>
-                        <li>Alice and Bob exchange public keys A=6, B=16.</li>
-                        <li>Alice computes shared secret: S = B<sup>a</sup> mod P = 16<sup>4</sup> mod 23 = 65536 mod 23 = 9.</li>
-                        <li>Bob computes shared secret: S = A<sup>b</sup> mod P = 6<sup>3</sup> mod 23 = 216 mod 23 = 9.</li>
-                     </ol>
-                    <div class="solution"><strong>Shared Secret Key = 9</strong></div>
-                </div>
-            </div>
+                        <li>Alice and Bob agree on large prime <var>P</var> and a primitive root generator <var>G</var> (both public).</li>
+                        <li>Alice chooses a secret random integer <var>a</var>. Bob chooses a secret random integer <var>b</var>.</li>
+                        <li>Alice computes her public key: A = G<sup>a</sup> mod P. Sends A to Bob.</li>
+                        <li>Bob computes his public key: B = G<sup>b</sup> mod P. Sends B to Alice.</li>
+                        <li>Alice computes the shared secret: S = B<sup>a</sup> mod P = (G<sup>b</sup>)<sup>a</sup> mod P.</li>
+                         <li>Bob computes the shared secret: S = A<sup>b</sup> mod P = (G<sup>a</sup>)<sup>b</sup> mod P.</li>
+                        <li>Both now share the same secret key S = G<sup>ab</sup> mod P, which was never transmitted directly.</li>
+                    </ol>
+                    <div class="example">
+                        <p><strong>Diffie-Hellman Example (Slide 36):</strong></p>
+                        <ol>
+                            <li>Public numbers: P = 23, G = 9.</li>
+                            <li>Alice secret a = 4. Bob secret b = 3.</li>
+                            <li>Alice computes public key: A = G<sup>a</sup> mod P = 9<sup>4</sup> mod 23 = 6561 mod 23 = 6.</li>
+                            <li>Bob computes public key: B = G<sup>b</sup> mod P = 9<sup>3</sup> mod 23 = 729 mod 23 = 16.</li>
+                            <li>Alice and Bob exchange public keys A=6, B=16.</li>
+                            <li>Alice computes shared secret: S = B<sup>a</sup> mod P = 16<sup>4</sup> mod 23 = 65536 mod 23 = 9.</li>
+                            <li>Bob computes shared secret: S = A<sup>b</sup> mod P = 6<sup>3</sup> mod 23 = 216 mod 23 = 9.</li>
+                         </ol>
+                        <div class="solution"><strong>Shared Secret Key = 9</strong></div>
+                    </div>
+                </div> <!-- End concept-panel -->
+            </div> <!-- End concept-block -->
 
              <div class="concept-block">
-                 <h3>Other Asymmetric Systems</h3>
-                 <ul>
-                     <li><strong>ElGamal Cryptosystem:</strong> Based on Diffie-Hellman concepts and discrete logarithm problem. Used for digital signatures (part of DSS) and encryption.</li>
-                     <li><strong>Elliptic Curve Cryptography (ECC):</strong> Uses mathematics of elliptic curves. Provides equivalent security to RSA with much smaller keys, leading to better performance (important for mobile/constrained devices). Used for key exchange and digital signatures.</li>
-                 </ul>
-             </div>
+                 <h3 class="concept-header">Other Asymmetric Systems</h3>
+                 <div class="concept-panel">
+                     <ul>
+                         <li><strong>ElGamal Cryptosystem:</strong> Based on Diffie-Hellman concepts and discrete logarithm problem. Used for digital signatures (part of DSS) and encryption.</li>
+                         <li><strong>Elliptic Curve Cryptography (ECC):</strong> Uses mathematics of elliptic curves. Provides equivalent security to RSA with much smaller keys, leading to better performance (important for mobile/constrained devices). Used for key exchange and digital signatures.</li>
+                     </ul>
+                 </div> <!-- End concept-panel -->
+             </div> <!-- End concept-block -->
 
         </section>
 
@@ -722,8 +783,11 @@
             const tfContainer = document.getElementById('tf-questions');
             const mcContainer = document.getElementById('mc-questions');
 
-             // Select accordion elements
+             // Select accordion elements (Glossary)
             const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+            // Select concept accordion elements
+            const conceptHeaders = document.querySelectorAll('.concept-header');
 
 
             // --- Main Tab Switching Logic ---
@@ -775,6 +839,32 @@
                         }
                     });
                     // --- End Optional Close Others ---
+                });
+            });
+
+            // --- Accordion Logic (for Concepts) ---
+             conceptHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const panel = this.nextElementSibling; // The .concept-panel div
+
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px";
+                    } else {
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add buffer
+                        panel.style.padding = "15px 20px"; // Use padding defined in CSS or adjust as needed
+                    }
+
+                    // Optional: Close other concept panels
+                    conceptHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            const otherPanel = otherHeader.nextElementSibling;
+                            otherPanel.style.maxHeight = null;
+                            otherPanel.style.padding = "0 20px";
+                        }
+                    });
                 });
             });
 
@@ -968,8 +1058,8 @@
             loadTrueFalseQuestions();
             loadMultipleChoiceQuestions();
 
-             // Activate the default tab's content on load
-             document.querySelector('.main-content.active').style.display = 'block';
+             // Activate the default tab's content on load using CSS class (no direct style manipulation needed here)
+             // document.querySelector('.main-content.active').style.display = 'block'; // This line is removed/commented out
 
 
         }); // End DOMContentLoaded
