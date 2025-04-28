@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SE205 - Unit 2: Cryptography (Symmetric Ciphers)</title>
+    <style>
+        /* Paste the CSS from the SE204 c1.html / SE205 unit1.html example here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3, h4 { /* Added h4 */
+            color: #0056b3; /* Cairo University Blue */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #007bff; /* Lighter Blue */
+        }
+        h4 { /* Style for sub-sections within concepts */
+             margin-top: 20px;
+             margin-bottom: 10px;
+             color: #17a2b8; /* Info Blue */
+        }
+
+         ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+         li {
+             margin-bottom: 8px;
+         }
+        code, pre { /* Apply styling to pre for code blocks */
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.95em;
+            display: block; /* Make pre block-level */
+            overflow-x: auto; /* Add scroll for long code lines */
+            padding: 10px; /* More padding for pre */
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #dee2e6;
+        }
+        strong {
+             color: #dc3545; /* Red emphasis */
+        }
+         .formula { /* Specific style for formula display */
+            font-weight: bold;
+            color: #28a745; /* Green */
+            margin: 10px 0;
+         }
+         .example {
+             margin-top: 15px;
+             padding-left: 15px;
+             border-left: 3px solid #17a2b8; /* Info Blue */
+             background-color: #f8f9fa;
+             padding-top: 10px;
+             padding-bottom: 10px;
+             border-radius: 4px;
+         }
+          .solution {
+             margin-top: 10px;
+             padding-left: 15px;
+             font-style: italic;
+         }
+         .solution code, .solution pre {
+            font-style: normal; /* Keep code normal style */
+            background-color: #e0e0e0; /* Slightly darker bg for solution code */
+         }
+
+        /* Main Tabs Styles */
+        .main-tabs {
+            display: flex;
+            justify-content: space-around; /* Or flex-start, center */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            margin-bottom: 25px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .main-tabs .tab-button {
+            padding: 12px 20px; /* Adjusted padding slightly */
+            border: none;
+            background: none;
+            color: #0056b3;
+            font-size: 0.95em; /* Slightly smaller font */
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-bottom: -2px; /* Overlap border */
+            border-bottom: 2px solid transparent;
+            text-align: center;
+        }
+
+        .main-tabs .tab-button.active {
+            background: #0056b3;
+            color: white;
+            border-bottom: 2px solid #0056b3;
+        }
+        .main-tabs .tab-button:hover:not(.active) {
+            background-color: #e9ecef;
+            border-bottom: 2px solid #adb5bd;
+        }
+
+        /* Content Sections */
+        .main-content {
+            display: none; /* Hide all main content sections by default */
+            animation: fadeIn 0.5s;
+        }
+
+        .main-content.active {
+            display: block; /* Show only the active one */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        /* --- Accordion Styles (for Glossary) --- */
+        .glossary-accordion {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            overflow: hidden; /* Contain borders */
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid #dee2e6; /* Separator */
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            background-color: #f8f9fa;
+            color: #dc3545; /* Highlight Red for terms */
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            position: relative; /* For the indicator */
+        }
+
+        .accordion-header:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Indicator (+/-) */
+        .accordion-header::after {
+            content: '\002B'; /* + sign */
+            color: #0056b3;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .accordion-header.active::after {
+            content: "\2212"; /* - sign */
+            transform: rotate(180deg); /* Optional: animate the sign itself */
+        }
+        /* Optional: Slightly different style for active header */
+        .accordion-header.active {
+             background-color: #e7f1ff;
+        }
+
+
+        .accordion-panel {
+            padding: 0 20px; /* Start with 0 padding top/bottom */
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out; /* Smooth transition */
+        }
+        .accordion-panel p, .accordion-panel ul { /* Apply margin to lists too */
+            margin: 15px 0; /* Add margin back when panel is open */
+            color: #333; /* Reset color for definition */
+        }
+        .accordion-panel pre { /* Style code blocks inside accordion */
+             margin: 15px 0;
+             background-color: #f1f1f1;
+        }
+
+        /* --- End Accordion Styles --- */
+
+        /* Concepts Section Styles */
+        #concepts .concept-block {
+            background-color: #ffffff; /* White background for concept blocks */
+            border: 1px solid #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+         #concepts .concept-block h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+         .matrix-table {
+             border-collapse: collapse;
+             margin: 10px 0;
+             font-family: monospace;
+             text-align: center;
+         }
+         .matrix-table td, .matrix-table th {
+             border: 1px solid #ccc;
+             padding: 5px 8px;
+             min-width: 30px;
+         }
+         .matrix-table th {
+              background-color: #f0f0f0;
+         }
+
+
+        /* Quiz Styles (apply within #fill, #tf, #mc) */
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #ffffff; /* White background for questions */
+            position: relative; /* For feedback positioning */
+        }
+
+        .question p {
+            margin: 0 0 15px;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-button {
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            background: #f8f9fa; /* Light background for options */
+            color: #495057;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: left;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            width: 100%;
+        }
+        .option-button:hover {
+             background-color: #e9ecef;
+             border-color: #adb5bd;
+        }
+
+        .option-button.selected {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .check-answer {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border: none;
+            background: #28a745; /* Success Green */
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+        .check-answer:hover {
+             background-color: #218838;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SE205 - Unit 2: Cryptography (Symmetric Ciphers)</h1>
+
+        <!-- Main Tab Buttons -->
+        <div class="main-tabs">
+            <button class="tab-button active" data-tab="glossary">Glossary</button>
+            <button class="tab-button" data-tab="concepts">Key Concepts & Examples</button>
+            <button class="tab-button" data-tab="fill">Fill in the Blank</button>
+            <button class="tab-button" data-tab="tf">True/False</button>
+            <button class="tab-button" data-tab="mc">Multiple Choice</button>
+        </div>
+
+        <!-- Glossary Section (Accordion) -->
+        <section id="glossary" class="main-content active">
+            <h2>Glossary of Terms</h2>
+            <div class="glossary-accordion">
+                <!-- Add terms based on Unit 2 slides -->
+                <div class="accordion-item">
+                    <button class="accordion-header">3DES (Triple DES)</button>
+                    <div class="accordion-panel">
+                        <p>A symmetric-key block cipher that applies the Data Encryption Standard (DES) algorithm three times to each data block (Encrypt-Decrypt-Encrypt sequence). Developed to improve DES security with a longer effective key length.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">AES (Advanced Encryption Standard)</button>
+                    <div class="accordion-panel">
+                        <p>A symmetric-key block cipher standard adopted by the U.S. government. It uses key sizes of 128, 192, or 256 bits and encrypts data in 128-bit blocks through multiple rounds (10, 12, or 14 respectively). Widely used and considered very secure.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Asymmetric Cryptography</button>
+                    <div class="accordion-panel">
+                        <p>A type of cryptography that uses two separate but mathematically related keys: a public key (for encryption) and a private key (for decryption). Also known as public-key cryptography.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Block Cipher</button>
+                    <div class="accordion-panel">
+                        <p>An encryption algorithm that processes input data in fixed-size blocks (e.g., 64-bit or 128-bit blocks) at a time, producing an output block for each input block. Examples: DES, AES, 3DES.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Brute-Force Attack</button>
+                    <div class="accordion-panel">
+                        <p>A cryptanalytic attack that involves trying every possible key on a piece of ciphertext until an intelligible plaintext is obtained. Feasibility depends on key space size.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Caesar Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A simple substitution cipher where each letter in the plaintext is shifted a certain fixed number of positions down the alphabet. Example: Shift 3 (A becomes D, B becomes E).</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Cipher</button>
+                    <div class="accordion-panel">
+                        <p>The algorithm used for transforming plaintext into ciphertext (encryption) and back (decryption).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Ciphertext</button>
+                    <div class="accordion-panel">
+                        <p>The scrambled, unreadable message resulting from applying an encryption algorithm (cipher) to plaintext.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Classical Encryption Techniques</button>
+                    <div class="accordion-panel">
+                        <p>Older methods of encryption, typically operating on characters, including substitution and transposition techniques. Examples: Caesar, Playfair, Hill, Rail Fence.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Cryptanalysis</button>
+                    <div class="accordion-panel">
+                        <p>The study and practice of analyzing information systems to understand hidden aspects, often focusing on finding weaknesses in cryptographic algorithms or breaking ciphers without knowing the key.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Cryptography</button>
+                    <div class="accordion-panel">
+                        <p>The science and study of techniques for secure communication in the presence of third parties (adversaries). Involves encryption, decryption, key management, etc.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Decrypt</button>
+                    <div class="accordion-panel">
+                        <p>The process of converting ciphertext back into its original plaintext form using a key and a decryption algorithm.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">DES (Data Encryption Standard)</button>
+                    <div class="accordion-panel">
+                        <p>An outdated symmetric-key block cipher standard, officially retired in 2005. It uses a 56-bit effective key and operates on 64-bit blocks through 16 rounds of permutation and substitution.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Encrypt</button>
+                    <div class="accordion-panel">
+                        <p>The process of converting plaintext into ciphertext using a key and an encryption algorithm to make it unreadable to unauthorized parties.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">Hill Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A polygraphic substitution cipher based on linear algebra. It uses a matrix key to encrypt blocks of letters.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Key</button>
+                    <div class="accordion-panel">
+                        <p>A piece of information (parameter) used by a cipher algorithm to transform plaintext into ciphertext or vice versa. In symmetric crypto, the same key is used for both; in asymmetric, different but related keys are used.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Monoalphabetic Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A substitution cipher where the cipher alphabet is fixed throughout the encryption process (each plaintext letter always maps to the same ciphertext letter). Vulnerable to frequency analysis.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Plaintext</button>
+                    <div class="accordion-panel">
+                        <p>The original, readable message or data before encryption.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Playfair Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A manual symmetric encryption technique that encrypts pairs of letters (digraphs), instead of single letters. It uses a 5x5 grid based on a keyword.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Polyalphabetic Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A substitution cipher that uses multiple substitution alphabets (e.g., based on a keyword), making it more resistant to frequency analysis than monoalphabetic ciphers. Example: Vigenère cipher.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Rail Fence Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A simple transposition cipher where plaintext is written downwards diagonally on successive "rails" of an imaginary fence and then read off as sequences of rows.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">SDES (Simplified DES)</button>
+                    <div class="accordion-panel">
+                        <p>An educational simplified version of the DES algorithm, operating on 8-bit blocks with a 10-bit key and involving 2 rounds. Used to illustrate the principles of block ciphers.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Stream Cipher</button>
+                    <div class="accordion-panel">
+                        <p>An encryption algorithm that processes input data continuously, typically one bit or one byte at a time, producing one output element for each input element. Example: XOR cipher.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Substitution Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A method of encryption where units of plaintext (like letters or bits) are replaced with ciphertext units according to a defined system (the key).</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Symmetric Cryptography</button>
+                    <div class="accordion-panel">
+                        <p>A type of cryptography where the same secret key is used for both encryption and decryption. Requires secure key distribution.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Transposition Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A method of encryption where the positions of plaintext units (like letters) are shifted according to a regular system, rearranging the order but keeping the letters themselves unchanged.</p>
+                    </div>
+                </div>
+                 <div class="accordion-item">
+                    <button class="accordion-header">XOR Cipher</button>
+                    <div class="accordion-panel">
+                        <p>A simple stream cipher technique where the plaintext is combined with a key using the bitwise XOR operation. Repeating the XOR operation with the same key decrypts the ciphertext.</p>
+                    </div>
+                </div>
+            </div> <!-- End glossary-accordion -->
+        </section>
+
+        <!-- Key Concepts & Examples Section -->
+        <section id="concepts" class="main-content">
+            <h2>Key Concepts & Examples from Unit 2</h2>
+
+            <div class="concept-block">
+                <h3>Cryptography Fundamentals</h3>
+                <p>Cryptography is the study of secure communication techniques.</p>
+                <ul>
+                    <li><strong>Dimensions of Classification:</strong>
+                        <ol>
+                            <li>Type of Operations: Substitution (replace elements) or Transposition (rearrange elements).</li>
+                            <li>Number of Keys: Symmetric (one shared key) or Asymmetric (public/private key pair).</li>
+                            <li>Way Plaintext is Processed: Block Cipher (process fixed-size blocks) or Stream Cipher (process continuously).</li>
+                        </ol>
+                    </li>
+                    <li><strong>Basic Terms:</strong> Plaintext (original), Ciphertext (coded), Cipher (algorithm), Key (secret parameter), Encrypt (plaintext to ciphertext), Decrypt (ciphertext to plaintext).</li>
+                    <li><strong>Symmetric Model:</strong> Uses a single shared secret key <code>K</code>. Encryption: <code>Y = E(K, X)</code>. Decryption: <code>X = D(K, Y)</code>. Requires secure key distribution.</li>
+                </ul>
+            </div>
+
+             <div class="concept-block">
+                <h3>Cryptanalysis</h3>
+                <p>The study of breaking ciphers. Main approaches:</p>
+                <ul>
+                    <li><strong>Cryptanalytic Attack:</strong> Exploits algorithm characteristics, possibly using known plaintext/ciphertext pairs.</li>
+                    <li><strong>Brute-Force Attack:</strong> Tries every possible key. Feasibility depends on key length (key space size). Longer keys make this harder.</li>
+                </ul>
+            </div>
+
+             <div class="concept-block">
+                <h3>Classical Encryption Techniques (Character-Oriented)</h3>
+                <h4>1. Substitution Techniques</h4>
+                <p>Replace plaintext letters with other letters, numbers, or symbols.</p>
+
+                <h5>Caesar Cipher</h5>
+                <p>Shift each letter by a fixed amount (key <code>k</code>).</p>
+                <p class="formula">Encryption: C = (p + k) mod 26</p>
+                <p class="formula">Decryption: P = (C - k) mod 26</p>
+                <div class="example">
+                     <p><strong>Example:</strong> Encrypt "HELLO" with key k=10.</p>
+                     <p>Map letters to numbers (A=0, B=1,... Z=25): H=7, E=4, L=11, L=11, O=14.</p>
+                     <p>Apply formula:</p>
+                     <ul>
+                        <li>(7 + 10) mod 26 = 17 -> R</li>
+                        <li>(4 + 10) mod 26 = 14 -> O</li>
+                        <li>(11 + 10) mod 26 = 21 -> V</li>
+                        <li>(11 + 10) mod 26 = 21 -> V</li>
+                        <li>(14 + 10) mod 26 = 24 -> Y</li>
+                     </ul>
+                     <div class="solution"><strong>Ciphertext:</strong> ROVVY</div>
+                </div>
+                <div class="example">
+                     <p><strong>Python Code (Caesar Encrypt):</strong></p>
+                     <pre>
+#enter the word to encrypt
+text = "hello world"
+#define the shift
+shift = 4
+def ceaser (message, offset): #messages to encrypt, offset to shift
+    alphapet = 'abcdefghijklmnopqrstuvwxyz'
+    enc_text = ''
+    for char in message.lower (): # convert every letter to its small phase
+        if char == " ": #dealing with spaces
+            enc_text += char # add it without changes
+        else:
+            try: # Handle non-alphabetic chars if needed
+                index = alphapet.find(char)
+                new_index = (index + offset) % len(alphapet) # new letter index, len to range 0-25
+                enc_text += alphapet[new_index] #Shifted letter
+            except ValueError:
+                 enc_text += char # Keep non-alpha chars as is
+    return enc_text
+
+encrypted = ceaser(text, shift)
+print ('plain text :', text)
+print ('encrypted text :', encrypted)
+# Assignment 1: write a code that decrypt any given message based of Caesar chipper.
+# Hint: Decryption is encryption with shift = (26 - k)
+                    </pre>
+                 </div>
+
+                <h5>Monoalphabetic Cipher</h5>
+                <p>Each plaintext letter maps to a unique, fixed ciphertext letter (e.g., A->J, B->I, C->B...). Uses a fixed substitution alphabet (26! possible keys).</p>
+                <div class="example">
+                    <p><strong>Example:</strong> Plaintext "CRYPTOGRAPHY", Substitution: A->J, B->I, C->B, ..., R->S, Y->E, etc.</p>
+                    <p>(Using the specific table from slide 22: C->B, R->S, Y->E, P->U, T->W, O->A, G->C, R->S, A->J, P->U, H->N, Y->E)</p>
+                    <div class="solution"><strong>Ciphertext (using slide 22 table):</strong> BSEZ WUC SJZN E</div>
+                    <p><em>Note: The example calculation differs slightly from the slide's result, double-checking the specific substitutions is needed for exact match. The slide result was BSEZWUCSJZNE. Let's re-check: C->B, R->S, Y->E, P->U, T->W, O->A, G->C, R->S, A->J, P->U, H->N, Y->E. This still seems different. Let's use the slide's result as the intended example.</em></p>
+                     <div class="solution"><strong>Ciphertext (as per slide 22):</strong> BSEZWUCSJZNE</div>
+                     <p>Vulnerable to frequency analysis.</p>
+                </div>
+
+                 <h5>Polyalphabetic Cipher</h5>
+                 <p>Uses multiple substitution alphabets, often determined by a keyword. Each occurrence of a character can map to a different character.</p>
+                 <div class="example">
+                     <p><strong>Example:</strong> Plaintext "SECURITY", Key: Shift 1st letter by 3, 2nd by 5, 3rd by 7 (repeating pattern).</p>
+                     <p>Map letters to numbers (A=0..Z=25): S=18, E=4, C=2, U=20, R=17, I=8, T=19, Y=24</p>
+                     <p>Apply shifts (3, 5, 7, 3, 5, 7, 3, 5):</p>
+                     <ul>
+                         <li>S (18) + 3 = 21 -> V</li>
+                         <li>E (4) + 5 = 9 -> J</li>
+                         <li>C (2) + 7 = 9 -> J</li>
+                         <li>U (20) + 3 = 23 -> X</li>
+                         <li>R (17) + 5 = 22 -> W</li>
+                         <li>I (8) + 7 = 15 -> P</li>
+                         <li>T (19) + 3 = 22 -> W</li>
+                         <li>Y (24) + 5 = 29 mod 26 = 3 -> D</li>
+                     </ul>
+                     <div class="solution"><strong>Ciphertext:</strong> VJJXWPWD</div>
+                 </div>
+
+                 <h5>Playfair Cipher</h5>
+                 <p>Encrypts digraphs (pairs of letters) using a 5x5 grid based on a keyword (I/J often share a cell).</p>
+                 <div class="example">
+                     <p><strong>Example:</strong> Keyword "MONARCHY", Plaintext "BALLON".</p>
+                     <p>1. Create 5x5 Grid (Fill keyword letters first, omit duplicates, then fill remaining alphabet):</p>
+                     <table class="matrix-table">
+                         <tr><td>M</td><td>O</td><td>N</td><td>A</td><td>R</td></tr>
+                         <tr><td>C</td><td>H</td><td>Y</td><td>B</td><td>D</td></tr>
+                         <tr><td>E</td><td>F</td><td>G</td><td>I/J</td><td>K</td></tr>
+                         <tr><td>L</td><td>P</td><td>Q</td><td>S</td><td>T</td></tr>
+                         <tr><td>U</td><td>V</td><td>W</td><td>X</td><td>Z</td></tr>
+                     </table>
+                     <p>2. Prepare Plaintext: Split into digraphs. If double letter, insert filler (e.g., 'X'). If odd length, append filler. "BALLON" -> BA LX LO NX (Assuming X filler for LL, and for odd length if needed - here ON doesn't need it).</p>
+                     <p>3. Encrypt Digraphs using grid rules:</p>
+                     <ul>
+                         <li><strong>BA:</strong> Same row (Row 2). Replace with letter to the right (wrap around). B->D, A->R? <em>Re-checking slide example: slide used different rules/grid? Slide says BA->IB. Let's follow slide's rules based on output. Rule 1 (Same Column): Shift down. Rule 2 (Same Row): Shift right. Rule 3 (Rectangle): Use opposite corners on same row.</em></li>
+                         <li>BA -> IB (Rectangle rule: B(2,4), A(1,4). Corners are I(3,4), R(1,1)? No, I(3,4) and C(2,1)? Still doesn't match. Let's use slide result directly.) <strong>BA -> IB</strong> (Implies B and A are rectangle corners, replaced by I and B? Check grid: A(1,4), B(2,4). Same column! Shift down: A->S, B->D? Still no match. There might be an error in the slide example or a specific Playfair variant used.) <strong>Using slide's result: BA -> IB</strong></li>
+                         <li><strong>LX:</strong> Rectangle L(4,1), X(5,4). Corners are U(5,1), T(4,4)? Slide says: <strong>LX -> SU</strong> (Implies corners are S and U. Let's assume these are the rules.)</li>
+                          <li><strong>LO:</strong> Same row (Row 4). Shift right. L->P, O->? O is row 1. This pair isn't in same row. Rectangle L(4,1), O(1,2). Corners are M(1,1) P(4,2)? Slide says: <strong>LO -> PM</strong>.</li>
+                          <li><strong>ON:</strong> Rectangle O(1,2), N(1,3). Same row! Shift right. O->N, N->A. Slide says: <strong>ON -> NA</strong>. (This one matches the rule!)</li>
+                     </ul>
+                      <p><em>Conclusion: The Playfair example on the slide seems inconsistent with standard rules or uses a different grid/rule interpretation for some pairs. Following the slide's provided transformations:</em></p>
+                     <div class="solution"><strong>Ciphertext (based on slide transformations):</strong> IBSUPMNA</div>
+                 </div>
+
+                 <h5>Hill Cipher</h5>
+                 <p>Uses matrix multiplication for encryption. Key is an invertible matrix.</p>
+                <p class="formula">Encryption: C = P * K mod 26</p>
+                 <p>Decryption: P = C * K<sup>-1</sup> mod 26</p>
+                 <div class="example">
+                     <p><strong>Example:</strong> Plaintext "HATS", Key K = [[3, 3], [2, 5]].</p>
+                     <p>Map letters: H=7, A=0, T=19, S=18.</p>
+                     <p>Process digraphs: HA = [7, 0], TS = [19, 18].</p>
+                     <p>Encrypt HA:</p>
+                     <code>[7, 0] * [[3, 3], [2, 5]] mod 26</code><br/>
+                     <code>= [(7*3 + 0*2), (7*3 + 0*5)] mod 26</code><br/>
+                     <code>= [21, 21] mod 26</code><br/>
+                     <code>= [21, 21] -> VV (V=21)</code>
+                     <p><em>Correction: Slide shows HA -> VO. Let's recheck slide calculation:</em></p>
+                     <p>HA: [7 0] * K = [(7*3 + 0*2) (7*3 + 0*5)] mod 26 = [21 21] mod 26 -> VV.</p>
+                     <p>TS: [19 18] * K = [(19*3 + 18*2) (19*3 + 18*5)] mod 26 = [ (57+36) (57+90) ] mod 26 = [93 147] mod 26.</p>
+                     <p>93 mod 26 = 15 (P)</p>
+                     <p>147 mod 26 = 17 (R)</p>
+                     <p>Result: VVPR. Slide shows VOHY. Let's check slide's calculation steps.</p>
+                     <p>Slide HA calc: [(7*3 + 0*3) (7*2 + 0*5)] mod 26 = [21 14] mod 26 -> VO. <em>Ah, the matrix multiplication order/setup in the slide seems different (applying key columns?). Or maybe P is represented as column vector? Let's assume slide uses P as column vector [P1 P2]^T, so C = K * P.</em></p>
+                     <p>HA (H=7, A=0): K * [7 0]^T = [[3, 3], [2, 5]] * [7 0]^T = [ (3*7+3*0) (2*7+5*0) ]^T mod 26 = [21 14]^T mod 26 -> VO (Matches slide)</p>
+                     <p>TS (T=19, S=18): K * [19 18]^T = [[3, 3], [2, 5]] * [19 18]^T = [ (3*19+3*18) (2*19+5*18) ]^T mod 26 = [ (57+54) (38+90) ]^T mod 26 = [111 128]^T mod 26.</p>
+                     <p>111 mod 26 = 7 (H)</p>
+                     <p>128 mod 26 = 24 (Y)</p>
+                      <p>Result: HY (Matches slide calculation for TS)</p>
+                     <div class="solution"><strong>Ciphertext (following slide's matrix multiplication method):</strong> VOHY</div>
+                 </div>
+
+                <h4>2. Transposition Techniques</h4>
+                <p>Rearrange the letters of the plaintext without changing the letters themselves.</p>
+
+                 <h5>Rail Fence Cipher</h5>
+                 <p>Write plaintext diagonally on 'rails' and read off row by row.</p>
+                 <div class="example">
+                     <p><strong>Example:</strong> Plaintext "meet me after the party", Depth (rails) = 2.</p>
+                     <p>Write on rails:</p>
+                     <code>
+m . e . m . a . t . r . h . p . r . y <br/>
+. e . t . m . e . f . e . t . e . a . t
+                     </code>
+                     <p>Read Row 1: mematrhpry</p>
+                     <p>Read Row 2: etmefeteat</p>
+                     <p><em>Correction: Slide example shows different spacing/result. Let's follow slide.</em></p>
+                     <p>Slide method:</p>
+                     <code>
+m e m a t r h p r y <br/>
+e t e f e t e a t
+                     </code>
+                     <p>Read Row 1: mematrhpry</p>
+                     <p>Read Row 2: etefeteat</p>
+                     <div class="solution"><strong>Ciphertext:</strong> mematrhpryetefeteat</div>
+                 </div>
+            </div>
+
+            <div class="concept-block">
+                 <h3>Simple Modern Encryption (Bit-Oriented)</h3>
+                 <h4>XOR Cipher (Stream Cipher)</h4>
+                 <p>Combines plaintext bits with key bits using XOR.</p>
+                 <p class="formula">Cipher = Plaintext XOR Key</p>
+                 <p class="formula">Plaintext = Cipher XOR Key</p>
+                 <p>(XOR: 0^0=0, 0^1=1, 1^0=1, 1^1=0)</p>
+                 <div class="example">
+                     <p><strong>Example:</strong> Encrypt M = 1110101010, Key K = 1100110101.</p>
+                     <pre>
+   1110101010 (Plaintext)
+XOR 1100110101 (Key)
+------------------
+   0010011111 (Ciphertext)
+                     </pre>
+                     <div class="solution"><strong>Ciphertext:</strong> 0010011111</div>
+                 </div>
+            </div>
+
+            <div class="concept-block">
+                <h3>Modern Round Ciphers (Block Ciphers)</h3>
+                <p>Operate on fixed-size blocks using multiple rounds of substitution and permutation.</p>
+
+                <h4>DES (Data Encryption Standard)</h4>
+                 <ul>
+                    <li>Outdated symmetric key block cipher (retired 2005).</li>
+                    <li>Key: 64 bits (56 effective + 8 parity).</li>
+                    <li>Block Size: 64 bits.</li>
+                    <li>Rounds: 16 rounds of substitution and permutation.</li>
+                    <li>Structure: Initial Permutation, 16 rounds using subkeys generated from the main key, Final Permutation.</li>
+                    <li>Considered insecure due to short key length (vulnerable to brute-force).</li>
+                 </ul>
+
+                 <h4>SDES (Simplified DES) - Educational</h4>
+                  <ul>
+                     <li>Simplified version for teaching.</li>
+                     <li>Key: 10 bits.</li>
+                     <li>Block Size: 8 bits.</li>
+                     <li>Rounds: 2.</li>
+                     <li>Process involves: Initial Permutation (IP), Round function (f<sub>k</sub>) involving Expansion/Permutation (E/P), Key XOR, S-Boxes, P4 permutation, Switch (SW) halves, Round function (f<sub>k</sub>) with second subkey, Inverse Initial Permutation (IP<sup>-1</sup>).</li>
+                     <li><strong>Key Generation:</strong> P10 permute -> Split 5 bits + 5 bits -> LS-1 (Left Shift 1) on each half -> P8 permute (yields K1) -> LS-2 (Left Shift 2) on halves from after LS-1 -> P8 permute (yields K2).</li>
+                 </ul>
+                 <div class="example">
+                    <p><strong>SDES Example Walkthrough (Key Gen & Encrypt from slides 34-44):</strong></p>
+                    <p><strong>Given:</strong> Plaintext M=00101000, Key=1100011110, IP=[2 6 3 1 4 8 5 7], P10=[3 5 2 7 4 10 1 9 8 6], P8=[6 3 7 4 8 5 10 9], E/P=[4 1 2 3 2 3 4 1], S0=[[1,0,3,2],[3,2,1,0],[0,2,1,3],[3,1,3,2]], S1=[[0,1,2,3],[2,0,1,3],[3,0,1,0],[2,1,0,3]], P4=[2 4 3 1], IP<sup>-1</sup>=[4 1 3 5 7 2 8 6]</p>
+                    <p><strong>1. Key Generation:</strong></p>
+                    <ul>
+                        <li>Key = 11000 11110</li>
+                        <li>P10(Key) = 00110 01111 (Applying P10 indices: 3rd=0, 5th=0, 2nd=1, 7th=1, 4th=0 | 10th=0, 1st=1, 9th=1, 8th=1, 6th=1) -> 00110 01111</li>
+                        <li>Split: Left=00110, Right=01111</li>
+                        <li>LS-1: Left=01100, Right=11110</li>
+                        <li>Combine: 0110011110</li>
+                        <li>P8(Combined LS-1): K1 = 11100111 (Applying P8 indices: 6th=1, 3rd=1, 7th=1, 4th=0 | 8th=1, 5th=0, 10th=0, 9th=1) -> 1110 0111 <em>(Slide shows K1=11101001, slide 37 shows K1=11101001 - checking slide 37 P8 calculation: Key=1100011110 -> P10=0011001111 -> LS1=0110011110 -> P8(0110011110) = 11101001. Let's use this.)</em> <strong>K1 = 11101001</strong></li>
+                        <li>Halves after LS-1: Left=01100, Right=11110</li>
+                        <li>LS-2: Left=10001, Right=11011 (Shift by 2)</li>
+                        <li>Combine: 1000111011</li>
+                         <li>P8(Combined LS-2): K2 = 10100111 (Applying P8: 6th=1, 3rd=0, 7th=1, 4th=0 | 8th=0, 5th=1, 10th=1, 9th=1) -> 1010 0111. <strong>K2 = 10100111</strong> (Matches slide 37)</li>
+                    </ul>
+                     <p><strong>2. Encryption: M=00101000</strong></p>
+                    <ul>
+                        <li>IP(M): 00100010 (Applying IP indices: 2nd=0, 6th=0, 3rd=1, 1st=0 | 4th=0, 8th=0, 5th=1, 7th=0) -> 0010 0010</li>
+                        <li>Split: L0=0010, R0=0010</li>
+                        <li><strong>Round 1 (f<sub>K1</sub>):</strong> Use R0=0010, K1=11101001
+                            <ul>
+                                <li>E/P(R0) = 0100 0010 (Applying E/P indices: 4th=0, 1st=0, 2nd=0, 3rd=1 -> 0001; 2nd=0, 3rd=1, 4th=0, 1st=0 -> 0100) -> 0001 0100 <em>(Slide 40 shows E/P(0010)=00010100. Let's use slide result.)</em> <strong>E/P(R0) = 0001 0100</strong></li>
+                                <li>E/P(R0) XOR K1 = 00010100 XOR 11101001 = 11111101</li>
+                                <li>S-Box Input: Left=1111, Right=1101</li>
+                                <li>S0(1111): Row=(11)<sub>2</sub>=3, Col=(11)<sub>2</sub>=3. S0[3][3]=2=(10)<sub>2</sub></li>
+                                <li>S1(1101): Row=(11)<sub>2</sub>=3, Col=(10)<sub>2</sub>=2. S1[3][2]=0=(00)<sub>2</sub></li>
+                                <li>Combine S-Box output: 1000</li>
+                                <li>P4(1000) = 0001 (Applying P4 indices: 2nd=0, 4th=0, 3rd=0, 1st=1) -> 0001</li>
+                                <li>Result F = 0001</li>
+                             </ul>
+                         </li>
+                         <li>L1 = L0 XOR F = 0010 XOR 0001 = 0011</li>
+                         <li>R1 = R0 = 0010</li>
+                         <li><strong>Switch (SW):</strong> Input to Round 2 is L=0010, R=0011</li>
+                         <li><strong>Round 2 (f<sub>K2</sub>):</strong> Use R=0011, K2=10100111
+                            <ul>
+                                 <li>E/P(R) = 1001 0110 (Apply E/P to 0011: 4th=1, 1st=0, 2nd=0, 3rd=1 -> 1001; 2nd=0, 3rd=1, 4th=1, 1st=0 -> 0110) -> <strong>1001 0110</strong></li>
+                                 <li>E/P(R) XOR K2 = 10010110 XOR 10100111 = 00110001</li>
+                                 <li>S-Box Input: Left=0011, Right=0001</li>
+                                 <li>S0(0011): Row=(01)<sub>2</sub>=1, Col=(01)<sub>2</sub>=1. S0[1][1]=2=(10)<sub>2</sub></li>
+                                 <li>S1(0001): Row=(01)<sub>2</sub>=1, Col=(00)<sub>2</sub>=0. S1[1][0]=2=(10)<sub>2</sub> <em>(Check S1 Table: S1[1][0]=2. Correct)</em></li>
+                                 <li>Combine S-Box output: 1010</li>
+                                 <li>P4(1010) = 0011 (Applying P4: 2nd=0, 4th=0, 3rd=1, 1st=1) -> 0011</li>
+                                 <li>Result F = 0011</li>
+                             </ul>
+                         </li>
+                          <li>L2 = L(from SW) XOR F = 0010 XOR 0011 = 0001</li>
+                          <li>R2 = R(from SW) = 0011</li>
+                         <li>Combine: L2 R2 = 0001 0011</li>
+                         <li>IP<sup>-1</sup>(00010011) = 10001010 (Applying IP<sup>-1</sup>: 4th=1, 1st=0, 3rd=0, 5th=0 | 7th=1, 2nd=0, 8th=1, 6th=0) -> 1000 1010</li>
+                     </ul>
+                     <div class="solution"><strong>Final Ciphertext:</strong> 10001010 <em>(Slide 44 shows 10001010. Matches!)</em></div>
+                 </div>
+
+                <h4>3DES (Triple DES)</h4>
+                 <ul>
+                    <li>Applies DES three times: Encrypt(K1) -> Decrypt(K2) -> Encrypt(K3).</li>
+                    <li>Modes:
+                        <ul>
+                            <li>3-Key 3DES: K1, K2, K3 are independent (Strongest, 168-bit effective key).</li>
+                            <li>2-Key 3DES: K1 = K3, K2 is different (112-bit effective key, still common).</li>
+                        </ul>
+                    </li>
+                     <li>Provides backward compatibility with DES (if K1=K2=K3).</li>
+                     <li>Slower than AES but still used.</li>
+                 </ul>
+
+                <h4>AES (Advanced Encryption Standard)</h4>
+                <ul>
+                    <li>Current standard, widely used (SSL/TLS, VPNs, file encryption).</li>
+                     <li>Symmetric block cipher.</li>
+                    <li>Block Size: 128 bits.</li>
+                    <li>Key Sizes: 128, 192, or 256 bits.</li>
+                    <li>Rounds: 10 (for 128-bit key), 12 (for 192), 14 (for 256).</li>
+                    <li>Structure: Not a Feistel cipher like DES. Operates on a 4x4 byte matrix (State).</li>
+                     <li>Round Operations:
+                        <ol>
+                            <li><strong>SubBytes:</strong> Non-linear byte substitution using an S-box.</li>
+                            <li><strong>ShiftRows:</strong> Cyclically shifts bytes within rows of the State matrix.</li>
+                            <li><strong>MixColumns:</strong> Mixes bytes within columns using matrix multiplication in Galois Field GF(2<sup>8</sup>). (Omitted in final round).</li>
+                             <li><strong>AddRoundKey:</strong> XORs the State with a round key derived from the main key.</li>
+                        </ol>
+                     </li>
+                     <li>Initial AddRoundKey before first round.</li>
+                     <li>Considered secure and efficient.</li>
+                 </ul>
+            </div>
+
+        </section>
+
+        <!-- Quiz Sections -->
+        <div id="fill" class="main-content">
+            <h2>Fill in the Blank Questions</h2>
+            <div id="fill-questions"></div>
+        </div>
+
+        <div id="tf" class="main-content">
+            <h2>True/False Questions</h2>
+            <div id="tf-questions"></div>
+        </div>
+
+        <div id="mc" class="main-content">
+            <h2>Multiple Choice Questions</h2>
+            <div id="mc-questions"></div>
+        </div>
+
+    </div> <!-- End Container -->
+
+     <script>
+        // --- START OF QUIZ DATA (UNIT 2) ---
+        const fillInTheBlank = [
+            { question: "In _______ key cryptography, the same key is used for encryption and decryption.", options: ["Asymmetric", "Public", "Symmetric", "Hybrid"], answer: "Symmetric" },
+            { question: "The original, readable message before encryption is called _______.", options: ["Ciphertext", "Plaintext", "Keytext", "Cryptogram"], answer: "Plaintext" },
+            { question: "A _______ cipher processes input data in fixed-size chunks.", options: ["Stream", "Block", "Caesar", "Rail Fence"], answer: "Block" },
+            { question: "The Caesar cipher is a type of _______ cipher.", options: ["Transposition", "Polyalphabetic", "Substitution", "Block"], answer: "Substitution" },
+            { question: "DES uses a _______ -bit effective key length.", options: ["64", "128", "56", "10"], answer: "56" },
+            { question: "AES operates on data blocks of _______ bits.", options: ["64", "56", "128", "256"], answer: "128" },
+            { question: "Trying every possible key to decrypt a message is known as a _______ attack.", options: ["Cryptanalytic", "Man-in-the-middle", "Brute-force", "Replay"], answer: "Brute-force" },
+            { question: "The _______ cipher rearranges the order of letters in the plaintext.", options: ["Substitution", "Caesar", "Transposition", "Playfair"], answer: "Transposition" },
+            { question: "AES uses key sizes of 128, 192, or _______ bits.", options: ["64", "56", "512", "256"], answer: "256" },
+            { question: "3DES applies the DES algorithm _______ times in an Encrypt-Decrypt-Encrypt sequence.", options: ["Two", "Three", "Four", "Sixteen"], answer: "Three" },
+             { question: "The Playfair cipher encrypts _______ of letters.", options: ["Single letters", "Pairs (digraphs)", "Triplets", "Blocks of 5"], answer: "Pairs (digraphs)" },
+             { question: "The step in AES that provides non-linearity through byte substitution is called _______.", options: ["ShiftRows", "MixColumns", "AddRoundKey", "SubBytes"], answer: "SubBytes" }
+        ];
+
+        const trueOrFalse = [
+            { question: "Symmetric cryptography uses a public and private key pair.", answer: false },
+            { question: "Plaintext is the encrypted form of a message.", answer: false },
+            { question: "A block cipher processes data one bit at a time.", answer: false }, // Stream cipher does
+            { question: "Transposition ciphers replace letters with other letters or symbols.", answer: false }, // Substitution ciphers do
+            { question: "DES performs 16 rounds of encryption.", answer: true },
+            { question: "AES is considered less secure than DES.", answer: false },
+            { question: "Cryptanalysis is the study of creating strong encryption algorithms.", answer: false }, // It's the study of breaking them
+            { question: "Monoalphabetic ciphers are highly resistant to frequency analysis.", answer: false }, // They are vulnerable
+            { question: "The Rail Fence cipher is a type of substitution cipher.", answer: false }, // It's transposition
+            { question: "SDES is a simplified version of AES.", answer: false }, // Simplified version of DES
+            { question: "3DES can use either two or three distinct keys.", answer: true },
+            { question: "The MixColumns step is performed in the final round of AES encryption.", answer: false } // It is omitted in the final round
+        ];
+
+        const multipleChoice = [
+            { question: "Which type of cryptography uses a single shared key?", options: ["Asymmetric", "Public Key", "Symmetric", "Hybrid"], answer: "Symmetric" },
+            { question: "Which cipher type involves rearranging the order of plaintext letters?", options: ["Substitution", "Transposition", "Block", "Stream"], answer: "Transposition" },
+            { question: "Which classical cipher encrypts pairs of letters using a 5x5 grid?", options: ["Caesar", "Hill", "Playfair", "Rail Fence"], answer: "Playfair" },
+            { question: "What is the effective key size of the original DES algorithm?", options: ["64 bits", "128 bits", "56 bits", "256 bits"], answer: "56 bits" },
+            { question: "Which modern symmetric cipher is the current standard and uses 128, 192, or 256-bit keys?", options: ["DES", "3DES", "AES", "RC4"], answer: "AES" },
+            { question: "What type of cryptanalytic attack involves trying all possible keys?", options: ["Frequency Analysis", "Known Plaintext", "Brute-Force", "Differential Cryptanalysis"], answer: "Brute-Force" },
+            { question: "Which cipher operates on data continuously, often bit by bit?", options: ["Block Cipher", "AES", "Stream Cipher", "DES"], answer: "Stream Cipher" },
+            { question: "How many rounds does AES use with a 128-bit key?", options: ["10", "12", "14", "16"], answer: "10" },
+            { question: "Which operation in AES involves XORing the state matrix with a key?", options: ["SubBytes", "ShiftRows", "MixColumns", "AddRoundKey"], answer: "AddRoundKey" },
+            { question: "Which cipher uses matrix multiplication based on linear algebra?", options: ["Playfair", "Caesar", "Vigenere", "Hill"], answer: "Hill" },
+             { question: "What is the primary vulnerability of monoalphabetic substitution ciphers?", options: ["Short key length", "Susceptibility to brute-force", "Vulnerability to frequency analysis", "Slow encryption speed"], answer: "Vulnerability to frequency analysis" },
+             { question: "The 2-key version of 3DES uses which key configuration?", options: ["K1=K2, K3 different", "K1=K3, K2 different", "K2=K3, K1 different", "K1=K2=K3"], answer: "K1=K3, K2 different" }
+        ];
+        // --- END OF QUIZ DATA ---
+
+        // --- START OF SCRIPT LOGIC (PASTE FROM unit1.html) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select main tabs and content sections
+            const mainTabButtons = document.querySelectorAll('.main-tabs .tab-button');
+            const mainTabContents = document.querySelectorAll('.main-content');
+
+            // Select quiz content containers
+            const fillContainer = document.getElementById('fill-questions');
+            const tfContainer = document.getElementById('tf-questions');
+            const mcContainer = document.getElementById('mc-questions');
+
+             // Select accordion elements
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+
+            // --- Main Tab Switching Logic ---
+            mainTabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab'); // Get the ID of the target content
+
+                    // Deactivate all main buttons and content
+                    mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                    mainTabContents.forEach(content => content.classList.remove('active'));
+
+                    // Activate the clicked button
+                    button.classList.add('active');
+
+                    // Activate the corresponding content section
+                    const targetContent = document.getElementById(tabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            // --- Accordion Logic (for Glossary) ---
+             accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // Toggle active class on the header for styling (+) (-) sign
+                    this.classList.toggle('active');
+
+                    // Get the panel sibling
+                    const panel = this.nextElementSibling;
+
+                    // Toggle the max-height for smooth transition
+                    if (panel.style.maxHeight) {
+                        // If panel is open, close it
+                        panel.style.maxHeight = null;
+                        panel.style.padding = "0 20px"; // Remove padding when closing
+                    } else {
+                         // If panel is closed, open it
+                        panel.style.maxHeight = panel.scrollHeight + 40 + "px"; // Add some buffer
+                        panel.style.padding = "15px 20px"; // Add padding back when opening
+                    }
+
+                    // --- Optional: Close other accordions ---
+                    accordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== this && otherHeader.classList.contains('active')) {
+                            otherHeader.classList.remove('active');
+                            otherHeader.nextElementSibling.style.maxHeight = null;
+                            otherHeader.nextElementSibling.style.padding = "0 20px";
+                        }
+                    });
+                    // --- End Optional Close Others ---
+                });
+            });
+
+
+            // --- Function to handle option selection within a question ---
+            function handleOptionSelection(button, questionDiv) {
+                // Deselect siblings within the same question
+                const siblings = questionDiv.querySelectorAll('.option-button.selected');
+                siblings.forEach(sib => sib.classList.remove('selected'));
+                // Select clicked button
+                button.classList.add('selected');
+                 // Clear previous feedback when a new option is selected
+                const existingFeedback = questionDiv.querySelector('.feedback');
+                if (existingFeedback) {
+                    existingFeedback.remove();
+                }
+            }
+
+            // --- Function to create and append feedback ---
+            function showFeedback(questionDiv, isCorrect, correctAnswer) {
+                 // Remove existing feedback first
+                const existingFeedback = questionDiv.querySelector('.feedback');
+                if (existingFeedback) {
+                    existingFeedback.remove();
+                }
+
+                const feedback = document.createElement('div');
+                feedback.className = 'feedback';
+                if (isCorrect) {
+                    feedback.classList.add('correct');
+                    feedback.textContent = 'Correct!';
+                } else {
+                    feedback.classList.add('incorrect');
+                     // For T/F, explicitly show the boolean value
+                     let displayAnswer = correctAnswer;
+                     if (typeof correctAnswer === 'boolean') {
+                         displayAnswer = correctAnswer ? 'True' : 'False';
+                     }
+                    feedback.textContent = `Incorrect. Correct answer: ${displayAnswer}`;
+                }
+                // Append feedback after the check button
+                const checkButton = questionDiv.querySelector('.check-answer');
+                 if (checkButton) {
+                    // Insert after the check button if it exists
+                    checkButton.parentNode.insertBefore(feedback, checkButton.nextSibling);
+                } else {
+                     // Otherwise, append to the end of the question div
+                     questionDiv.appendChild(feedback);
+                }
+            }
+
+            // --- Load Fill in the Blank Questions ---
+            function loadFillInTheBlankQuestions() {
+                fillContainer.innerHTML = ''; // Clear previous content
+                fillInTheBlank.forEach((q, index) => { // Added index for unique IDs if needed
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `fill-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    // Find the blank spot indicated by _______ and replace it for display
+                    questionText.innerHTML = q.question.replace('_______', '<span style="color: #007bff; font-weight:bold;">_______</span>');
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options';
+
+                    q.options.forEach(option => {
+                        const optionButton = document.createElement('button');
+                        optionButton.className = 'option-button';
+                        optionButton.textContent = option;
+                        optionButton.addEventListener('click', () => handleOptionSelection(optionButton, questionDiv));
+                        optionsDiv.appendChild(optionButton);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            showFeedback(questionDiv, selected.textContent === q.answer, q.answer);
+                        } else {
+                             // Optionally show feedback that an answer must be selected
+                             showFeedback(questionDiv, false, q.answer); // Or provide specific feedback
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    fillContainer.appendChild(questionDiv);
+                });
+            }
+
+
+            // --- Load True/False Questions ---
+            function loadTrueFalseQuestions() {
+                tfContainer.innerHTML = ''; // Clear previous content
+                trueOrFalse.forEach((q, index) => { // Added index
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `tf-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+
+                     const optionsDiv = document.createElement('div'); // Keep consistent structure
+                    optionsDiv.className = 'options';
+
+                    const trueButton = document.createElement('button');
+                    trueButton.className = 'option-button';
+                    trueButton.textContent = 'True';
+                    trueButton.addEventListener('click', () => handleOptionSelection(trueButton, questionDiv));
+                    optionsDiv.appendChild(trueButton);
+
+                    const falseButton = document.createElement('button');
+                    falseButton.className = 'option-button';
+                    falseButton.textContent = 'False';
+                    falseButton.addEventListener('click', () => handleOptionSelection(falseButton, questionDiv));
+                    optionsDiv.appendChild(falseButton);
+
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            // Check boolean answer correctly
+                            const isCorrect = (selected.textContent === 'True' && q.answer === true) || (selected.textContent === 'False' && q.answer === false);
+                            showFeedback(questionDiv, isCorrect, q.answer); // Pass boolean directly
+                        } else {
+                            showFeedback(questionDiv, false, q.answer); // Pass boolean directly
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    tfContainer.appendChild(questionDiv);
+                });
+            }
+
+            // --- Load Multiple Choice Questions ---
+            function loadMultipleChoiceQuestions() {
+                mcContainer.innerHTML = ''; // Clear previous content
+                multipleChoice.forEach((q, index) => { // Added index
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `mc-q-${index}`;
+
+                    const questionText = document.createElement('p');
+                    questionText.textContent = q.question;
+                    questionDiv.appendChild(questionText);
+
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'options';
+
+                    // Shuffle options for variety (optional)
+                    // const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+                    q.options.forEach(option => { // Use original options or shuffledOptions
+                        const optionButton = document.createElement('button');
+                        optionButton.className = 'option-button';
+                        optionButton.textContent = option;
+                        optionButton.addEventListener('click', () => handleOptionSelection(optionButton, questionDiv));
+                        optionsDiv.appendChild(optionButton);
+                    });
+                    questionDiv.appendChild(optionsDiv);
+
+                    const checkButton = document.createElement('button');
+                    checkButton.className = 'check-answer';
+                    checkButton.textContent = 'Check Answer';
+                    checkButton.addEventListener('click', () => {
+                        const selected = questionDiv.querySelector('.option-button.selected');
+                        if (selected) {
+                            showFeedback(questionDiv, selected.textContent === q.answer, q.answer);
+                        } else {
+                             showFeedback(questionDiv, false, q.answer);
+                        }
+                    });
+                    questionDiv.appendChild(checkButton);
+
+                    mcContainer.appendChild(questionDiv);
+                });
+            }
+
+            // --- Initial Load ---
+            // Load all quiz questions initially so they are ready when tabs are clicked
+            loadFillInTheBlankQuestions();
+            loadTrueFalseQuestions();
+            loadMultipleChoiceQuestions();
+
+             // Activate the default tab's content on load
+             document.querySelector('.main-content.active').style.display = 'block';
+
+
+        }); // End DOMContentLoaded
+        // --- END OF SCRIPT LOGIC ---
+    </script>
+</body>
+</html>
