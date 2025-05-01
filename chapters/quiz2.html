@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cryptography & Secure Design Quiz</title> <!-- Updated Title -->
+    <title>Cryptography & Secure Design Quiz</title>
     <style>
         /* --- General Styles --- */
         body {
@@ -32,6 +32,7 @@
             display: flex;
             border-bottom: 2px solid #ccc;
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
         }
 
         .tab-button {
@@ -41,6 +42,7 @@
             background-color: #eee;
             border-bottom: 2px solid transparent;
             margin-right: 5px;
+            margin-bottom: -2px; /* Align with bottom border */
             font-size: 1em;
             border-radius: 5px 5px 0 0;
              transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -56,39 +58,93 @@
             border-bottom: 2px solid #fff; /* Cover the container border */
             font-weight: bold;
             position: relative;
-            top: 2px; /* Align with bottom border */
+            /* top: 2px; Align with bottom border - removed as margin-bottom handles it */
         }
 
         .tab-content {
             display: none; /* Hide content by default */
             padding-top: 15px;
+            border: 2px solid #ccc; /* Add border to content */
+            border-top: none; /* Remove top border as tabs handle it */
+            padding: 20px;
+            margin-top: -2px; /* Overlap with tab bottom border */
+            border-radius: 0 0 5px 5px;
         }
 
         .tab-content.active {
             display: block; /* Show active content */
         }
 
-
-        /* --- Multiple Choice / T/F Styles (Existing) --- */
-        .question-block {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+        /* --- Question Block Styles (Common for MC/TF, Essay, Practical) --- */
+        .question-block-base { /* Base styling for all question types */
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
         }
-
-        .question-block:last-child {
+        .question-block-base:last-child {
             border-bottom: none;
             margin-bottom: 0;
             padding-bottom: 0;
         }
 
-        .question-text {
+        .question-title-base { /* Base for clickable titles */
+            font-weight: bold;
+            cursor: pointer;
+            color: #0056b3;
+            margin-bottom: 8px;
+            position: relative;
+            padding-right: 20px; /* Space for arrow */
+            display: block; /* Full width click */
+        }
+
+        .question-title-base::after {
+            content: '▼'; /* Collapsed indicator */
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8em;
+            color: #666;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .question-title-base.expanded::after {
+             content: '▲'; /* Expanded indicator */
+             /* transform: translateY(-50%) rotate(180deg); Optionally rotate */
+        }
+
+        .answer-content-base { /* Base for hidden/revealed answers */
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            border-radius: 0 4px 4px 0;
+            white-space: pre-wrap; /* Preserves whitespace and wraps */
+            word-wrap: break-word; /* Breaks long words */
+            font-family: monospace; /* Good for code/cipher examples */
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+         .answer-content-base.visible {
+            display: block;
+         }
+
+        /* --- MC/TF Specific Styles --- */
+        .mc-tf-question-block { /* Inherits from base */
+             border-bottom-style: solid; /* Solid border for MC/TF */
+             padding-bottom: 20px;
+             margin-bottom: 30px;
+        }
+
+        .mc-tf-question-text {
             font-weight: bold;
             margin-bottom: 15px;
             color: #555;
         }
 
-        .options button {
+        .mc-tf-options button {
             display: block;
             width: 100%;
             padding: 10px 15px;
@@ -101,121 +157,142 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
             font-size: 0.95em;
+            font-family: sans-serif; /* Override monospace */
+            white-space: normal; /* Override pre-wrap */
+            line-height: 1.6; /* Override */
         }
 
-        .options button:hover:not(:disabled) {
+        .mc-tf-options button:hover:not(:disabled) {
             background-color: #e9e9e9;
         }
 
-        .options button:disabled {
+        .mc-tf-options button:disabled {
             cursor: not-allowed;
             opacity: 0.7;
         }
 
-        .feedback {
+        .mc-tf-feedback {
             margin-top: 10px;
             padding: 8px;
             border-radius: 4px;
             font-weight: bold;
             display: none; /* Initially hidden */
+             font-family: sans-serif; /* Override monospace */
         }
 
-        .feedback.correct {
+        .mc-tf-feedback.correct {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
             display: block;
         }
 
-        .feedback.incorrect {
+        .mc-tf-feedback.incorrect {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
             display: block;
         }
 
-        .options button.selected.correct {
+        .mc-tf-options button.selected.correct {
             background-color: #28a745;
             color: white;
             border-color: #28a745;
         }
 
-        .options button.selected.incorrect {
+        .mc-tf-options button.selected.incorrect {
             background-color: #dc3545;
             color: white;
             border-color: #dc3545;
         }
 
-        .options button.reveal-correct {
+        .mc-tf-options button.reveal-correct {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
             font-weight: bold;
         }
 
-        /* --- Essay Question Styles --- */
-        .essay-question-block {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #ddd;
+        /* --- Essay Specific Styles --- */
+         .essay-question-block { /* Inherits from base */
+             /* Add specific styles if needed */
+         }
+         .essay-question-title { /* Inherits from base */
+              /* Add specific styles if needed */
+         }
+         .essay-answer { /* Inherits from base */
+             font-family: sans-serif; /* Essays are better in sans-serif */
+             font-size: 1em;
+             background-color: #f0f0f0; /* Slightly different bg for distinction */
+         }
+
+        /* --- Practical Specific Styles --- */
+         .practical-question-block { /* Inherits from base */
+             /* Add specific styles if needed */
+         }
+         .practical-question-title { /* Inherits from base */
+             /* Add specific styles if needed */
+         }
+         .practical-answer { /* Inherits from base */
+             /* Monospace is good here */
+         }
+         .practical-answer table {
+             width: 100%;
+             border-collapse: collapse;
+             margin-top: 10px;
+             margin-bottom: 10px;
+             background-color: #fff; /* White background for tables */
+         }
+         .practical-answer th,
+         .practical-answer td {
+             border: 1px solid #ccc;
+             padding: 8px;
+             text-align: left;
+             vertical-align: top;
+         }
+         .practical-answer th {
+             background-color: #e9e9e9;
+             font-weight: bold;
+         }
+         .practical-answer code {
+             font-family: monospace;
+             background-color: #e8e8e8;
+             padding: 2px 4px;
+             border-radius: 3px;
+         }
+         .practical-answer strong {
+             font-weight: bold;
+             color: #333;
+         }
+         .step {
+             margin-top: 8px;
+             font-weight: bold;
+         }
+         .explanation {
+             margin-left: 15px;
+             font-style: italic;
+             color: #555;
+         }
+
+         /* --- Utility Classes --- */
+        .monospace {
+             font-family: monospace;
         }
-        .essay-question-block:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .highlight {
+             background-color: #fffbdd; /* Light yellow highlight */
         }
 
-        .essay-question-title {
-            font-weight: bold;
-            cursor: pointer;
-            color: #0056b3; /* Make it look like a link */
-            margin-bottom: 8px;
-            position: relative; /* For pseudo-element */
-            padding-right: 20px; /* Space for arrow */
-            display: block; /* Ensure it takes full width for click */
-        }
-
-        .essay-question-title::after {
-            content: '▼'; /* Collapsed indicator */
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.8em;
-            color: #666;
-        }
-
-        .essay-question-title.expanded::after {
-             content: '▲'; /* Expanded indicator */
-        }
-
-
-        .essay-answer {
-            display: none; /* Hidden by default */
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-left: 3px solid #0056b3;
-            border-radius: 0 4px 4px 0;
-            /* Allow text wrapping */
-            white-space: pre-wrap; /* Preserves whitespace and wraps */
-            word-wrap: break-word; /* Breaks long words */
-        }
-
-         .essay-answer.visible {
-            display: block; /* Show when expanded */
-        }
 
     </style>
 </head>
 <body>
 
-    <h1>Cryptography & Secure Design - Interactive Quiz</h1> <!-- Updated Title -->
+    <h1>Cryptography & Secure Design - Interactive Quiz</h1>
 
     <div class="main-container">
         <div class="tabs">
-            <!-- Added tab for MC/TF -->
             <button class="tab-button active" data-tab="mc-tf-quiz-content">Multiple Choice / T/F</button>
+            <button class="tab-button" data-tab="practical-quiz-content">Practical Questions</button> <!-- New Tab -->
             <button class="tab-button" data-tab="essay-quiz-content">Essay Questions</button>
         </div>
 
@@ -226,339 +303,758 @@
             </div>
         </div>
 
+        <!-- Practical Questions Content -->
+        <div class="tab-content" id="practical-quiz-content">
+             <!-- Practical Questions will be loaded here by JavaScript -->
+             <p style="font-style: italic; color: #666;">Click on a question to reveal the step-by-step solution.</p>
+             <div class="quiz-container" id="quiz-container-practical">
+                <!-- Practical Questions will be loaded here -->
+             </div>
+        </div>
+
         <!-- Essay Questions Content -->
         <div class="tab-content" id="essay-quiz-content">
              <!-- Essay Questions will be loaded here by JavaScript -->
              <p style="font-style: italic; color: #666;">Click on a question to reveal the model answer.</p>
+              <div class="quiz-container" id="quiz-container-essay">
+                 <!-- Essay Questions will be loaded here -->
+              </div>
         </div>
     </div>
 
     <script>
         // --- DATA ---
 
-        // Multiple Choice and True/False Data (Combined from your Unit 2 OCR and the provided Secure Design Data)
-        const mcTfData = [
-            // --- Unit 2 Cryptography Questions ---
+        // (MC/TF Data remains the same as in the previous version)
+        const mcTfData = [ /* Omitted for brevity - same as before */
             { // Unit 2, Q1
                 question: "What is the primary goal of cryptography?",
-                options: [
-                    "Data compression",
-                    "Data encryption for secure communication",
-                    "Increasing data transmission speed",
-                    "Reducing data storage requirements"
-                ],
+                options: ["Data compression","Data encryption for secure communication","Increasing data transmission speed","Reducing data storage requirements"],
                 answer: "Data encryption for secure communication"
             },
-            { // Unit 2, Q2
-                question: "Which of the following is a symmetric key algorithm?",
-                options: ["RSA", "AES", "ECC", "DSA"],
-                answer: "AES"
-            },
-            { // Unit 2, Q3
-                question: "In Caesar Cipher, if the key is 5, what is the ciphertext for \"HELLO\"?",
-                options: ["KHOOR", "EBIIL", "MJQQT", "OLSSV"],
-                answer: "MJQQT"
-            },
-            { // Unit 2, Q4
-                question: "Which of the following is NOT a classical encryption technique?",
-                options: ["Caesar Cipher", "AES", "Hill Cipher", "Playfair Cipher"],
-                answer: "AES"
-            },
-            { // Unit 2, Q5
-                question: "What is the key length of DES?",
-                options: ["56 bits", "128 bits", "192 bits", "256 bits"],
-                answer: "56 bits"
-            },
-            { // Unit 2, Q6
-                question: "Which cipher uses a 5x5 matrix for encryption?",
-                options: ["Caesar Cipher", "Playfair Cipher", "Hill Cipher", "Vigenère Cipher"],
-                answer: "Playfair Cipher"
-            },
-            { // Unit 2, Q7
-                question: "What is the main weakness of the Caesar Cipher?",
-                options: [
-                    "It uses a large key space",
-                    "It is vulnerable to brute-force attacks",
-                    "It is too complex to implement",
-                    "It requires a public key"
-                ],
-                answer: "It is vulnerable to brute-force attacks"
-            },
-            { // Unit 2, Q8
-                question: "Which of the following is a polyalphabetic cipher?",
-                options: ["Caesar Cipher", "Vigenère Cipher", "Playfair Cipher", "Hill Cipher"],
-                answer: "Vigenère Cipher"
-            },
-            { // Unit 2, Q9
-                question: "What is the key size of AES-256?",
-                options: ["128 bits", "192 bits", "256 bits", "512 bits"],
-                answer: "256 bits"
-            },
-            { // Unit 2, Q10
-                question: "Which of the following is a characteristic of symmetric key cryptography?",
-                options: [
-                    "Uses two different keys",
-                    "Faster than asymmetric cryptography",
-                    "Provides non-repudiation",
-                    "Uses public and private keys"
-                ],
-                answer: "Faster than asymmetric cryptography"
-            },
-            { // Unit 2, Q11
-                question: "What is the main advantage of 3DES over DES?",
-                options: [
-                    "It uses a single key",
-                    "It is faster than DES",
-                    "It increases key length and complexity",
-                    "It is less secure than DES"
-                ],
-                answer: "It increases key length and complexity"
-            },
-            { // Unit 2, Q12
-                question: "Which of the following is a substitution cipher?",
-                options: ["Caesar Cipher", "Rail Fence Cipher", "Transposition Cipher", "Stream Cipher"],
-                answer: "Caesar Cipher"
-            },
-            { // Unit 2, Q13
-                question: "What is the purpose of the S-box in AES?",
-                options: ["To shift rows", "To mix columns", "To perform substitution", "To add round keys"],
-                answer: "To perform substitution"
-            },
-            { // Unit 2, Q14
-                question: "Which of the following is a transposition cipher?",
-                options: ["Caesar Cipher", "Playfair Cipher", "Rail Fence Cipher", "Vigenère Cipher"],
-                answer: "Rail Fence Cipher"
-            },
-            { // Unit 2, Q15
-                question: "What is the key length of AES-128?",
-                options: ["128 bits", "192 bits", "256 bits", "512 bits"],
-                answer: "128 bits"
-            },
-            { // Unit 2, Q16
-                question: "Which of the following is a characteristic of asymmetric cryptography?",
-                options: [
-                    "Uses the same key for encryption and decryption",
-                    "Provides confidentiality, authentication, and non-repudiation",
-                    "Faster than symmetric cryptography",
-                    "Uses a single key"
-                ],
-                answer: "Provides confidentiality, authentication, and non-repudiation"
-            },
-            { // Unit 2, Q17
-                question: "What is the main disadvantage of brute-force attacks?",
-                options: [
-                    "They are too fast",
-                    "They require a lot of computational resources",
-                    "They are easy to implement",
-                    "They are only effective against weak algorithms"
-                ],
-                answer: "They require a lot of computational resources"
-            },
-            { // Unit 2, Q18
-                question: "Which of the following is a modern encryption algorithm?",
-                options: ["Caesar Cipher", "DES", "AES", "Playfair Cipher"],
-                answer: "AES"
-            },
-            { // Unit 2, Q19
-                question: "What is the purpose of the MixColumns step in AES?",
-                options: [
-                    "To substitute bytes",
-                    "To shift rows",
-                    "To mix columns for diffusion",
-                    "To add round keys"
-                ],
-                answer: "To mix columns for diffusion"
-            },
-            { // Unit 2, Q20
-                question: "Which of the following is a characteristic of DES?",
-                options: [
-                    "It uses a 128-bit key",
-                    "It is a block cipher",
-                    "It is resistant to brute-force attacks",
-                    "It is an asymmetric algorithm"
-                ],
-                answer: "It is a block cipher"
-            },
-            // --- Unit 2 True/False Questions ---
-            { // Unit 2, T/F 1
-                question: "Symmetric key cryptography uses the same key for encryption and decryption.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 2
-                question: "AES is a type of asymmetric key cryptography.",
-                options: ["True", "False"],
-                answer: "False"
-            },
-            { // Unit 2, T/F 3
-                question: "In Caesar Cipher, the decryption process involves shifting letters in the opposite direction of the encryption shift.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 4
-                question: "DES is considered secure against modern cryptographic attacks.",
-                options: ["True", "False"],
-                answer: "False"
-            },
-            { // Unit 2, T/F 5
-                question: "The Playfair Cipher is a polyalphabetic cipher.",
-                options: ["True", "False"],
-                answer: "False" // It's a digraphic substitution cipher, generally considered monoalphabetic in nature as pairs are substituted based on fixed rules relative to the key square. Vigenere is polyalphabetic.
-            },
-            { // Unit 2, T/F 6
-                question: "Brute-force attacks are effective against all encryption algorithms.",
-                options: ["True", "False"],
-                answer: "False" // Ineffective against algorithms with sufficiently large key spaces.
-            },
-            { // Unit 2, T/F 7
-                question: "The Hill Cipher uses matrix multiplication for encryption.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 8
-                question: "3DES is more secure than AES.",
-                options: ["True", "False"],
-                answer: "False"
-            },
-            { // Unit 2, T/F 9
-                question: "The Caesar Cipher is a type of transposition cipher.",
-                options: ["True", "False"],
-                answer: "False" // It's a substitution cipher.
-            },
-            { // Unit 2, T/F 10
-                question: "AES supports key sizes of 128, 192, and 256 bits.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 11
-                question: "DES uses a 64-bit block size.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 12
-                question: "Asymmetric cryptography is faster than symmetric cryptography.",
-                options: ["True", "False"],
-                answer: "False"
-            },
-            { // Unit 2, T/F 13
-                question: "The Rail Fence Cipher is a type of transposition cipher.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 14
-                question: "AES is vulnerable to brute-force attacks.",
-                options: ["True", "False"],
-                answer: "False" // Theoretically yes, practically infeasible with current technology for standard key sizes.
-            },
-            { // Unit 2, T/F 15
-                question: "The Caesar Cipher is still widely used in modern cryptography.",
-                options: ["True", "False"],
-                answer: "False"
-            },
-            { // Unit 2, T/F 16
-                question: "The Playfair Cipher uses a 5x5 matrix for encryption.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-            { // Unit 2, T/F 17
-                question: "DES is an example of a stream cipher.",
-                options: ["True", "False"],
-                answer: "False" // It's a block cipher.
-            },
-            { // Unit 2, T/F 18
-                question: "AES is an open-source encryption standard.",
-                options: ["True", "False"],
-                answer: "True" // The algorithm specification is public (NIST standard), and many implementations are open source.
-            },
-
-            // --- Secure Design Questions (from previous context) ---
-             { // Secure Design MC Q1
-                question: "What does the \"Secure-by-design\" approach emphasize?",
-                options: [
-                    "Adding security after development",
-                    "Embedding security from the beginning of the software lifecycle",
-                    "Using only open-source software",
-                    "Ignoring security during development"
-                ],
-                answer: "Embedding security from the beginning of the software lifecycle"
-            },
-            { // Secure Design MC Q2 (Adjusted based on common principles)
-                question: "Which of the following is NOT typically considered a core Principle of Secure Design?",
-                options: [
-                    "Minimize Attack Surface",
-                    "Open Access",
-                    "Least Privilege",
-                    "Secure Defaults"
-                ],
-                answer: "Open Access"
-            },
-            { // Secure Design MC Q3
-                question: "The \"Least Privilege\" principle applies to:",
-                options: [
-                    "Only users",
-                    "Users, machines, and network resources",
-                    "Only network devices",
-                    "Only databases"
-                ],
-                answer: "Users, machines, and network resources"
-            },
-             // ... (Include other relevant MC/TF questions from the previous context if desired) ...
-             { // Secure Design T/F 1
-                question: "Secure-by-design means embedding security from the start of development.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-             { // Secure Design T/F 3
-                question: "Stateful inspection firewalls track active connection states.",
-                options: ["True", "False"],
-                answer: "True"
-            },
-             { // Secure Design T/F 4
-                question: "Public key encryption uses the same key for encryption and decryption.",
-                options: ["True", "False"],
-                answer: "False"
-            },
-             // ... (Add more Secure Design MC/TF questions here as needed) ...
+            { question: "Which of the following is a symmetric key algorithm?", options: ["RSA", "AES", "ECC", "DSA"], answer: "AES" },
+            { question: 'In Caesar Cipher, if the key is 5, what is the ciphertext for "HELLO"?', options: ["KHOOR", "EBIIL", "MJQQT", "OLSSV"], answer: "MJQQT" },
+            { question: "Which of the following is NOT a classical encryption technique?", options: ["Caesar Cipher", "AES", "Hill Cipher", "Playfair Cipher"], answer: "AES" },
+            { question: "What is the key length of DES?", options: ["56 bits", "128 bits", "192 bits", "256 bits"], answer: "56 bits" },
+            { question: "Which cipher uses a 5x5 matrix for encryption?", options: ["Caesar Cipher", "Playfair Cipher", "Hill Cipher", "Vigenère Cipher"], answer: "Playfair Cipher" },
+            { question: "What is the main weakness of the Caesar Cipher?", options: ["It uses a large key space","It is vulnerable to brute-force attacks","It is too complex to implement","It requires a public key"], answer: "It is vulnerable to brute-force attacks" },
+            { question: "Which of the following is a polyalphabetic cipher?", options: ["Caesar Cipher", "Vigenère Cipher", "Playfair Cipher", "Hill Cipher"], answer: "Vigenère Cipher" },
+            { question: "What is the key size of AES-256?", options: ["128 bits", "192 bits", "256 bits", "512 bits"], answer: "256 bits" },
+            { question: "Which of the following is a characteristic of symmetric key cryptography?", options: ["Uses two different keys","Faster than asymmetric cryptography","Provides non-repudiation","Uses public and private keys"], answer: "Faster than asymmetric cryptography" },
+            { question: "What is the main advantage of 3DES over DES?", options: ["It uses a single key","It is faster than DES","It increases key length and complexity","It is less secure than DES"], answer: "It increases key length and complexity" },
+            { question: "Which of the following is a substitution cipher?", options: ["Caesar Cipher", "Rail Fence Cipher", "Transposition Cipher", "Stream Cipher"], answer: "Caesar Cipher" },
+            { question: "What is the purpose of the S-box in AES?", options: ["To shift rows", "To mix columns", "To perform substitution", "To add round keys"], answer: "To perform substitution" },
+            { question: "Which of the following is a transposition cipher?", options: ["Caesar Cipher", "Playfair Cipher", "Rail Fence Cipher", "Vigenère Cipher"], answer: "Rail Fence Cipher" },
+            { question: "What is the key length of AES-128?", options: ["128 bits", "192 bits", "256 bits", "512 bits"], answer: "128 bits" },
+            { question: "Which of the following is a characteristic of asymmetric cryptography?", options: ["Uses the same key for encryption and decryption","Provides confidentiality, authentication, and non-repudiation","Faster than symmetric cryptography","Uses a single key"], answer: "Provides confidentiality, authentication, and non-repudiation" },
+            { question: "What is the main disadvantage of brute-force attacks?", options: ["They are too fast","They require a lot of computational resources","They are easy to implement","They are only effective against weak algorithms"], answer: "They require a lot of computational resources" },
+            { question: "Which of the following is a modern encryption algorithm?", options: ["Caesar Cipher", "DES", "AES", "Playfair Cipher"], answer: "AES" },
+            { question: "What is the purpose of the MixColumns step in AES?", options: ["To substitute bytes","To shift rows","To mix columns for diffusion","To add round keys"], answer: "To mix columns for diffusion" },
+            { question: "Which of the following is a characteristic of DES?", options: ["It uses a 128-bit key","It is a block cipher","It is resistant to brute-force attacks","It is an asymmetric algorithm"], answer: "It is a block cipher" },
+            { question: "Symmetric key cryptography uses the same key for encryption and decryption.", options: ["True", "False"], answer: "True" },
+            { question: "AES is a type of asymmetric key cryptography.", options: ["True", "False"], answer: "False" },
+            { question: "In Caesar Cipher, the decryption process involves shifting letters in the opposite direction of the encryption shift.", options: ["True", "False"], answer: "True" },
+            { question: "DES is considered secure against modern cryptographic attacks.", options: ["True", "False"], answer: "False" },
+            { question: "The Playfair Cipher is a polyalphabetic cipher.", options: ["True", "False"], answer: "False" },
+            { question: "Brute-force attacks are effective against all encryption algorithms.", options: ["True", "False"], answer: "False" },
+            { question: "The Hill Cipher uses matrix multiplication for encryption.", options: ["True", "False"], answer: "True" },
+            { question: "3DES is more secure than AES.", options: ["True", "False"], answer: "False" },
+            { question: "The Caesar Cipher is a type of transposition cipher.", options: ["True", "False"], answer: "False" },
+            { question: "AES supports key sizes of 128, 192, and 256 bits.", options: ["True", "False"], answer: "True" },
+            { question: "DES uses a 64-bit block size.", options: ["True", "False"], answer: "True" },
+            { question: "Asymmetric cryptography is faster than symmetric cryptography.", options: ["True", "False"], answer: "False" },
+            { question: "The Rail Fence Cipher is a type of transposition cipher.", options: ["True", "False"], answer: "True" },
+            { question: "AES is vulnerable to brute-force attacks.", options: ["True", "False"], answer: "False" },
+            { question: "The Caesar Cipher is still widely used in modern cryptography.", options: ["True", "False"], answer: "False" },
+            { question: "The Playfair Cipher uses a 5x5 matrix for encryption.", options: ["True", "False"], answer: "True" },
+            { question: "DES is an example of a stream cipher.", options: ["True", "False"], answer: "False" },
+            { question: "AES is an open-source encryption standard.", options: ["True", "False"], answer: "True" },
+            // Secure Design MC/TF Questions
+            { question: "What does the \"Secure-by-design\" approach emphasize?", options: ["Adding security after development","Embedding security from the beginning of the software lifecycle","Using only open-source software","Ignoring security during development"], answer: "Embedding security from the beginning of the software lifecycle" },
+            { question: "Which of the following is NOT typically considered a core Principle of Secure Design?", options: ["Minimize Attack Surface","Open Access","Least Privilege","Secure Defaults"], answer: "Open Access" },
+            { question: "The \"Least Privilege\" principle applies to:", options: ["Only users","Users, machines, and network resources","Only network devices","Only databases"], answer: "Users, machines, and network resources" },
+            { question: "Secure-by-design means embedding security from the start of development.", options: ["True", "False"], answer: "True" },
+            { question: "Stateful inspection firewalls track active connection states.", options: ["True", "False"], answer: "True" },
+            { question: "Public key encryption uses the same key for encryption and decryption.", options: ["True", "False"], answer: "False" },
         ];
 
-        // Essay Question Data (From Unit 2 OCR and previous context)
-        const essayData = [
-            { // Unit 2, Essay Q1
-                question: "Explain the differences between symmetric and asymmetric cryptography. Provide examples of algorithms for each type.",
-                answer: "Symmetric cryptography uses the same secret key for both encryption and decryption. It is generally faster and more efficient for encrypting large amounts of data. However, the secure distribution of the shared key is a challenge. Examples include AES, DES, and 3DES.\n\nAsymmetric cryptography (or public-key cryptography) uses a pair of keys: a public key for encryption (or signature verification) and a private key for decryption (or signing). The public key can be shared openly, while the private key must remain secret. This simplifies key distribution but is computationally slower than symmetric encryption. It's often used for key exchange, digital signatures, and encrypting small amounts of data. Examples include RSA, ECC, and DSA."
-            },
-            { // Unit 2, Essay Q2
-                question: "Describe the steps involved in the AES encryption process. How does AES provide security against cryptographic attacks?",
-                answer: "AES (Advanced Encryption Standard) is a symmetric block cipher that encrypts data in 128-bit blocks. The key size can be 128, 192, or 256 bits. The encryption process involves several rounds (10, 12, or 14 rounds depending on key size):\n1.  **Initial Round:** AddRoundKey - The initial block is XORed with the first round key derived from the main key.\n2.  **Main Rounds (repeated):**\n    *   SubBytes: A non-linear byte substitution using a fixed S-box.\n    *   ShiftRows: Bytes in each row of the state matrix are shifted cyclically.\n    *   MixColumns: Columns of the state matrix are mixed using matrix multiplication over GF(2^8).\n    *   AddRoundKey: The current state is XORed with the round key for this round.\n3.  **Final Round:** Similar to main rounds but omits the MixColumns step.\n\nAES provides security through:\n*   **Confusion:** Achieved mainly by the SubBytes step (S-box), making the relationship between the ciphertext and the key complex.\n*   **Diffusion:** Achieved by ShiftRows and MixColumns, spreading the influence of a single plaintext bit over many ciphertext bits.\n*   **Key Size:** Large key sizes (128, 192, 256 bits) make brute-force attacks computationally infeasible.\n*   **Structure:** Its well-analyzed structure has proven resistant to known attacks like linear and differential cryptanalysis."
-            },
-            { // Unit 2, Essay Q3
-                question: "What are the advantages of using 3DES over DES? Why is 3DES still considered less secure than AES?",
-                answer: "Advantages of 3DES over DES:\n*   **Increased Key Length:** 3DES effectively increases the key length compared to DES's 56 bits (typically using two or three unique 56-bit keys, giving effective strengths of 112 or 168 bits), making it significantly more resistant to brute-force attacks that broke DES.\n*   **Leverages Existing Hardware:** It allowed organizations with DES hardware/software to enhance security without a complete overhaul.\n\nWhy 3DES is less secure/preferred than AES:\n*   **Speed:** 3DES is much slower than AES because it performs the DES encryption/decryption three times.\n*   **Block Size:** 3DES retains DES's 64-bit block size, which can be less secure against certain attacks (like Sweet32) compared to AES's 128-bit block size.\n*   **Key Length vs Security:** While having a larger effective key size than DES, the theoretical security of 168-bit 3DES isn't fully achieved due to meet-in-the-middle attacks, making its practical strength closer to 112 bits. AES offers stronger security guarantees with comparable or larger key sizes.\n*   **Modern Standard:** AES is the modern, widely adopted standard, benefiting from more extensive analysis and optimization."
-            },
-            { // Unit 2, Essay Q4
-                question: "Explain the concept of a block cipher. How does it differ from a stream cipher?",
-                answer: "A **block cipher** is a symmetric key encryption algorithm that operates on fixed-size groups of bits, called blocks. Common block sizes are 64 bits (e.g., DES, 3DES) or 128 bits (e.g., AES). The cipher encrypts one block of plaintext at a time to produce a block of ciphertext of the same size. If the message is longer than one block, it's divided into blocks, and a mode of operation (like CBC, ECB, CTR) is used to handle multiple blocks securely.\n\nA **stream cipher**, on the other hand, encrypts data one bit or one byte at a time. It generates a pseudorandom keystream, which is then combined (usually via XOR) with the plaintext bits/bytes to produce the ciphertext. The decryption process involves generating the same keystream and XORing it with the ciphertext.\n\n**Differences:**\n*   **Unit of Operation:** Block ciphers work on fixed blocks; stream ciphers work on individual bits/bytes.\n*   **Padding:** Block ciphers often require padding if the last block of plaintext is smaller than the block size; stream ciphers do not.\n*   **Error Propagation:** Errors in transmission can affect an entire block in some block cipher modes, while they usually affect only specific bits/bytes in stream ciphers.\n*   **Use Cases:** Block ciphers are common in file/database encryption. Stream ciphers are often used in real-time communication (like wireless) where data arrives continuously and low latency is important (e.g., RC4 - though now insecure, ChaCha20)."
-            },
-            { // Unit 2, Essay Q5
-                question: "What is the purpose of the MixColumns step in AES? How does it enhance the security of the algorithm?",
-                answer: "The **MixColumns** step in AES is a linear transformation applied independently to each column of the state matrix during most encryption rounds. It operates on the state column by column, treating each column as a four-term polynomial over GF(2^8) and multiplying it by a fixed polynomial.\n\nThe primary purpose of MixColumns is to provide **diffusion**. Diffusion ensures that changes in a single bit of the plaintext (or intermediate state) are spread across multiple bits in the subsequent state. Specifically, MixColumns ensures that the four bytes in one column affect all four bytes in that column in the next round's state. Combined with the ShiftRows step (which spreads changes across columns), MixColumns rapidly disperses the influence of plaintext bits throughout the entire state matrix over multiple rounds. This makes it much harder for cryptanalysts to analyze the relationship between the plaintext and ciphertext or find statistical patterns, thus enhancing security against attacks like differential and linear cryptanalysis."
-            },
-            { // Unit 2, Essay Q6
-                question: "Discuss the importance of key length in cryptographic algorithms. How does key length affect security?",
-                answer: "Key length is a critical parameter in cryptographic algorithms as it directly determines the size of the key space – the total number of possible keys.\n\n**Importance and Effect on Security:**\n*   **Brute-Force Resistance:** The primary way key length affects security is by determining the feasibility of a brute-force attack. An attacker attempting a brute-force attack must try, on average, half of all possible keys. A longer key means an exponentially larger key space, making brute-force attacks computationally infeasible with current and foreseeable technology.\n    *   For example, a 56-bit key (DES) has 2^56 possible keys, which is breakable. A 128-bit key (AES-128) has 2^128 keys, considered secure against brute-force for the foreseeable future. A 256-bit key (AES-256) offers even greater long-term security.\n*   **Security Level:** Longer keys generally provide a higher theoretical security level against brute-force. However, the *overall* security of an algorithm also depends on its design resisting other attacks (like cryptanalysis). A flawed algorithm with a long key can still be insecure.\n*   **Performance Trade-off:** Longer keys often require more computational resources and time for key generation, encryption, and decryption processes.\n\nIn summary, key length is a fundamental measure of the strength of a cipher against brute-force attacks. Choosing an appropriate key length is essential to balance security requirements with performance constraints, ensuring the effort to break the cipher exceeds the value or lifetime of the protected information."
-            },
-             // --- Include Secure Design Essay Questions from previous context ---
-            { // Secure Design Essay Q1
-                question: "Explain the \"Secure-by-design\" approach and its significance in software development.",
-                answer: "Secure-by-design is a methodology that integrates security practices throughout the entire software development lifecycle (SDLC), starting from the requirements and design phases, through coding, testing, deployment, and maintenance. It contrasts with approaches where security is considered late in the cycle or bolted on afterward.\n\nSignificance:\n*   **Proactive Vulnerability Prevention:** Identifies and mitigates security risks early, which is more effective and less costly than fixing vulnerabilities found later.\n*   **Reduced Attack Surface:** Encourages principles like minimizing features and access points, inherently making the software harder to attack.\n*   **Increased Resilience:** Builds software that can better withstand attacks and fail gracefully (securely) if compromised.\n*   **Cost Savings:** Fixing security flaws late in development or after deployment is significantly more expensive than addressing them early.\n*   **Trust and Compliance:** Builds user trust and helps meet regulatory compliance requirements by demonstrating a commitment to security.\nIn essence, secure-by-design treats security as a fundamental quality attribute, just like performance or usability, rather than an optional feature."
-            },
-            // ... (Add other Secure Design essay questions here) ...
-
+        // (Essay Data remains the same as in the previous version)
+        const essayData = [ /* Omitted for brevity - same as before */
+            { question: "Explain the differences between symmetric and asymmetric cryptography. Provide examples of algorithms for each type.", answer: "Symmetric cryptography uses the same secret key for both encryption and decryption. It is generally faster and more efficient for encrypting large amounts of data. However, the secure distribution of the shared key is a challenge. Examples include AES, DES, and 3DES.\n\nAsymmetric cryptography (or public-key cryptography) uses a pair of keys: a public key for encryption (or signature verification) and a private key for decryption (or signing). The public key can be shared openly, while the private key must remain secret. This simplifies key distribution but is computationally slower than symmetric encryption. It's often used for key exchange, digital signatures, and encrypting small amounts of data. Examples include RSA, ECC, and DSA." },
+            { question: "Describe the steps involved in the AES encryption process. How does AES provide security against cryptographic attacks?", answer: "AES (Advanced Encryption Standard) is a symmetric block cipher that encrypts data in 128-bit blocks. The key size can be 128, 192, or 256 bits. The encryption process involves several rounds (10, 12, or 14 rounds depending on key size):\n1.  **Initial Round:** AddRoundKey - The initial block is XORed with the first round key derived from the main key.\n2.  **Main Rounds (repeated):**\n    *   SubBytes: A non-linear byte substitution using a fixed S-box.\n    *   ShiftRows: Bytes in each row of the state matrix are shifted cyclically.\n    *   MixColumns: Columns of the state matrix are mixed using matrix multiplication over GF(2^8).\n    *   AddRoundKey: The current state is XORed with the round key for this round.\n3.  **Final Round:** Similar to main rounds but omits the MixColumns step.\n\nAES provides security through:\n*   **Confusion:** Achieved mainly by the SubBytes step (S-box), making the relationship between the ciphertext and the key complex.\n*   **Diffusion:** Achieved by ShiftRows and MixColumns, spreading the influence of a single plaintext bit over many ciphertext bits.\n*   **Key Size:** Large key sizes (128, 192, 256 bits) make brute-force attacks computationally infeasible.\n*   **Structure:** Its well-analyzed structure has proven resistant to known attacks like linear and differential cryptanalysis." },
+            { question: "What are the advantages of using 3DES over DES? Why is 3DES still considered less secure than AES?", answer: "Advantages of 3DES over DES:\n*   **Increased Key Length:** 3DES effectively increases the key length compared to DES's 56 bits (typically using two or three unique 56-bit keys, giving effective strengths of 112 or 168 bits), making it significantly more resistant to brute-force attacks that broke DES.\n*   **Leverages Existing Hardware:** It allowed organizations with DES hardware/software to enhance security without a complete overhaul.\n\nWhy 3DES is less secure/preferred than AES:\n*   **Speed:** 3DES is much slower than AES because it performs the DES encryption/decryption three times.\n*   **Block Size:** 3DES retains DES's 64-bit block size, which can be less secure against certain attacks (like Sweet32) compared to AES's 128-bit block size.\n*   **Key Length vs Security:** While having a larger effective key size than DES, the theoretical security of 168-bit 3DES isn't fully achieved due to meet-in-the-middle attacks, making its practical strength closer to 112 bits. AES offers stronger security guarantees with comparable or larger key sizes.\n*   **Modern Standard:** AES is the modern, widely adopted standard, benefiting from more extensive analysis and optimization." },
+            { question: "Explain the concept of a block cipher. How does it differ from a stream cipher?", answer: "A **block cipher** is a symmetric key encryption algorithm that operates on fixed-size groups of bits, called blocks. Common block sizes are 64 bits (e.g., DES, 3DES) or 128 bits (e.g., AES). The cipher encrypts one block of plaintext at a time to produce a block of ciphertext of the same size. If the message is longer than one block, it's divided into blocks, and a mode of operation (like CBC, ECB, CTR) is used to handle multiple blocks securely.\n\nA **stream cipher**, on the other hand, encrypts data one bit or one byte at a time. It generates a pseudorandom keystream, which is then combined (usually via XOR) with the plaintext bits/bytes to produce the ciphertext. The decryption process involves generating the same keystream and XORing it with the ciphertext.\n\n**Differences:**\n*   **Unit of Operation:** Block ciphers work on fixed blocks; stream ciphers work on individual bits/bytes.\n*   **Padding:** Block ciphers often require padding if the last block of plaintext is smaller than the block size; stream ciphers do not.\n*   **Error Propagation:** Errors in transmission can affect an entire block in some block cipher modes, while they usually affect only specific bits/bytes in stream ciphers.\n*   **Use Cases:** Block ciphers are common in file/database encryption. Stream ciphers are often used in real-time communication (like wireless) where data arrives continuously and low latency is important (e.g., RC4 - though now insecure, ChaCha20)." },
+            { question: "What is the purpose of the MixColumns step in AES? How does it enhance the security of the algorithm?", answer: "The **MixColumns** step in AES is a linear transformation applied independently to each column of the state matrix during most encryption rounds. It operates on the state column by column, treating each column as a four-term polynomial over GF(2^8) and multiplying it by a fixed polynomial.\n\nThe primary purpose of MixColumns is to provide **diffusion**. Diffusion ensures that changes in a single bit of the plaintext (or intermediate state) are spread across multiple bits in the subsequent state. Specifically, MixColumns ensures that the four bytes in one column affect all four bytes in that column in the next round's state. Combined with the ShiftRows step (which spreads changes across columns), MixColumns rapidly disperses the influence of plaintext bits throughout the entire state matrix over multiple rounds. This makes it much harder for cryptanalysts to analyze the relationship between the plaintext and ciphertext or find statistical patterns, thus enhancing security against attacks like differential and linear cryptanalysis." },
+            { question: "Discuss the importance of key length in cryptographic algorithms. How does key length affect security?", answer: "Key length is a critical parameter in cryptographic algorithms as it directly determines the size of the key space – the total number of possible keys.\n\n**Importance and Effect on Security:**\n*   **Brute-Force Resistance:** The primary way key length affects security is by determining the feasibility of a brute-force attack. An attacker attempting a brute-force attack must try, on average, half of all possible keys. A longer key means an exponentially larger key space, making brute-force attacks computationally infeasible with current and foreseeable technology.\n    *   For example, a 56-bit key (DES) has 2^56 possible keys, which is breakable. A 128-bit key (AES-128) has 2^128 keys, considered secure against brute-force for the foreseeable future. A 256-bit key (AES-256) offers even greater long-term security.\n*   **Security Level:** Longer keys generally provide a higher theoretical security level against brute-force. However, the *overall* security of an algorithm also depends on its design resisting other attacks (like cryptanalysis). A flawed algorithm with a long key can still be insecure.\n*   **Performance Trade-off:** Longer keys often require more computational resources and time for key generation, encryption, and decryption processes.\n\nIn summary, key length is a fundamental measure of the strength of a cipher against brute-force attacks. Choosing an appropriate key length is essential to balance security requirements with performance constraints, ensuring the effort to break the cipher exceeds the value or lifetime of the protected information." },
+            { question: "Explain the \"Secure-by-design\" approach and its significance in software development.", answer: "Secure-by-design is a methodology that integrates security practices throughout the entire software development lifecycle (SDLC), starting from the requirements and design phases, through coding, testing, deployment, and maintenance. It contrasts with approaches where security is considered late in the cycle or bolted on afterward.\n\nSignificance:\n*   **Proactive Vulnerability Prevention:** Identifies and mitigates security risks early, which is more effective and less costly than fixing vulnerabilities found later.\n*   **Reduced Attack Surface:** Encourages principles like minimizing features and access points, inherently making the software harder to attack.\n*   **Increased Resilience:** Builds software that can better withstand attacks and fail gracefully (securely) if compromised.\n*   **Cost Savings:** Fixing security flaws late in development or after deployment is significantly more expensive than addressing them early.\n*   **Trust and Compliance:** Builds user trust and helps meet regulatory compliance requirements by demonstrating a commitment to security.\nIn essence, secure-by-design treats security as a fundamental quality attribute, just like performance or usability, rather than an optional feature." },
         ];
+
+        // Practical Question Data
+        const practicalData = [
+             { // Practical Q1
+                question: 'Encrypt the plaintext "HELLO" using the Caesar Cipher with a key of 4.',
+                answer: `
+<strong>Algorithm:</strong> Caesar Cipher
+<strong>Plaintext:</strong> HELLO
+<strong>Key (Shift):</strong> 4
+
+<strong>Steps:</strong>
+Each letter in the plaintext is shifted forward by 4 positions in the alphabet (wrapping around from Z to A).
+H (+4) -> L
+E (+4) -> I
+L (+4) -> P
+L (+4) -> P
+O (+4) -> S
+
+<strong>Ciphertext:</strong> <code>LIPPS</code>
+                `
+            },
+            { // Practical Q2
+                question: 'Encrypt the plaintext "SECURITY" using the Caesar Cipher with a key of 3.',
+                answer: `
+<strong>Algorithm:</strong> Caesar Cipher
+<strong>Plaintext:</strong> SECURITY
+<strong>Key (Shift):</strong> 3
+
+<strong>Steps:</strong>
+Shift each letter forward by 3 positions.
+S (+3) -> V
+E (+3) -> H
+C (+3) -> F
+U (+3) -> X
+R (+3) -> U
+I (+3) -> L
+T (+3) -> W
+Y (+3) -> B
+
+<strong>Ciphertext:</strong> <code>VHFXULWB</code>
+                `
+            },
+             { // Practical Q3
+                question: 'Encrypt the plaintext "CRYPTO" using the Playfair Cipher with the keyword "MONARCHY".',
+                answer: `
+<strong>Algorithm:</strong> Playfair Cipher
+<strong>Plaintext:</strong> CRYPTO
+<strong>Keyword:</strong> MONARCHY
+
+<strong>Steps:</strong>
+<div class="step">1. Generate the 5x5 Key Matrix:</div>
+Fill the matrix with unique letters from the keyword "MONARCHY", then fill the remaining spots with the rest of the alphabet (combining I/J).
+M O N A R
+C H Y B D
+E F G I/J K
+L P Q S T
+U V W X Z
+
+<div class="step">2. Prepare Plaintext:</div>
+Divide the plaintext into digraphs (pairs of letters). If a pair has identical letters, insert an 'X' between them. If the plaintext has an odd number of letters, append an 'X'.
+CR YP TO
+
+<div class="step">3. Encrypt Digraphs:</div>
+- <strong>CR:</strong> Same row (Row 1). Replace with letters to their right (wrapping around). C -> H, R -> M. Result: <code>HM</code> (Oops, OCR answer is BSEZWU. Let's re-check the OCR example's likely matrix and rules.)
+
+<div class="explanation">Revisiting based on expected answer BSEZWU. The standard Playfair rules are:
+1. Same row: Take letter to the right (wrap).
+2. Same column: Take letter below (wrap).
+3. Rectangle: Take letter on the same row but in the other corner of the rectangle.
+Let's re-encrypt CR YP TO with the matrix above:</div>
+- <strong>CR:</strong> Different row, different column. Form rectangle with M and A. C is on the same row as H. R is on the same row as M. Cipher: HM -> (Still doesn't match. Let's assume the standard rules were followed for the provided answer, maybe a different matrix was used in the source? Let's follow the standard rules anyway for demonstration).
+- <strong>CR:</strong> Rectangle M-A-C-R. C -> H, R -> M. Cipher: <strong>HM</strong>
+- <strong>YP:</strong> Same column (Column 2). Take letters below. Y -> F, P -> V. Cipher: <strong>FV</strong>
+- <strong>TO:</strong> Same row (Row 4). Take letters to the right. T -> L, O -> N (using row 1 wrap). Cipher: <strong>LN</strong> (assuming O is in row 1 - NO, 'O' is row 1, 'T' is row 4 - different rows!)
+- <strong>TO:</strong> Rectangle N-R-T-O. T -> S, O -> N. Cipher: <strong>SN</strong>
+
+<div class="explanation">The provided answer "BSEZWU" seems inconsistent with standard Playfair rules and the matrix derived from "MONARCHY". Let's try encrypting the *answer* "BSEZWU" back to see if it makes sense, or maybe the plaintext/keyword were different in the original question leading to that answer. Assuming standard rules and the MONARCHY matrix:
+- BS -> (Rectangle M-S-B-?) -> ??
+This suggests the example answer in the image might be incorrect or based on non-standard rules/matrix. Showing the standard process:</div>
+
+<strong>Applying Standard Rules to CRYPTO with MONARCHY matrix:</strong>
+- CR -> HM
+- YP -> FV
+- TO -> SN
+
+<strong>Resulting Ciphertext (Standard Rules):</strong> <code>HMFVSN</code>
+
+<strong>Provided Answer in Image:</strong> <code>BSEZWU</code> (This answer cannot be easily derived using standard Playfair rules with the given keyword/plaintext).
+<strong class="highlight">Note:</strong> Presenting the standard method result, but acknowledging the discrepancy with the image's answer.
+                `
+            },
+            { // Practical Q4
+                question: 'Encrypt the plaintext "HELLO" using the Hill Cipher with the key matrix [3 3; 2 5].',
+                answer: `
+<strong>Algorithm:</strong> Hill Cipher (2x2)
+<strong>Plaintext:</strong> HELLO
+<strong>Key Matrix (K):</strong>
+[ 3  3 ]
+[ 2  5 ]
+
+<strong>Steps:</strong>
+<div class="step">1. Prepare Plaintext:</div>
+Convert plaintext to numbers (A=0, B=1, ..., Z=25) and group into vectors of size 2. Add padding if necessary (e.g., 'X').
+H=7, E=4, L=11, L=11, O=14
+Pairs: (HE), (LL), (OX) - Padding O with X (23)
+Vectors: [7; 4], [11; 11], [14; 23]
+
+<div class="step">2. Matrix Multiplication (mod 26):</div>
+Ciphertext Vector (C) = Key Matrix (K) * Plaintext Vector (P) mod 26
+
+- <strong>For [HE] = [7; 4]:</strong>
+  [ 3  3 ] [ 7 ]   [ (3*7 + 3*4) mod 26 ]   [ (21 + 12) mod 26 ]   [ 33 mod 26 ]   [ 7 ] (H)
+  [ 2  5 ] [ 4 ] = [ (2*7 + 5*4) mod 26 ] = [ (14 + 20) mod 26 ] = [ 34 mod 26 ] = [ 8 ] (I)
+  Result: HI
+
+- <strong>For [LL] = [11; 11]:</strong>
+  [ 3  3 ] [ 11 ]   [ (3*11 + 3*11) mod 26 ]   [ (33 + 33) mod 26 ]   [ 66 mod 26 ]   [ 14 ] (O)
+  [ 2  5 ] [ 11 ] = [ (2*11 + 5*11) mod 26 ] = [ (22 + 55) mod 26 ] = [ 77 mod 26 ] = [ 25 ] (Z)
+  Result: OZ
+
+- <strong>For [OX] = [14; 23]:</strong>
+  [ 3  3 ] [ 14 ]   [ (3*14 + 3*23) mod 26 ]   [ (42 + 69) mod 26 ]   [ 111 mod 26 ]   [ 7 ] (H)
+  [ 2  5 ] [ 23 ] = [ (2*14 + 5*23) mod 26 ] = [ (28 + 115) mod 26 ] = [ 143 mod 26 ] = [ 13 ] (N)
+  Result: HN
+
+<div class="explanation">Let's re-check calculation for the expected answer VOHY. Maybe the plaintext was treated differently? Let's try HE LL OO (no padding)
+H=7, E=4 -> [7; 4]
+L=11, L=11 -> [11; 11]
+O=14, O=14 -> [14; 14]</div>
+
+- <strong>[HE] = [7; 4]:</strong> -> [7; 8] -> HI (as before)
+- <strong>[LL] = [11; 11]:</strong> -> [14; 25] -> OZ (as before)
+- <strong>[OO] = [14; 14]:</strong>
+  [ 3  3 ] [ 14 ]   [ (3*14 + 3*14) mod 26 ]   [ (42 + 42) mod 26 ]   [ 84 mod 26 ]   [ 6 ] (G)
+  [ 2  5 ] [ 14 ] = [ (2*14 + 5*14) mod 26 ] = [ (28 + 70) mod 26 ] = [ 98 mod 26 ] = [ 20 ] (U)
+  Result: GU
+
+Ciphertext (no padding): HI OZ GU
+<div class="explanation">The provided answer VOHY still doesn't match. Let's verify the calculation leading to VOHY.
+V=21, O=14, H=7, Y=24.
+Maybe the multiplication was P * K instead of K * P? (Usually K*P)
+Maybe the matrix was different?
+Let's assume K*P is correct and check the first pair HE -> VO?
+[ 3 3 ] [ 7 ] = [ 33 mod 26 ] = [ 7 ] (H, not V)
+[ 2 5 ] [ 4 ] = [ 34 mod 26 ] = [ 8 ] (I, not O)
+Let's try P*K (plaintext vector as row):
+[7 4] [ 3 3 ] = [ (7*3+4*2) (7*3+4*5) ] mod 26
+      [ 2 5 ] = [ (21+8) (21+20) ] mod 26
+            = [ 29 mod 26, 41 mod 26 ] = [3, 15] -> DP (Still not VO)
+</div>
+<strong class="highlight">Note:</strong> Standard Hill cipher encryption (K*P mod 26) with the provided key matrix and plaintext "HELLO" does not yield "VOHY". There might be an error in the question or the provided answer in the image. The standard calculation for HE LL OX (padded) yields <code>HIOZHN</code>.
+Result based on image answer: <code>VOHY</code> (Cannot replicate with standard steps).
+Result with standard steps (HE LL OX): <code>HIOZHN</code>
+                `
+            },
+            { // Practical Q5
+                question: 'Given the plaintext "10101010" and the key "11001100", perform XOR encryption.',
+                answer: `
+<strong>Algorithm:</strong> XOR Encryption (Stream Cipher concept)
+<strong>Plaintext (P):</strong> 10101010
+<strong>Key (K):</strong>      11001100
+
+<strong>Steps:</strong>
+Perform bitwise XOR operation between the plaintext and the key.
+(0 XOR 0 = 0), (0 XOR 1 = 1), (1 XOR 0 = 1), (1 XOR 1 = 0)
+
+  1 0 1 0 1 0 1 0  (P)
+⊕ 1 1 0 0 1 1 0 0  (K)
+-----------------
+  0 1 1 0 0 1 1 0  (Ciphertext C = P XOR K)
+
+<strong>Ciphertext:</strong> <code>01100110</code>
+                `
+            },
+             { // Practical Q6
+                question: 'Encrypt the plaintext "WORLD" using the Caesar Cipher with a key of 7.',
+                answer: `
+<strong>Algorithm:</strong> Caesar Cipher
+<strong>Plaintext:</strong> WORLD
+<strong>Key (Shift):</strong> 7
+
+<strong>Steps:</strong>
+Shift each letter forward by 7 positions.
+W (+7) -> D
+O (+7) -> V
+R (+7) -> Y
+L (+7) -> S
+D (+7) -> K
+
+<strong>Ciphertext:</strong> <code>DVYSK</code>
+                `
+            },
+            { // Practical Q7
+                question: 'Encrypt the plaintext "MEET" using the Playfair Cipher with the keyword "SECURITY".',
+                 answer: `
+<strong>Algorithm:</strong> Playfair Cipher
+<strong>Plaintext:</strong> MEET
+<strong>Keyword:</strong> SECURITY
+
+<strong>Steps:</strong>
+<div class="step">1. Generate the 5x5 Key Matrix:</div>
+Fill with unique letters from "SECURITY", then the rest of the alphabet (I/J combined).
+S E C U R
+I/J T Y A B
+D F G H K
+L M N O P
+Q V W X Z
+
+<div class="step">2. Prepare Plaintext:</div>
+Divide into digraphs. Insert 'X' between identical letters.
+ME ET -> ME EX T (Add 'X' between E's, T needs padding) -> ME EX TX
+
+<div class="explanation">Re-evaluating pairing based on the provided answer "IBSU": If the plaintext was MEET, pairings are ME ET.</div>
+- ME: Rectangle S-R-M-E. M -> L, E -> U. Cipher: LU
+- ET: Same row (Row 2). E -> C, T -> Y. Cipher: CY (Using SECURITY matrix: S E C U R / I T Y A B / D F G H K / L M N O P / Q V W X Z )
+
+<div class="explanation">Matrix from Step 1:
+S E C U R
+I/J T Y A B
+D F G H K
+L M N O P
+Q V W X Z
+
+Re-encrypting ME ET:
+- ME: Rectangle S-R-L-E. M -> P, E -> U. Cipher: PU
+- ET: Same row (Row 2). E->S, T->Y. Cipher: SY (Using the matrix above and wrapping).
+Result: PUSY
+
+Let's try the provided answer "IBSU". Can we decrypt it with this matrix?
+- IB: Same row (Row 2). I -> S, B -> I/J. Plaintext: SI/SJ ??
+- SU: Same row (Row 1). S -> E, U -> R. Plaintext: ER ??
+Resulting plaintext SIER / SJER doesn't match MEET.
+
+There seems to be inconsistency between the keyword/plaintext and the expected answer in the image source. Let's use the provided answer and assume it's correct for demonstrating format.</div>
+
+<strong>Assuming Ciphertext is IBSU (from image):</strong>
+<strong>Ciphertext:</strong> <code>IBSU</code>
+<strong class="highlight">Note:</strong> Similar to Q3, the provided answer "IBSU" doesn't seem to directly result from applying standard Playfair rules to "MEET" with the keyword "SECURITY". The steps for standard encryption would yield <code>PUSY</code>.
+                 `
+            },
+             { // Practical Q8
+                question: 'Encrypt the plaintext "DATA" using the Hill Cipher with the key matrix [2 1; 3 4].',
+                answer: `
+<strong>Algorithm:</strong> Hill Cipher (2x2)
+<strong>Plaintext:</strong> DATA
+<strong>Key Matrix (K):</strong>
+[ 2  1 ]
+[ 3  4 ]
+
+<strong>Steps:</strong>
+<div class="step">1. Prepare Plaintext:</div>
+Convert to numbers (A=0..Z=25), group into vectors.
+D=3, A=0, T=19, A=0
+Pairs: (DA), (TA)
+Vectors: [3; 0], [19; 0]
+
+<div class="step">2. Matrix Multiplication (mod 26):</div>
+C = K * P mod 26
+
+- <strong>For [DA] = [3; 0]:</strong>
+  [ 2  1 ] [ 3 ]   [ (2*3 + 1*0) mod 26 ]   [ 6 mod 26 ]   [ 6 ] (G)
+  [ 3  4 ] [ 0 ] = [ (3*3 + 4*0) mod 26 ] = [ 9 mod 26 ] = [ 9 ] (J)
+  Result: GJ
+
+- <strong>For [TA] = [19; 0]:</strong>
+  [ 2  1 ] [ 19 ]   [ (2*19 + 1*0) mod 26 ]   [ 38 mod 26 ]   [ 12 ] (M)
+  [ 3  4 ] [ 0 ]  = [ (3*19 + 4*0) mod 26 ] = [ 57 mod 26 ] = [  5 ] (F)
+  Result: MF
+
+<strong>Ciphertext (Standard K*P):</strong> <code>GJMF</code>
+
+<div class="explanation">Checking the provided answer "ZKZA".
+Z=25, K=10.
+Let's see if [DA] -> [ZK]?
+[ 2 1 ] [ 3 ] = [ 6 ] (G not Z)
+[ 3 4 ] [ 0 ] = [ 9 ] (J not K)
+Let's try P*K:
+[3 0] [ 2 1 ] = [ (3*2+0*3) (3*1+0*4) ] mod 26
+      [ 3 4 ] = [ 6 mod 26, 3 mod 26 ] = [6, 3] -> GD (Not ZK)
+</div>
+<strong class="highlight">Note:</strong> The provided answer "ZKZA" in the image does not match the result of standard Hill Cipher encryption (K*P or P*K) for "DATA" with key [2 1; 3 4]. The standard K*P result is <code>GJMF</code>.
+Result based on image answer: <code>ZKZA</code> (Cannot replicate with standard steps).
+Result with standard K*P steps: <code>GJMF</code>
+                `
+            },
+            { // Practical Q9
+                question: 'Given the plaintext "11001100" and the key "10101010", perform XOR encryption.',
+                answer: `
+<strong>Algorithm:</strong> XOR Encryption
+<strong>Plaintext (P):</strong> 11001100
+<strong>Key (K):</strong>      10101010
+
+<strong>Steps:</strong>
+Perform bitwise XOR.
+  1 1 0 0 1 1 0 0  (P)
+⊕ 1 0 1 0 1 0 1 0  (K)
+-----------------
+  0 1 1 0 0 1 1 0  (C = P XOR K)
+
+<strong>Ciphertext:</strong> <code>01100110</code>
+                `
+            },
+            { // Practical Q10
+                question: 'Encrypt the plaintext "CRYPTO" using the Caesar Cipher with a key of 10.',
+                answer: `
+<strong>Algorithm:</strong> Caesar Cipher
+<strong>Plaintext:</strong> CRYPTO
+<strong>Key (Shift):</strong> 10
+
+<strong>Steps:</strong>
+Shift each letter forward by 10 positions.
+C (+10) -> M
+R (+10) -> B
+Y (+10) -> I (Y=24, 24+10=34, 34 mod 26 = 8 -> I) -- Let's recheck OCR answer MBYZXC
+Y=24 -> +10 -> 34 -> 8 -> I (OCR answer has Y)
+P=15 -> +10 -> 25 -> Z
+T=19 -> +10 -> 29 -> 3 -> D (OCR answer has X)
+O=14 -> +10 -> 24 -> Y (OCR answer has C)
+
+<div class="explanation">Let's re-calculate based on the provided answer MBYZXC.
+M <- C (+10) Correct.
+B <- R (+10) Correct.
+Y <- ? Maybe it was Vignere? No, Caesar. Did they mean decrypt? C(-10) -> S. R(-10)->H. No.
+Let's recalculate carefully:
+C(2) + 10 = 12 -> M
+R(17) + 10 = 27 -> 1 -> B
+Y(24) + 10 = 34 -> 8 -> I
+P(15) + 10 = 25 -> Z
+T(19) + 10 = 29 -> 3 -> D
+O(14) + 10 = 24 -> Y
+Standard Caesar yields: <code>MBIZDY</code></div>
+
+<strong class="highlight">Note:</strong> The provided answer "MBYZXC" in the image does not match the standard Caesar cipher encryption with key 10. Y->I, T->D, O->Y. The standard result is <code>MBIZDY</code>.
+Result based on image answer: <code>MBYZXC</code> (Inconsistent with standard steps).
+Result with standard steps: <code>MBIZDY</code>
+                `
+            },
+            { // Practical Q11
+                question: 'Encrypt the plaintext "HELLO" using the Rail Fence Cipher with 2 rails.',
+                answer: `
+<strong>Algorithm:</strong> Rail Fence Cipher
+<strong>Plaintext:</strong> HELLO
+<strong>Rails:</strong> 2
+
+<strong>Steps:</strong>
+<div class="step">1. Write plaintext diagonally on the specified number of rails:</div>
+H . L . O
+. E . L .
+
+<div class="step">2. Read off the ciphertext row by row:</div>
+Row 1: H L O
+Row 2: E L
+
+<strong>Ciphertext:</strong> <code>HLOEL</code>
+                `
+            },
+            { // Practical Q12
+                question: 'Encrypt the plaintext "SECRET" using the Caesar Cipher with a key of 5.',
+                answer: `
+<strong>Algorithm:</strong> Caesar Cipher
+<strong>Plaintext:</strong> SECRET
+<strong>Key (Shift):</strong> 5
+
+<strong>Steps:</strong>
+Shift each letter forward by 5 positions.
+S (+5) -> X
+E (+5) -> J
+C (+5) -> H
+R (+5) -> W
+E (+5) -> J
+T (+5) -> Y
+
+<strong>Ciphertext:</strong> <code>XJHWJY</code>
+                `
+            },
+             { // Practical Q13
+                question: 'Encrypt the plaintext "HELLO" using the Hill Cipher with the key matrix [1 2; 3 4].',
+                answer: `
+<strong>Algorithm:</strong> Hill Cipher (2x2)
+<strong>Plaintext:</strong> HELLO
+<strong>Key Matrix (K):</strong>
+[ 1  2 ]
+[ 3  4 ]
+
+<strong>Steps:</strong>
+<div class="step">1. Prepare Plaintext:</div>
+H=7, E=4, L=11, L=11, O=14. Pad with X(23).
+Pairs: (HE), (LL), (OX)
+Vectors: [7; 4], [11; 11], [14; 23]
+
+<div class="step">2. Matrix Multiplication (mod 26):</div>
+C = K * P mod 26
+
+- <strong>For [HE] = [7; 4]:</strong>
+  [ 1  2 ] [ 7 ]   [ (1*7 + 2*4) mod 26 ]   [ (7 + 8) mod 26 ]   [ 15 mod 26 ]   [ 15 ] (P)
+  [ 3  4 ] [ 4 ] = [ (3*7 + 4*4) mod 26 ] = [ (21 + 16) mod 26 ] = [ 37 mod 26 ] = [ 11 ] (L)
+  Result: PL
+
+- <strong>For [LL] = [11; 11]:</strong>
+  [ 1  2 ] [ 11 ]   [ (1*11 + 2*11) mod 26 ]   [ (11 + 22) mod 26 ]   [ 33 mod 26 ]   [ 7 ] (H)
+  [ 3  4 ] [ 11 ] = [ (3*11 + 4*11) mod 26 ] = [ (33 + 44) mod 26 ] = [ 77 mod 26 ] = [ 25 ] (Z)
+  Result: HZ
+
+- <strong>For [OX] = [14; 23]:</strong>
+  [ 1  2 ] [ 14 ]   [ (1*14 + 2*23) mod 26 ]   [ (14 + 46) mod 26 ]   [ 60 mod 26 ]   [ 8 ] (I)
+  [ 3  4 ] [ 23 ] = [ (3*14 + 4*23) mod 26 ] = [ (42 + 92) mod 26 ] = [ 134 mod 26 ] = [ 4 ] (E)
+  Result: IE
+
+<strong>Ciphertext (Standard K*P with padding):</strong> <code>PLHZIE</code>
+
+<div class="explanation">Checking the provided answer "ZKZA". This is the same incorrect answer as Q8. It seems highly likely the answer provided in the image for Q13 is wrong.</div>
+<strong class="highlight">Note:</strong> The provided answer "ZKZA" is inconsistent with the question's parameters. The standard K*P result for "HELLO" (padded) with key [1 2; 3 4] is <code>PLHZIE</code>.
+Result based on image answer: <code>ZKZA</code> (Cannot replicate with standard steps).
+Result with standard K*P steps (HE LL OX): <code>PLHZIE</code>
+                `
+            },
+            { // Practical Q14
+                question: 'Given the plaintext "11110000" and the key "10101010", perform XOR encryption.',
+                answer: `
+<strong>Algorithm:</strong> XOR Encryption
+<strong>Plaintext (P):</strong> 11110000
+<strong>Key (K):</strong>      10101010
+
+<strong>Steps:</strong>
+Perform bitwise XOR.
+  1 1 1 1 0 0 0 0  (P)
+⊕ 1 0 1 0 1 0 1 0  (K)
+-----------------
+  0 1 0 1 1 0 1 0  (C = P XOR K)
+
+<strong>Ciphertext:</strong> <code>01011010</code>
+                `
+            },
+            { // Practical Q15
+                question: 'Encrypt the plaintext "HELLO" using the Caesar Cipher with a key of 12.',
+                 answer: `
+<strong>Algorithm:</strong> Caesar Cipher
+<strong>Plaintext:</strong> HELLO
+<strong>Key (Shift):</strong> 12
+
+<strong>Steps:</strong>
+Shift each letter forward by 12 positions.
+H (7) + 12 = 19 -> T
+E (4) + 12 = 16 -> Q
+L (11) + 12 = 23 -> X
+L (11) + 12 = 23 -> X
+O (14) + 12 = 26 -> 0 -> A
+
+<strong>Ciphertext:</strong> <code>TQXXA</code>
+                `
+            },
+            { // Practical Q16
+                question: 'Encrypt the plaintext "HELLO" using the Playfair Cipher with the keyword "HELLO".',
+                 answer: `
+<strong>Algorithm:</strong> Playfair Cipher
+<strong>Plaintext:</strong> HELLO
+<strong>Keyword:</strong> HELLO
+
+<strong>Steps:</strong>
+<div class="step">1. Generate the 5x5 Key Matrix:</div>
+Unique letters from "HELLO" are H, E, L, O. Fill matrix.
+H E L O A
+B C D F G
+I/J K M N P
+Q R S T U
+V W X Y Z
+
+<div class="step">2. Prepare Plaintext:</div>
+HELLO -> HE LX LO (Insert X between identical Ls)
+
+<div class="step">3. Encrypt Digraphs:</div>
+- <strong>HE:</strong> Same row (Row 1). H -> E, E -> L. Cipher: <strong>EL</strong>
+- <strong>LX:</strong> Rectangle L-A-X-?. L is Row 1, X is Row 5. Rectangle L-A-V-X. L -> A, X -> V. Cipher: <strong>AV</strong>
+- <strong>LO:</strong> Same row (Row 1). L -> O, O -> A. Cipher: <strong>OA</strong>
+
+<strong>Ciphertext (Standard Rules):</strong> <code>ELAVOA</code>
+
+<div class="explanation">Checking the provided answer "IBSUP". This doesn't match. Let's assume the keyword was intended to be different, or the plaintext. The answer "IBSUP" is 5 letters, suggesting the plaintext might have been padded differently or was shorter. If plaintext was just HELLO (5 letters), pair as HE LO ?? Need a padding. HE LX LO X?
+- HE -> EL
+- LX -> AV
+- OX -> Rectangle O-A-X-Z. O -> A, X -> Z. Cipher: AZ
+Result: ELAVAZ. Still not matching.</div>
+
+<strong class="highlight">Note:</strong> The provided answer "IBSUP" in the image is inconsistent with standard Playfair encryption of "HELLO" using the keyword "HELLO". Standard encryption yields <code>ELAVOA</code> (for HE LX LO).
+Result based on image answer: <code>IBSUP</code> (Cannot replicate with standard steps).
+Result with standard steps (HE LX LO): <code>ELAVOA</code>
+                 `
+            },
+            { // Practical Q17
+                question: 'Encrypt the plaintext "HELLO" using the Rail Fence Cipher with 3 rails.',
+                answer: `
+<strong>Algorithm:</strong> Rail Fence Cipher
+<strong>Plaintext:</strong> HELLO
+<strong>Rails:</strong> 3
+
+<strong>Steps:</strong>
+<div class="step">1. Write plaintext diagonally on 3 rails:</div>
+H . . . O
+. E . L .
+. . L . .
+
+<div class="step">2. Read off ciphertext row by row:</div>
+Row 1: H O
+Row 2: E L
+Row 3: L
+
+<strong>Ciphertext:</strong> <code>HOLEL</code>
+                `
+            },
+            { // Practical Q18
+                question: 'Given Key k= 1010000010 find k1, and k2 using SDES algorithm',
+                answer: `
+<strong>Algorithm:</strong> Simplified DES (SDES) Key Generation
+<strong>Initial Key (k):</strong> 1010000010 (10 bits)
+
+<strong>Constants:</strong>
+P10 permutation: 3 5 2 7 4 10 1 9 8 6
+P8 permutation:  6 3 7 4 8 5 10 9
+
+<strong>Steps:</strong>
+<div class="step">1. Apply P10 to k:</div>
+Input positions: 1 2 3 4 5 6 7 8 9 10
+Key k:         1 0 1 0 0 0 0 0 1 0
+P10 positions: 3 5 2 7 4 10 1 9 8 6
+P10(k):        1 0 0 0 0 0 1 1 0 0  (Take bit at pos 3, then pos 5, then pos 2...)
+
+<div class="step">2. Split P10(k) into Left (L) and Right (R) halves (5 bits each):</div>
+L = 10000
+R = 01100
+
+<div class="step">3. Apply Left Shift 1 (LS-1) to L and R separately:</div>
+LS1(L) = 00001
+LS1(R) = 11000
+
+<div class="step">4. Combine LS1(L) and LS1(R) and apply P8 to get k1:</div>
+Combined: 00001 11000
+Input positions: 1 2 3 4 5 6 7 8 9 10
+Combined bits:   0 0 0 0 1 1 1 0 0 0
+P8 positions:    6 3 7 4 8 5 10 9
+k1:              1 0 1 0 0 1 0 0  (Take bit at pos 6, then pos 3, then pos 7...)
+
+<div class="step">5. Apply Left Shift 2 (LS-2) to the LS-1 result from Step 3 (Effectively LS-3 from original split):</div>
+<div class="explanation">(Alternatively, apply LS-2 to the result of Step 3: LS1(L) and LS1(R))</div>
+LS2(LS1(L)) = LS2(00001) = 00100
+LS2(LS1(R)) = LS2(11000) = 00011
+
+<div class="step">6. Combine LS2 results and apply P8 to get k2:</div>
+Combined: 00100 00011
+Input positions: 1 2 3 4 5 6 7 8 9 10
+Combined bits:   0 0 1 0 0 0 0 0 1 1
+P8 positions:    6 3 7 4 8 5 10 9
+k2:              0 1 0 0 0 0 1 1 (Take bit at pos 6, then pos 3, then pos 7...)
+
+<strong>Result:</strong>
+<strong>k1:</strong> <code>10100100</code>
+<strong>k2:</strong> <code>01000011</code>
+<div class="explanation">Note: The LS-2 in Step 5 should be applied to the result of LS-1. So it's two more shifts from the state after LS-1.
+LS-1 state was: L=00001, R=11000
+LS-2 on L (00001) -> 00100
+LS-2 on R (11000) -> 00011
+Combined: 00100 00011. Apply P8 -> 0 1 0 0 0 0 1 1. Matches calculation.</div>
+                `
+            },
+            { // Practical Q19
+                 question: 'Given K1 = 10100100, K2=01000011 encrypt the plaintext M= 11011001 using SDES algorithm',
+                 answer: `
+<strong>Algorithm:</strong> Simplified DES (SDES) Encryption
+<strong>Plaintext (M):</strong> 11011001 (8 bits)
+<strong>Subkey k1:</strong>     10100100
+<strong>Subkey k2:</strong>     01000011
+
+<strong>Constants:</strong>
+IP (Initial Permutation): 2 6 3 1 4 8 5 7
+IP⁻¹ (Inverse IP):      4 1 3 5 7 2 8 6
+E/P (Expansion/Permutation): 4 1 2 3 2 3 4 1
+P4 (Permutation 4):       2 4 3 1
+S0 Box: [ [1,0,3,2], [3,2,1,0], [0,2,1,3], [3,1,3,2] ]
+S1 Box: [ [0,1,2,3], [2,0,1,3], [3,0,1,0], [2,1,0,3] ]
+
+<strong>Steps:</strong>
+<div class="step">1. Apply Initial Permutation (IP) to M:</div>
+Input positions: 1 2 3 4 5 6 7 8
+Plaintext M:     1 1 0 1 1 0 0 1
+IP positions:    2 6 3 1 4 8 5 7
+IP(M):           1 0 0 1 1 1 1 0
+
+<div class="step">2. Define the function f_k(L, R) = (L ⊕ F(R, k), R) where F(R, k) involves E/P, XOR with key, S-Boxes, P4:</div>
+Let IP(M) = L0 R0. L0 = 1001, R0 = 1110
+
+<div class="step">3. Calculate F(R0, k1):</div>
+   - E/P(R0) = E/P(1110):
+     Positions: 4 1 2 3 2 3 4 1 -> Bits: 0 1 1 1 1 1 0 1
+   - E/P(R0) XOR k1:
+       0 1 1 1 1 1 0 1
+     ⊕ 1 0 1 0 0 1 0 0
+     -----------------
+       1 1 0 1 1 0 0 1
+   - S-Box lookup (Input split: 1101 for S0, 1001 for S1):
+     S0(1101): row=11(3), col=10(2). S0[3][2] = 3 = '11'
+     S1(1001): row=11(3), col=00(0). S1[3][0] = 2 = '10'
+     Concatenated S-Box output: 1110
+   - P4(1110):
+     Positions: 2 4 3 1 -> Bits: 1 0 1 1
+   Result F(R0, k1) = 1011
+
+<div class="step">4. Calculate L1 = L0 ⊕ F(R0, k1) and R1 = R0:</div>
+   L1 = 1001 ⊕ 1011 = 0010
+   R1 = 1110
+
+<div class="step">5. Swap halves for next round: Input to round 2 is R1 L1 = 1110 0010</div>
+Let L1' = 1110, R1' = 0010 (swapped)
+
+<div class="step">6. Calculate F(R1', k2):</div>
+   - E/P(R1') = E/P(0010):
+     Positions: 4 1 2 3 2 3 4 1 -> Bits: 0 0 0 1 0 1 0 0
+   - E/P(R1') XOR k2:
+       0 0 0 1 0 1 0 0
+     ⊕ 0 1 0 0 0 0 1 1
+     -----------------
+       0 1 0 1 0 1 1 1
+   - S-Box lookup (Input split: 0101 for S0, 0111 for S1):
+     S0(0101): row=01(1), col=10(2). S0[1][2] = 1 = '01'
+     S1(0111): row=01(1), col=11(3). S1[1][3] = 3 = '11'
+     Concatenated S-Box output: 0111
+   - P4(0111):
+     Positions: 2 4 3 1 -> Bits: 1 1 1 0
+   Result F(R1', k2) = 1110
+
+<div class="step">7. Calculate L2 = L1' ⊕ F(R1', k2) and R2 = R1':</div>
+   L2 = 1110 ⊕ 1110 = 0000
+   R2 = 0010
+
+<div class="step">8. Apply Inverse IP (IP⁻¹) to L2 R2 (0000 0010):</div>
+Input positions: 1 2 3 4 5 6 7 8
+Input bits:      0 0 0 0 0 0 1 0
+IP⁻¹ positions:  4 1 3 5 7 2 8 6
+Ciphertext:      0 0 0 0 1 0 0 0
+
+<strong>Resulting Ciphertext (Oops, re-checking calculation vs image answer 11101001):</strong>
+Let's recheck Step 3 S-Box:
+S0(1101): row=11(3), col=10(2). S0[3][2]=3 -> '11'. Correct.
+S1(1001): row=11(3), col=00(0). S1[3][0]=2 -> '10'. Correct.
+Output 1110. P4(1110) -> 1011. Correct. F=1011.
+L1 = 1001 ^ 1011 = 0010. R1 = 1110. Correct.
+Swap -> 1110 0010. Correct.
+Step 6 S-Box:
+S0(0101): row=01(1), col=10(2). S0[1][2]=1 -> '01'. Correct.
+S1(0111): row=01(1), col=11(3). S1[1][3]=3 -> '11'. Correct.
+Output 0111. P4(0111) -> 1110. Correct. F=1110.
+L2 = 1110 ^ 1110 = 0000. R2 = 0010. Correct.
+Result before IP-1 is 0000 0010. Correct.
+Final IP-1(0000 0010) -> 0 0 0 0 1 0 0 0. My calculation consistently yields 00001000.
+
+<div class="explanation">Let's assume the answer 11101001 from the image is correct and see where a potential difference could occur. It's possible the S-Box definitions or permutations used in the source material were different from the standard ones used here. Given the inconsistencies in previous practical questions, this is plausible.</div>
+
+<strong>Ciphertext (Standard SDES):</strong> <code>00001000</code>
+<strong>Ciphertext (From Image):</strong> <code>11101001</code>
+<strong class="highlight">Note:</strong> The result using standard SDES definition differs from the answer provided in the image. Presenting the standard result.
+                 `
+            }
+        ];
+
 
         // --- DOM Elements ---
-        const mcTfQuizContainer = document.getElementById('quiz-container-mc-tf'); // Updated ID
-        const essayQuizContainer = document.getElementById('essay-quiz-content');
+        const mcTfQuizContainer = document.getElementById('quiz-container-mc-tf');
+        const practicalQuizContainer = document.getElementById('quiz-container-practical'); // New container
+        const essayQuizContainer = document.getElementById('quiz-container-essay');
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -569,54 +1065,72 @@
             mcTfQuizContainer.innerHTML = ''; // Clear previous content
             mcTfData.forEach((qData, index) => {
                 const questionBlock = document.createElement('div');
-                questionBlock.classList.add('question-block');
-                questionBlock.setAttribute('data-question-index', index); // Use index within mcTfData
+                questionBlock.classList.add('question-block-base', 'mc-tf-question-block'); // Use base and specific class
+                questionBlock.setAttribute('data-question-index', index);
 
                 const questionText = document.createElement('p');
-                questionText.classList.add('question-text');
-                // Use a distinct numbering prefix or just the index for this tab
-                questionText.textContent = `MC/TF ${index + 1}. ${qData.question}`;
+                questionText.classList.add('mc-tf-question-text'); // Specific class
+                questionText.textContent = `Q ${index + 1}. ${qData.question}`;
                 questionBlock.appendChild(questionText);
 
                 const optionsDiv = document.createElement('div');
-                optionsDiv.classList.add('options');
+                optionsDiv.classList.add('mc-tf-options'); // Specific class
 
-                const options = qData.options;
-                options.forEach(option => {
+                qData.options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
-                    button.addEventListener('click', handleMcTfAnswer); // Use specific handler
+                    button.addEventListener('click', handleMcTfAnswer);
                     optionsDiv.appendChild(button);
                 });
 
                 questionBlock.appendChild(optionsDiv);
 
                 const feedbackDiv = document.createElement('div');
-                feedbackDiv.classList.add('feedback');
+                feedbackDiv.classList.add('mc-tf-feedback'); // Specific class
                 questionBlock.appendChild(feedbackDiv);
 
                 mcTfQuizContainer.appendChild(questionBlock);
             });
         }
 
-        // Function to display Essay questions
-        function displayEssayQuestions() {
-            essayQuizContainer.innerHTML = '<p style="font-style: italic; color: #666;">Click on a question to reveal the model answer.</p>'; // Clear previous and add instruction
-            essayData.forEach((essay, index) => {
+        // Function to display Practical Questions
+        function displayPracticalQuestions() {
+            practicalQuizContainer.innerHTML = ''; // Clear previous
+            practicalData.forEach((qData, index) => {
                 const block = document.createElement('div');
-                block.classList.add('essay-question-block');
+                block.classList.add('question-block-base', 'practical-question-block'); // Base + specific
 
-                // Changed title element to span for better inline behaviour if needed, but keep styling as block-like
-                const title = document.createElement('span'); // Changed to span, but styled like a block
-                title.classList.add('essay-question-title');
-                 // Use a distinct numbering prefix or just the index for this tab
-                title.textContent = `Essay ${index + 1}. ${essay.question}`;
-                title.addEventListener('click', toggleEssayAnswer); // Add listener
+                const title = document.createElement('span');
+                title.classList.add('question-title-base', 'practical-question-title'); // Base + specific
+                title.textContent = `Practical Q ${index + 1}. ${qData.question}`;
+                title.addEventListener('click', toggleAnswerVisibility); // Generic toggle handler
 
                 const answer = document.createElement('div');
-                answer.classList.add('essay-answer');
-                // Use textContent for security, but pre-wrap CSS handles formatting
-                answer.textContent = essay.answer; // Using textContent is generally safer
+                answer.classList.add('answer-content-base', 'practical-answer'); // Base + specific
+                answer.innerHTML = qData.answer; // Use innerHTML to render formatted answer
+
+                block.appendChild(title);
+                block.appendChild(answer);
+                practicalQuizContainer.appendChild(block);
+            });
+        }
+
+
+        // Function to display Essay questions
+        function displayEssayQuestions() {
+            essayQuizContainer.innerHTML = ''; // Clear previous
+            essayData.forEach((essay, index) => {
+                const block = document.createElement('div');
+                 block.classList.add('question-block-base', 'essay-question-block'); // Base + specific
+
+                const title = document.createElement('span');
+                title.classList.add('question-title-base', 'essay-question-title'); // Base + specific
+                title.textContent = `Essay Q ${index + 1}. ${essay.question}`;
+                title.addEventListener('click', toggleAnswerVisibility); // Generic toggle handler
+
+                const answer = document.createElement('div');
+                answer.classList.add('answer-content-base', 'essay-answer'); // Base + specific
+                answer.textContent = essay.answer; // Use textContent for essays
 
                 block.appendChild(title);
                 block.appendChild(answer);
@@ -628,13 +1142,13 @@
         // Function to handle MC/TF answer selection
         function handleMcTfAnswer(event) {
             const selectedButton = event.target;
-            const selectedAnswer = selectedButton.textContent;
-            const questionBlock = selectedButton.closest('.question-block');
+            const questionBlock = selectedButton.closest('.mc-tf-question-block'); // Target specific block class
             const questionIndex = parseInt(questionBlock.getAttribute('data-question-index'), 10);
-            const correctAnswer = mcTfData[questionIndex].answer; // Use mcTfData array
-            const feedbackDiv = questionBlock.querySelector('.feedback');
-            const optionButtons = questionBlock.querySelectorAll('.options button');
+            const correctAnswer = mcTfData[questionIndex].answer;
+            const feedbackDiv = questionBlock.querySelector('.mc-tf-feedback'); // Target specific feedback class
+            const optionButtons = questionBlock.querySelectorAll('.mc-tf-options button'); // Target specific options class
 
+            // Disable all buttons in this question block
             optionButtons.forEach(button => {
                 button.disabled = true;
                 button.classList.remove('selected', 'correct', 'incorrect', 'reveal-correct');
@@ -642,15 +1156,16 @@
 
             selectedButton.classList.add('selected');
 
-            if (selectedAnswer === correctAnswer) {
+            // Provide feedback
+            if (selectedButton.textContent === correctAnswer) {
                 selectedButton.classList.add('correct');
                 feedbackDiv.textContent = 'Correct!';
-                feedbackDiv.className = 'feedback correct';
+                feedbackDiv.className = 'mc-tf-feedback correct'; // Use specific class
             } else {
                 selectedButton.classList.add('incorrect');
                 feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
-                feedbackDiv.className = 'feedback incorrect';
-
+                feedbackDiv.className = 'mc-tf-feedback incorrect'; // Use specific class
+                // Highlight the correct answer
                 optionButtons.forEach(button => {
                     if (button.textContent === correctAnswer) {
                         button.classList.add('reveal-correct');
@@ -660,18 +1175,17 @@
             feedbackDiv.style.display = 'block';
         }
 
-         // Function to toggle essay answer visibility
-         function toggleEssayAnswer(event) {
-            const title = event.target;
-            // Ensure we handle clicks inside the title span correctly
-            const currentTitle = title.classList.contains('essay-question-title') ? title : title.closest('.essay-question-title');
-            if (!currentTitle) return; // Exit if click wasn't on a title element
+        // Generic function to toggle answer visibility for Essay and Practical Questions
+         function toggleAnswerVisibility(event) {
+            const title = event.target.closest('.question-title-base'); // Find the title element
+            if (!title) return;
 
-            const answerDiv = currentTitle.nextElementSibling; // Assumes answer div is immediately after title
-            if (answerDiv && answerDiv.classList.contains('essay-answer')) {
-                answerDiv.classList.toggle('visible');
-                currentTitle.classList.toggle('expanded'); // Toggle class for arrow styling
-            }
+            const answerDiv = title.nextElementSibling; // Assumes answer div is immediately after title
+            // Check if the next sibling is indeed an answer div
+            if (answerDiv && answerDiv.classList.contains('answer-content-base')) {
+                 answerDiv.classList.toggle('visible');
+                 title.classList.toggle('expanded');
+             }
          }
 
         // Function to handle tab switching
@@ -697,8 +1211,9 @@
         });
 
         // --- Initial Display ---
-        displayMcTfQuiz(); // Display MC/TF questions on load
-        displayEssayQuestions(); // Display Essay questions on load (will be hidden initially unless tab is active)
+        displayMcTfQuiz();
+        displayPracticalQuestions(); // Display Practical questions
+        displayEssayQuestions();
 
     </script>
 
