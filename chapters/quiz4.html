@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Design & Application Security Quiz</title>
     <style>
-        /* CSS Styles identical to the previous quiz examples */
+        /* --- General Styles --- */
         body {
             font-family: sans-serif;
             line-height: 1.6;
@@ -18,7 +18,7 @@
             color: #333;
         }
 
-        .quiz-container {
+        .main-container {
             max-width: 800px;
             margin: 20px auto;
             background: #fff;
@@ -27,6 +27,49 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        /* --- Tab Styles --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #eee;
+            border-bottom: 2px solid transparent;
+            margin-right: 5px;
+            font-size: 1em;
+            border-radius: 5px 5px 0 0;
+             transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-bottom: 2px solid #fff; /* Cover the container border */
+            font-weight: bold;
+            position: relative;
+            top: 2px; /* Align with bottom border */
+        }
+
+        .tab-content {
+            display: none; /* Hide content by default */
+            padding-top: 15px;
+        }
+
+        .tab-content.active {
+            display: block; /* Show active content */
+        }
+
+
+        /* --- Multiple Choice / T/F Styles (Existing) --- */
         .question-block {
             margin-bottom: 30px;
             padding-bottom: 20px;
@@ -91,7 +134,6 @@
             display: block;
         }
 
-         /* Style for selected buttons */
         .options button.selected.correct {
             background-color: #28a745;
             color: white;
@@ -104,13 +146,62 @@
             border-color: #dc3545;
         }
 
-         /* Style to highlight the correct answer when wrong one is selected */
         .options button.reveal-correct {
-            background-color: #d4edda; /* Light green background */
-            color: #155724;         /* Dark green text */
-            border: 1px solid #c3e6cb; /* Green border */
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
             font-weight: bold;
         }
+
+        /* --- Essay Question Styles --- */
+        .essay-question-block {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .essay-question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .essay-question-title {
+            font-weight: bold;
+            cursor: pointer;
+            color: #0056b3; /* Make it look like a link */
+            margin-bottom: 8px;
+            position: relative; /* For pseudo-element */
+            padding-right: 20px; /* Space for arrow */
+        }
+
+        .essay-question-title::after {
+            content: '▼'; /* Collapsed indicator */
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .essay-question-title.expanded::after {
+             content: '▲'; /* Expanded indicator */
+        }
+
+
+        .essay-answer {
+            display: none; /* Hidden by default */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-left: 3px solid #0056b3;
+            border-radius: 0 4px 4px 0;
+        }
+
+         .essay-answer.visible {
+            display: block; /* Show when expanded */
+        }
+
 
     </style>
 </head>
@@ -118,11 +209,28 @@
 
     <h1>Secure Design & Application Security - Interactive Quiz</h1>
 
-    <div class="quiz-container" id="quiz-container">
-        <!-- Questions will be loaded here by JavaScript -->
+    <div class="main-container">
+        <div class="tabs">
+            <button class="tab-button active" data-tab="mc-quiz-content">Multiple Choice / T/F</button>
+            <button class="tab-button" data-tab="essay-quiz-content">Essay Questions</button>
+        </div>
+
+        <!-- Multiple Choice / T/F Content -->
+        <div class="tab-content active" id="mc-quiz-content">
+            <div class="quiz-container" id="quiz-container">
+                <!-- MC/TF Questions will be loaded here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Essay Questions Content -->
+        <div class="tab-content" id="essay-quiz-content">
+            <!-- Essay Questions will be loaded here by JavaScript -->
+             <p style="font-style: italic; color: #666;">Click on a question to reveal the answer.</p>
+        </div>
     </div>
 
     <script>
+        // --- DATA ---
         const quizData = [
             // --- Multiple Choice Questions (Secure Design, etc.) ---
             { // Page 1, Q1
@@ -877,21 +985,123 @@
                 options: ["True", "False"],
                 answer: "True"
             },
-
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
+        const essayData = [
+             { // Page 11, Q1
+                question: "Explain the \"Secure-by-design\" approach and its significance in software development.",
+                answer: "Secure-by-design is a methodology that integrates security practices throughout the software development lifecycle from the beginning. It ensures security is not an afterthought but a fundamental aspect, reducing vulnerabilities and attack surfaces. Embedding security early leads to products that are more resilient and fewer breaches after deployment."
+            },
+            { // Page 11, Q2
+                question: "Discuss the 7 Principles of Secure Software Design with examples.",
+                answer: "The principles include Security as Code (automating security tasks), Secure Defaults (safe default configurations), Least Privilege (minimum necessary access), Separation of Duties (dividing responsibilities), Minimize Attack Surface Area (limit entry points), Complete Mediation (authorize every access), and Failing Securely (secure error handling). For example, Least Privilege restricts user permissions to reduce damage from breaches, and Secure Defaults ensure strong password policies by default."
+                 // Note: The PDF source didn't list exactly 7 standard ones, but this answer reflects the general idea and mentions key ones.
+            },
+            { // Page 11, Q3
+                question: "Compare symmetric and asymmetric cryptography in terms of security and performance.",
+                answer: "Symmetric cryptography uses the same key for encryption and decryption, offering fast and efficient bulk data encryption but requiring secure key sharing. Asymmetric cryptography uses a public/private key pair, enabling secure key exchange without secret sharing but is slower and computationally intensive. Symmetric is ideal for large data volumes; asymmetric is used for key exchange and digital signatures."
+            },
+            { // Page 11, Q4
+                question: "Describe the role of firewalls in network security and the types of firewalls.",
+                answer: "Firewalls control network traffic based on rules to prevent unauthorized access. Packet-filtering firewalls inspect IP and ports, stateful inspection firewalls track connection states, proxy firewalls act as intermediaries filtering at the application layer, and next-generation firewalls combine these with intrusion prevention and application awareness."
+            },
+             { // Page 11, Q5
+                question: "Explain the principle of \"Failing Securely\" with an example.",
+                answer: "Failing securely means that when errors occur, the system defaults to a secure state without revealing sensitive information. For example, an authentication failure should not disclose whether the username or password was incorrect, preventing attackers from gaining clues."
+            },
+            { // Page 11, Q6
+                question: "Why is the \"Least Privilege\" principle important and how can it be enforced?",
+                answer: "Least Privilege limits access rights to reduce potential damage from breaches. It can be enforced through role-based access control, regular audits, and automation tools that detect and remove excessive permissions, ensuring users have only necessary access."
+            },
+             { // Page 11, Q7
+                question: "How does asymmetric cryptography enable secure communication?",
+                answer: "Asymmetric cryptography uses a public/private key pair. The sender encrypts data with the recipient's public key, which only the recipient's private key can decrypt. This allows secure communication over insecure channels without sharing secret keys."
+            },
+             { // Page 12, Q1
+                question: "Identify common web security threats and mitigation strategies.",
+                answer: "Common threats include SQL injection, XSS (Cross-Site Scripting), and CSRF (Cross-Site Request Forgery). Mitigation involves input validation, output encoding, parameterized queries, and proper session management to prevent malicious input execution and unauthorized actions."
+            },
+             { // Page 12, Q2
+                question: "Discuss the importance of Complete Mediation in access control.",
+                answer: "Complete Mediation requires every access request to be authenticated and authorized, preventing bypass of security checks. For example, each microservice in a distributed system independently verifies user permissions for each request, enhancing security."
+            },
+             { // Page 12, Q3
+                question: "What are the security challenges in virtual elections and how can they be addressed?",
+                answer: "Virtual elections must ensure voter anonymity, vote integrity, and prevent fraud. Challenges include secure voter authentication, tamper-proof vote recording, and privacy preservation. Cryptographic protocols and secure system design are key to addressing these challenges."
+            },
+             { // Page 12, Q4
+                question: "Explain how Separation of Duties reduces risk in system administration.",
+                answer: "By dividing tasks and privileges among different users, no single person can misuse the system alone. For example, developers write code but cannot deploy it, reducing risk of unauthorized changes."
+            },
+             { // Page 12, Q5
+                question: "Analyze the MOVEit breach and lessons learned for secure software design.",
+                answer: "The MOVEit breach exploited a vulnerability in a widely used file transfer app, leading to data theft across organizations. It underscores the importance of secure coding, timely patching, vulnerability assessments, and continuous monitoring."
+            },
+            { // Page 12, Q6
+                question: "Describe \"Security as Code\" and its benefits.",
+                answer: "Security as Code automates security enforcement using scripts and integrated tools in the development lifecycle. It enables continuous vulnerability scanning, policy enforcement, and rapid remediation, reducing human error and improving security."
+            },
+            { // Page 12, Q7
+                question: "Outline the SSL/TLS handshake process and its role in security.",
+                answer: "The SSL/TLS handshake negotiates encryption algorithms, authenticates parties via certificates, and securely exchanges keys (typically using asymmetric crypto to establish a symmetric session key). This establishes a secure channel ensuring confidentiality, integrity, and authentication before data transmission."
+            },
+             { // Page 12, Q8
+                question: "List key requirements for a secure public-key cryptosystem.",
+                answer: "Key generation must be easy, encryption with the public key straightforward, decryption with the private key efficient, and it must be computationally infeasible to derive the private key from the public key or ciphertext."
+            },
+             { // Page 12, Q9
+                question: "How can automation assist in enforcing Least Privilege?",
+                answer: "Automation tools scan for excessive permissions, recommend or enforce least privilege configurations, and perform continuous audits, reducing human error and ensuring compliance."
+            },
+             { // Page 13, Q1
+                question: "Explain the benefits of minimizing the attack surface area.",
+                answer: "Reducing entry points limits attacker opportunities, making systems harder to compromise. This includes closing unused ports, disabling unnecessary services, and limiting API endpoints."
+            },
+            { // Page 13, Q2
+                question: "Differentiate encryption/decryption and digital signatures in public-key cryptography.",
+                answer: "Encryption/decryption ensures confidentiality by encrypting data with the recipient's public key and decrypting with their private key. Digital signatures provide authentication and integrity by signing data (or a hash of data) with the sender's private key, verifiable with the sender's public key."
+            },
+             { // Page 13, Q3
+                question: "Why is public key cryptography preferred for key exchange in protocols like TLS?",
+                answer: "It allows secure symmetric key exchange over insecure networks without sharing secret keys beforehand, reducing key distribution risks and enabling secure session establishment."
+            },
+             { // Page 13, Q4
+                question: "Discuss the importance of secure defaults in software products.",
+                answer: "Many users do not change default settings; secure defaults (e.g., strong passwords, disabling risky features, unique configuration values) reduce vulnerabilities and widespread attacks, improving security for all users."
+            },
+             { // Page 13, Q5
+                question: "Explain the concept of threat modeling in secure software development.",
+                answer: "Threat modeling identifies potential security threats early in the development process, allowing developers to design mitigations proactively and reduce vulnerabilities before code is written or deployed."
+            },
+             { // Page 13, Q6
+                question: "How does multi-factor authentication enhance security?",
+                answer: "It requires multiple verification methods (e.g., password plus token, biometric plus PIN), making unauthorized access more difficult even if one factor (like a password) is compromised."
+            },
+             { // Page 13, Q7
+                question: "What role does patch management play in secure computing?",
+                answer: "Patch management fixes security vulnerabilities by applying updates (patches) promptly, preventing exploitation of known weaknesses by attackers."
+            },
+            { // Page 13, Q8
+                question: "Describe the principle of defense in depth.",
+                answer: "Defense in depth uses multiple layers of security controls (e.g., firewalls, encryption, access controls, intrusion detection) so that if one layer fails, others still protect the system, reducing the likelihood of a successful breach."
+            },
+            { // Page 13, Q9
+                question: "Discuss the importance of secure coding standards.",
+                answer: "Secure coding standards (e.g., rules for input validation, error handling, memory management, authentication) help prevent common vulnerabilities, reducing the risk of exploitation and improving overall software security and reliability."
+            },
+        ];
 
-        // Function to shuffle options (optional) - Not used here
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-            }
-        }
+        // --- DOM Elements ---
+        const mcQuizContainer = document.getElementById('quiz-container');
+        const essayQuizContainer = document.getElementById('essay-quiz-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-        // Function to display questions - Identical to the previous examples
-        function displayQuiz() {
+        // --- Functions ---
+
+        // Function to display MC/TF questions
+        function displayMcQuiz() {
+            mcQuizContainer.innerHTML = ''; // Clear previous content if any
             quizData.forEach((qData, index) => {
                 const questionBlock = document.createElement('div');
                 questionBlock.classList.add('question-block');
@@ -899,8 +1109,7 @@
 
                 const questionText = document.createElement('p');
                 questionText.classList.add('question-text');
-                // Add question number (adjusting for potentially large number)
-                questionText.textContent = `${index + 1}. ${qData.question}`;
+                questionText.textContent = `${index + 1}. ${qData.question}`; // Add numbering
                 questionBlock.appendChild(questionText);
 
                 const optionsDiv = document.createElement('div');
@@ -910,7 +1119,7 @@
                 options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
-                    button.addEventListener('click', handleAnswer);
+                    button.addEventListener('click', handleMcAnswer); // Use specific handler
                     optionsDiv.appendChild(button);
                 });
 
@@ -920,12 +1129,36 @@
                 feedbackDiv.classList.add('feedback');
                 questionBlock.appendChild(feedbackDiv);
 
-                quizContainer.appendChild(questionBlock);
+                mcQuizContainer.appendChild(questionBlock);
             });
         }
 
-        // Function to handle answer selection - Identical to the previous examples
-        function handleAnswer(event) {
+        // Function to display Essay questions
+        function displayEssayQuestions() {
+            essayQuizContainer.innerHTML = '<p style="font-style: italic; color: #666;">Click on a question to reveal the answer.</p>'; // Clear previous and add instruction
+            essayData.forEach((essay, index) => {
+                const block = document.createElement('div');
+                block.classList.add('essay-question-block');
+
+                const title = document.createElement('h3');
+                title.classList.add('essay-question-title');
+                title.textContent = `${index + 1}. ${essay.question}`; // Add numbering
+                title.addEventListener('click', toggleEssayAnswer); // Add listener
+
+                const answer = document.createElement('div');
+                answer.classList.add('essay-answer');
+                // Use innerHTML to render potential simple formatting like line breaks if needed later
+                answer.innerHTML = essay.answer;
+
+                block.appendChild(title);
+                block.appendChild(answer);
+                essayQuizContainer.appendChild(block);
+            });
+        }
+
+
+        // Function to handle MC/TF answer selection
+        function handleMcAnswer(event) {
             const selectedButton = event.target;
             const selectedAnswer = selectedButton.textContent;
             const questionBlock = selectedButton.closest('.question-block');
@@ -935,7 +1168,9 @@
             const optionButtons = questionBlock.querySelectorAll('.options button');
 
             optionButtons.forEach(button => {
-                button.disabled = true;
+                button.disabled = true; // Disable all buttons in this block
+                 // Remove previous result classes if re-answering allowed (currently disabled)
+                button.classList.remove('selected', 'correct', 'incorrect', 'reveal-correct');
             });
 
             selectedButton.classList.add('selected');
@@ -943,22 +1178,54 @@
             if (selectedAnswer === correctAnswer) {
                 selectedButton.classList.add('correct');
                 feedbackDiv.textContent = 'Correct!';
-                feedbackDiv.classList.add('correct');
+                feedbackDiv.className = 'feedback correct'; // Use className to reset and add
             } else {
                 selectedButton.classList.add('incorrect');
                 feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
-                feedbackDiv.classList.add('incorrect');
+                feedbackDiv.className = 'feedback incorrect'; // Use className to reset and add
 
+                // Highlight the correct answer
                 optionButtons.forEach(button => {
                     if (button.textContent === correctAnswer) {
                         button.classList.add('reveal-correct');
                     }
                 });
             }
+            feedbackDiv.style.display = 'block'; // Ensure feedback is visible
         }
 
-        // Initial call to display the quiz when the page loads
-        displayQuiz();
+         // Function to toggle essay answer visibility
+         function toggleEssayAnswer(event) {
+            const title = event.target;
+            const answerDiv = title.nextElementSibling; // Assumes answer div is immediately after title
+            if (answerDiv && answerDiv.classList.contains('essay-answer')) {
+                answerDiv.classList.toggle('visible');
+                title.classList.toggle('expanded'); // Toggle class for arrow styling
+            }
+         }
+
+        // Function to handle tab switching
+        function switchTab(event) {
+            const clickedTabButton = event.target;
+            const targetTabContentId = clickedTabButton.getAttribute('data-tab');
+
+            // Remove active class from all buttons and content panes
+            tabButtons.forEach(button => button.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to the clicked button and corresponding content pane
+            clickedTabButton.classList.add('active');
+            document.getElementById(targetTabContentId).classList.add('active');
+        }
+
+        // --- Event Listeners ---
+        tabButtons.forEach(button => {
+            button.addEventListener('click', switchTab);
+        });
+
+        // --- Initial Display ---
+        displayMcQuiz();
+        displayEssayQuestions();
 
     </script>
 
