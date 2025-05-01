@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit 2: Cryptography Basics Quiz</title>
+    <title>Cryptography & Secure Design Quiz</title> <!-- Updated Title -->
     <style>
-        /* CSS Styles identical to the previous quiz examples */
+        /* --- General Styles --- */
         body {
             font-family: sans-serif;
             line-height: 1.6;
@@ -18,7 +18,7 @@
             color: #333;
         }
 
-        .quiz-container {
+        .main-container {
             max-width: 800px;
             margin: 20px auto;
             background: #fff;
@@ -27,6 +27,49 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        /* --- Tab Styles --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #eee;
+            border-bottom: 2px solid transparent;
+            margin-right: 5px;
+            font-size: 1em;
+            border-radius: 5px 5px 0 0;
+             transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+
+        .tab-button.active {
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-bottom: 2px solid #fff; /* Cover the container border */
+            font-weight: bold;
+            position: relative;
+            top: 2px; /* Align with bottom border */
+        }
+
+        .tab-content {
+            display: none; /* Hide content by default */
+            padding-top: 15px;
+        }
+
+        .tab-content.active {
+            display: block; /* Show active content */
+        }
+
+
+        /* --- Multiple Choice / T/F Styles (Existing) --- */
         .question-block {
             margin-bottom: 30px;
             padding-bottom: 20px;
@@ -91,7 +134,6 @@
             display: block;
         }
 
-         /* Style for selected buttons */
         .options button.selected.correct {
             background-color: #28a745;
             color: white;
@@ -104,28 +146,100 @@
             border-color: #dc3545;
         }
 
-         /* Style to highlight the correct answer when wrong one is selected */
         .options button.reveal-correct {
-            background-color: #d4edda; /* Light green background */
-            color: #155724;         /* Dark green text */
-            border: 1px solid #c3e6cb; /* Green border */
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
             font-weight: bold;
+        }
+
+        /* --- Essay Question Styles --- */
+        .essay-question-block {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .essay-question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .essay-question-title {
+            font-weight: bold;
+            cursor: pointer;
+            color: #0056b3; /* Make it look like a link */
+            margin-bottom: 8px;
+            position: relative; /* For pseudo-element */
+            padding-right: 20px; /* Space for arrow */
+            display: block; /* Ensure it takes full width for click */
+        }
+
+        .essay-question-title::after {
+            content: '▼'; /* Collapsed indicator */
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .essay-question-title.expanded::after {
+             content: '▲'; /* Expanded indicator */
+        }
+
+
+        .essay-answer {
+            display: none; /* Hidden by default */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-left: 3px solid #0056b3;
+            border-radius: 0 4px 4px 0;
+            /* Allow text wrapping */
+            white-space: pre-wrap; /* Preserves whitespace and wraps */
+            word-wrap: break-word; /* Breaks long words */
+        }
+
+         .essay-answer.visible {
+            display: block; /* Show when expanded */
         }
 
     </style>
 </head>
 <body>
 
-    <h1>Unit 2: Cryptography Basics - Interactive Quiz</h1>
+    <h1>Cryptography & Secure Design - Interactive Quiz</h1> <!-- Updated Title -->
 
-    <div class="quiz-container" id="quiz-container">
-        <!-- Questions will be loaded here by JavaScript -->
+    <div class="main-container">
+        <div class="tabs">
+            <!-- Added tab for MC/TF -->
+            <button class="tab-button active" data-tab="mc-tf-quiz-content">Multiple Choice / T/F</button>
+            <button class="tab-button" data-tab="essay-quiz-content">Essay Questions</button>
+        </div>
+
+        <!-- Multiple Choice / T/F Content -->
+        <div class="tab-content active" id="mc-tf-quiz-content">
+            <div class="quiz-container" id="quiz-container-mc-tf">
+                <!-- MC/TF Questions will be loaded here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Essay Questions Content -->
+        <div class="tab-content" id="essay-quiz-content">
+             <!-- Essay Questions will be loaded here by JavaScript -->
+             <p style="font-style: italic; color: #666;">Click on a question to reveal the model answer.</p>
+        </div>
     </div>
 
     <script>
-        const quizData = [
-            // --- Multiple Choice Questions (Unit 2) ---
-            { // MCQ 1
+        // --- DATA ---
+
+        // Multiple Choice and True/False Data (Combined from your Unit 2 OCR and the provided Secure Design Data)
+        const mcTfData = [
+            // --- Unit 2 Cryptography Questions ---
+            { // Unit 2, Q1
                 question: "What is the primary goal of cryptography?",
                 options: [
                     "Data compression",
@@ -135,57 +249,32 @@
                 ],
                 answer: "Data encryption for secure communication"
             },
-            { // MCQ 2
+            { // Unit 2, Q2
                 question: "Which of the following is a symmetric key algorithm?",
-                options: [
-                    "RSA",
-                    "AES",
-                    "ECC",
-                    "DSA"
-                ],
+                options: ["RSA", "AES", "ECC", "DSA"],
                 answer: "AES"
             },
-            { // MCQ 3
+            { // Unit 2, Q3
                 question: "In Caesar Cipher, if the key is 5, what is the ciphertext for \"HELLO\"?",
-                options: [
-                    "KHOOR",
-                    "EBIIL",
-                    "MJQQT",
-                    "OLSSV"
-                ],
+                options: ["KHOOR", "EBIIL", "MJQQT", "OLSSV"],
                 answer: "MJQQT"
             },
-            { // MCQ 4
+            { // Unit 2, Q4
                 question: "Which of the following is NOT a classical encryption technique?",
-                options: [
-                    "Caesar Cipher",
-                    "AES",
-                    "Hill Cipher",
-                    "Playfair Cipher"
-                ],
+                options: ["Caesar Cipher", "AES", "Hill Cipher", "Playfair Cipher"],
                 answer: "AES"
             },
-            { // MCQ 5
+            { // Unit 2, Q5
                 question: "What is the key length of DES?",
-                options: [
-                    "56 bits",
-                    "128 bits",
-                    "192 bits",
-                    "256 bits"
-                ],
+                options: ["56 bits", "128 bits", "192 bits", "256 bits"],
                 answer: "56 bits"
             },
-            { // MCQ 6
+            { // Unit 2, Q6
                 question: "Which cipher uses a 5x5 matrix for encryption?",
-                options: [
-                    "Caesar Cipher",
-                    "Playfair Cipher",
-                    "Hill Cipher",
-                    "Vigenère Cipher"
-                ],
+                options: ["Caesar Cipher", "Playfair Cipher", "Hill Cipher", "Vigenère Cipher"],
                 answer: "Playfair Cipher"
             },
-            { // MCQ 7
+            { // Unit 2, Q7
                 question: "What is the main weakness of the Caesar Cipher?",
                 options: [
                     "It uses a large key space",
@@ -195,27 +284,17 @@
                 ],
                 answer: "It is vulnerable to brute-force attacks"
             },
-            { // MCQ 8
+            { // Unit 2, Q8
                 question: "Which of the following is a polyalphabetic cipher?",
-                options: [
-                    "Caesar Cipher",
-                    "Vigenère Cipher",
-                    "Playfair Cipher",
-                    "Hill Cipher"
-                ],
+                options: ["Caesar Cipher", "Vigenère Cipher", "Playfair Cipher", "Hill Cipher"],
                 answer: "Vigenère Cipher"
             },
-            { // MCQ 9
+            { // Unit 2, Q9
                 question: "What is the key size of AES-256?",
-                options: [
-                    "128 bits",
-                    "192 bits",
-                    "256 bits",
-                    "512 bits"
-                ],
+                options: ["128 bits", "192 bits", "256 bits", "512 bits"],
                 answer: "256 bits"
             },
-            { // MCQ 10
+            { // Unit 2, Q10
                 question: "Which of the following is a characteristic of symmetric key cryptography?",
                 options: [
                     "Uses two different keys",
@@ -225,7 +304,7 @@
                 ],
                 answer: "Faster than asymmetric cryptography"
             },
-            { // MCQ 11
+            { // Unit 2, Q11
                 question: "What is the main advantage of 3DES over DES?",
                 options: [
                     "It uses a single key",
@@ -235,47 +314,27 @@
                 ],
                 answer: "It increases key length and complexity"
             },
-            { // MCQ 12
+            { // Unit 2, Q12
                 question: "Which of the following is a substitution cipher?",
-                options: [
-                    "Caesar Cipher",
-                    "Rail Fence Cipher",
-                    "Transposition Cipher", // Generic term, but Caesar is specifically substitution
-                    "Stream Cipher" // Category, not specific technique like Caesar
-                ],
+                options: ["Caesar Cipher", "Rail Fence Cipher", "Transposition Cipher", "Stream Cipher"],
                 answer: "Caesar Cipher"
             },
-            { // MCQ 13
+            { // Unit 2, Q13
                 question: "What is the purpose of the S-box in AES?",
-                options: [
-                    "To shift rows",
-                    "To mix columns",
-                    "To perform substitution",
-                    "To add round keys"
-                ],
+                options: ["To shift rows", "To mix columns", "To perform substitution", "To add round keys"],
                 answer: "To perform substitution"
             },
-            { // MCQ 14
+            { // Unit 2, Q14
                 question: "Which of the following is a transposition cipher?",
-                options: [
-                    "Caesar Cipher",
-                    "Playfair Cipher",
-                    "Rail Fence Cipher",
-                    "Vigenère Cipher"
-                ],
+                options: ["Caesar Cipher", "Playfair Cipher", "Rail Fence Cipher", "Vigenère Cipher"],
                 answer: "Rail Fence Cipher"
             },
-            { // MCQ 15
+            { // Unit 2, Q15
                 question: "What is the key length of AES-128?",
-                options: [
-                    "128 bits",
-                    "192 bits",
-                    "256 bits",
-                    "512 bits"
-                ],
+                options: ["128 bits", "192 bits", "256 bits", "512 bits"],
                 answer: "128 bits"
             },
-             { // MCQ 16
+            { // Unit 2, Q16
                 question: "Which of the following is a characteristic of asymmetric cryptography?",
                 options: [
                     "Uses the same key for encryption and decryption",
@@ -285,7 +344,7 @@
                 ],
                 answer: "Provides confidentiality, authentication, and non-repudiation"
             },
-            { // MCQ 17
+            { // Unit 2, Q17
                 question: "What is the main disadvantage of brute-force attacks?",
                 options: [
                     "They are too fast",
@@ -295,17 +354,12 @@
                 ],
                 answer: "They require a lot of computational resources"
             },
-            { // MCQ 18
+            { // Unit 2, Q18
                 question: "Which of the following is a modern encryption algorithm?",
-                options: [
-                    "Caesar Cipher",
-                    "DES",
-                    "AES",
-                    "Playfair Cipher"
-                ],
+                options: ["Caesar Cipher", "DES", "AES", "Playfair Cipher"],
                 answer: "AES"
             },
-            { // MCQ 19
+            { // Unit 2, Q19
                 question: "What is the purpose of the MixColumns step in AES?",
                 options: [
                     "To substitute bytes",
@@ -313,9 +367,9 @@
                     "To mix columns for diffusion",
                     "To add round keys"
                 ],
-                answer: "To mix columns for diffusion" // Corrected option based on PDF answer text
+                answer: "To mix columns for diffusion"
             },
-            { // MCQ 20
+            { // Unit 2, Q20
                 question: "Which of the following is a characteristic of DES?",
                 options: [
                     "It uses a 128-bit key",
@@ -325,119 +379,203 @@
                 ],
                 answer: "It is a block cipher"
             },
-            // --- True/False Questions (Unit 2) ---
-            { // T/F 1
+            // --- Unit 2 True/False Questions ---
+            { // Unit 2, T/F 1
                 question: "Symmetric key cryptography uses the same key for encryption and decryption.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 2
+            { // Unit 2, T/F 2
                 question: "AES is a type of asymmetric key cryptography.",
                 options: ["True", "False"],
                 answer: "False"
             },
-            { // T/F 3
+            { // Unit 2, T/F 3
                 question: "In Caesar Cipher, the decryption process involves shifting letters in the opposite direction of the encryption shift.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 4
+            { // Unit 2, T/F 4
                 question: "DES is considered secure against modern cryptographic attacks.",
                 options: ["True", "False"],
                 answer: "False"
             },
-            { // T/F 5
+            { // Unit 2, T/F 5
                 question: "The Playfair Cipher is a polyalphabetic cipher.",
                 options: ["True", "False"],
-                answer: "False" // Playfair is monoalphabetic digraph substitution
+                answer: "False" // It's a digraphic substitution cipher, generally considered monoalphabetic in nature as pairs are substituted based on fixed rules relative to the key square. Vigenere is polyalphabetic.
             },
-            { // T/F 6
+            { // Unit 2, T/F 6
                 question: "Brute-force attacks are effective against all encryption algorithms.",
                 options: ["True", "False"],
-                answer: "False" // Effectiveness depends heavily on key length
+                answer: "False" // Ineffective against algorithms with sufficiently large key spaces.
             },
-            { // T/F 7
+            { // Unit 2, T/F 7
                 question: "The Hill Cipher uses matrix multiplication for encryption.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 8
+            { // Unit 2, T/F 8
                 question: "3DES is more secure than AES.",
                 options: ["True", "False"],
                 answer: "False"
             },
-            { // T/F 9
+            { // Unit 2, T/F 9
                 question: "The Caesar Cipher is a type of transposition cipher.",
                 options: ["True", "False"],
-                answer: "False" // It's a substitution cipher
+                answer: "False" // It's a substitution cipher.
             },
-            { // T/F 10
+            { // Unit 2, T/F 10
                 question: "AES supports key sizes of 128, 192, and 256 bits.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 11
+            { // Unit 2, T/F 11
                 question: "DES uses a 64-bit block size.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 12
+            { // Unit 2, T/F 12
                 question: "Asymmetric cryptography is faster than symmetric cryptography.",
                 options: ["True", "False"],
                 answer: "False"
             },
-            { // T/F 13
+            { // Unit 2, T/F 13
                 question: "The Rail Fence Cipher is a type of transposition cipher.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 14
+            { // Unit 2, T/F 14
                 question: "AES is vulnerable to brute-force attacks.",
                 options: ["True", "False"],
-                answer: "False" // In practical terms with sufficient key length
+                answer: "False" // Theoretically yes, practically infeasible with current technology for standard key sizes.
             },
-            { // T/F 15
+            { // Unit 2, T/F 15
                 question: "The Caesar Cipher is still widely used in modern cryptography.",
                 options: ["True", "False"],
                 answer: "False"
             },
-            { // T/F 16
+            { // Unit 2, T/F 16
                 question: "The Playfair Cipher uses a 5x5 matrix for encryption.",
                 options: ["True", "False"],
                 answer: "True"
             },
-             { // T/F 17
+            { // Unit 2, T/F 17
                 question: "DES is an example of a stream cipher.",
                 options: ["True", "False"],
-                answer: "False" // It's a block cipher
+                answer: "False" // It's a block cipher.
             },
-            { // T/F 18
+            { // Unit 2, T/F 18
                 question: "AES is an open-source encryption standard.",
                 options: ["True", "False"],
-                answer: "True" // The algorithm specification is public/open.
-            }
+                answer: "True" // The algorithm specification is public (NIST standard), and many implementations are open source.
+            },
+
+            // --- Secure Design Questions (from previous context) ---
+             { // Secure Design MC Q1
+                question: "What does the \"Secure-by-design\" approach emphasize?",
+                options: [
+                    "Adding security after development",
+                    "Embedding security from the beginning of the software lifecycle",
+                    "Using only open-source software",
+                    "Ignoring security during development"
+                ],
+                answer: "Embedding security from the beginning of the software lifecycle"
+            },
+            { // Secure Design MC Q2 (Adjusted based on common principles)
+                question: "Which of the following is NOT typically considered a core Principle of Secure Design?",
+                options: [
+                    "Minimize Attack Surface",
+                    "Open Access",
+                    "Least Privilege",
+                    "Secure Defaults"
+                ],
+                answer: "Open Access"
+            },
+            { // Secure Design MC Q3
+                question: "The \"Least Privilege\" principle applies to:",
+                options: [
+                    "Only users",
+                    "Users, machines, and network resources",
+                    "Only network devices",
+                    "Only databases"
+                ],
+                answer: "Users, machines, and network resources"
+            },
+             // ... (Include other relevant MC/TF questions from the previous context if desired) ...
+             { // Secure Design T/F 1
+                question: "Secure-by-design means embedding security from the start of development.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+             { // Secure Design T/F 3
+                question: "Stateful inspection firewalls track active connection states.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+             { // Secure Design T/F 4
+                question: "Public key encryption uses the same key for encryption and decryption.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+             // ... (Add more Secure Design MC/TF questions here as needed) ...
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
+        // Essay Question Data (From Unit 2 OCR and previous context)
+        const essayData = [
+            { // Unit 2, Essay Q1
+                question: "Explain the differences between symmetric and asymmetric cryptography. Provide examples of algorithms for each type.",
+                answer: "Symmetric cryptography uses the same secret key for both encryption and decryption. It is generally faster and more efficient for encrypting large amounts of data. However, the secure distribution of the shared key is a challenge. Examples include AES, DES, and 3DES.\n\nAsymmetric cryptography (or public-key cryptography) uses a pair of keys: a public key for encryption (or signature verification) and a private key for decryption (or signing). The public key can be shared openly, while the private key must remain secret. This simplifies key distribution but is computationally slower than symmetric encryption. It's often used for key exchange, digital signatures, and encrypting small amounts of data. Examples include RSA, ECC, and DSA."
+            },
+            { // Unit 2, Essay Q2
+                question: "Describe the steps involved in the AES encryption process. How does AES provide security against cryptographic attacks?",
+                answer: "AES (Advanced Encryption Standard) is a symmetric block cipher that encrypts data in 128-bit blocks. The key size can be 128, 192, or 256 bits. The encryption process involves several rounds (10, 12, or 14 rounds depending on key size):\n1.  **Initial Round:** AddRoundKey - The initial block is XORed with the first round key derived from the main key.\n2.  **Main Rounds (repeated):**\n    *   SubBytes: A non-linear byte substitution using a fixed S-box.\n    *   ShiftRows: Bytes in each row of the state matrix are shifted cyclically.\n    *   MixColumns: Columns of the state matrix are mixed using matrix multiplication over GF(2^8).\n    *   AddRoundKey: The current state is XORed with the round key for this round.\n3.  **Final Round:** Similar to main rounds but omits the MixColumns step.\n\nAES provides security through:\n*   **Confusion:** Achieved mainly by the SubBytes step (S-box), making the relationship between the ciphertext and the key complex.\n*   **Diffusion:** Achieved by ShiftRows and MixColumns, spreading the influence of a single plaintext bit over many ciphertext bits.\n*   **Key Size:** Large key sizes (128, 192, 256 bits) make brute-force attacks computationally infeasible.\n*   **Structure:** Its well-analyzed structure has proven resistant to known attacks like linear and differential cryptanalysis."
+            },
+            { // Unit 2, Essay Q3
+                question: "What are the advantages of using 3DES over DES? Why is 3DES still considered less secure than AES?",
+                answer: "Advantages of 3DES over DES:\n*   **Increased Key Length:** 3DES effectively increases the key length compared to DES's 56 bits (typically using two or three unique 56-bit keys, giving effective strengths of 112 or 168 bits), making it significantly more resistant to brute-force attacks that broke DES.\n*   **Leverages Existing Hardware:** It allowed organizations with DES hardware/software to enhance security without a complete overhaul.\n\nWhy 3DES is less secure/preferred than AES:\n*   **Speed:** 3DES is much slower than AES because it performs the DES encryption/decryption three times.\n*   **Block Size:** 3DES retains DES's 64-bit block size, which can be less secure against certain attacks (like Sweet32) compared to AES's 128-bit block size.\n*   **Key Length vs Security:** While having a larger effective key size than DES, the theoretical security of 168-bit 3DES isn't fully achieved due to meet-in-the-middle attacks, making its practical strength closer to 112 bits. AES offers stronger security guarantees with comparable or larger key sizes.\n*   **Modern Standard:** AES is the modern, widely adopted standard, benefiting from more extensive analysis and optimization."
+            },
+            { // Unit 2, Essay Q4
+                question: "Explain the concept of a block cipher. How does it differ from a stream cipher?",
+                answer: "A **block cipher** is a symmetric key encryption algorithm that operates on fixed-size groups of bits, called blocks. Common block sizes are 64 bits (e.g., DES, 3DES) or 128 bits (e.g., AES). The cipher encrypts one block of plaintext at a time to produce a block of ciphertext of the same size. If the message is longer than one block, it's divided into blocks, and a mode of operation (like CBC, ECB, CTR) is used to handle multiple blocks securely.\n\nA **stream cipher**, on the other hand, encrypts data one bit or one byte at a time. It generates a pseudorandom keystream, which is then combined (usually via XOR) with the plaintext bits/bytes to produce the ciphertext. The decryption process involves generating the same keystream and XORing it with the ciphertext.\n\n**Differences:**\n*   **Unit of Operation:** Block ciphers work on fixed blocks; stream ciphers work on individual bits/bytes.\n*   **Padding:** Block ciphers often require padding if the last block of plaintext is smaller than the block size; stream ciphers do not.\n*   **Error Propagation:** Errors in transmission can affect an entire block in some block cipher modes, while they usually affect only specific bits/bytes in stream ciphers.\n*   **Use Cases:** Block ciphers are common in file/database encryption. Stream ciphers are often used in real-time communication (like wireless) where data arrives continuously and low latency is important (e.g., RC4 - though now insecure, ChaCha20)."
+            },
+            { // Unit 2, Essay Q5
+                question: "What is the purpose of the MixColumns step in AES? How does it enhance the security of the algorithm?",
+                answer: "The **MixColumns** step in AES is a linear transformation applied independently to each column of the state matrix during most encryption rounds. It operates on the state column by column, treating each column as a four-term polynomial over GF(2^8) and multiplying it by a fixed polynomial.\n\nThe primary purpose of MixColumns is to provide **diffusion**. Diffusion ensures that changes in a single bit of the plaintext (or intermediate state) are spread across multiple bits in the subsequent state. Specifically, MixColumns ensures that the four bytes in one column affect all four bytes in that column in the next round's state. Combined with the ShiftRows step (which spreads changes across columns), MixColumns rapidly disperses the influence of plaintext bits throughout the entire state matrix over multiple rounds. This makes it much harder for cryptanalysts to analyze the relationship between the plaintext and ciphertext or find statistical patterns, thus enhancing security against attacks like differential and linear cryptanalysis."
+            },
+            { // Unit 2, Essay Q6
+                question: "Discuss the importance of key length in cryptographic algorithms. How does key length affect security?",
+                answer: "Key length is a critical parameter in cryptographic algorithms as it directly determines the size of the key space – the total number of possible keys.\n\n**Importance and Effect on Security:**\n*   **Brute-Force Resistance:** The primary way key length affects security is by determining the feasibility of a brute-force attack. An attacker attempting a brute-force attack must try, on average, half of all possible keys. A longer key means an exponentially larger key space, making brute-force attacks computationally infeasible with current and foreseeable technology.\n    *   For example, a 56-bit key (DES) has 2^56 possible keys, which is breakable. A 128-bit key (AES-128) has 2^128 keys, considered secure against brute-force for the foreseeable future. A 256-bit key (AES-256) offers even greater long-term security.\n*   **Security Level:** Longer keys generally provide a higher theoretical security level against brute-force. However, the *overall* security of an algorithm also depends on its design resisting other attacks (like cryptanalysis). A flawed algorithm with a long key can still be insecure.\n*   **Performance Trade-off:** Longer keys often require more computational resources and time for key generation, encryption, and decryption processes.\n\nIn summary, key length is a fundamental measure of the strength of a cipher against brute-force attacks. Choosing an appropriate key length is essential to balance security requirements with performance constraints, ensuring the effort to break the cipher exceeds the value or lifetime of the protected information."
+            },
+             // --- Include Secure Design Essay Questions from previous context ---
+            { // Secure Design Essay Q1
+                question: "Explain the \"Secure-by-design\" approach and its significance in software development.",
+                answer: "Secure-by-design is a methodology that integrates security practices throughout the entire software development lifecycle (SDLC), starting from the requirements and design phases, through coding, testing, deployment, and maintenance. It contrasts with approaches where security is considered late in the cycle or bolted on afterward.\n\nSignificance:\n*   **Proactive Vulnerability Prevention:** Identifies and mitigates security risks early, which is more effective and less costly than fixing vulnerabilities found later.\n*   **Reduced Attack Surface:** Encourages principles like minimizing features and access points, inherently making the software harder to attack.\n*   **Increased Resilience:** Builds software that can better withstand attacks and fail gracefully (securely) if compromised.\n*   **Cost Savings:** Fixing security flaws late in development or after deployment is significantly more expensive than addressing them early.\n*   **Trust and Compliance:** Builds user trust and helps meet regulatory compliance requirements by demonstrating a commitment to security.\nIn essence, secure-by-design treats security as a fundamental quality attribute, just like performance or usability, rather than an optional feature."
+            },
+            // ... (Add other Secure Design essay questions here) ...
 
-        // Function to shuffle options (optional) - Not used here
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-            }
-        }
+        ];
 
-        // Function to display questions - Identical to the previous examples
-        function displayQuiz() {
-            quizData.forEach((qData, index) => {
+        // --- DOM Elements ---
+        const mcTfQuizContainer = document.getElementById('quiz-container-mc-tf'); // Updated ID
+        const essayQuizContainer = document.getElementById('essay-quiz-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // --- Functions ---
+
+        // Function to display MC/TF questions
+        function displayMcTfQuiz() {
+            mcTfQuizContainer.innerHTML = ''; // Clear previous content
+            mcTfData.forEach((qData, index) => {
                 const questionBlock = document.createElement('div');
                 questionBlock.classList.add('question-block');
-                questionBlock.setAttribute('data-question-index', index);
+                questionBlock.setAttribute('data-question-index', index); // Use index within mcTfData
 
                 const questionText = document.createElement('p');
                 questionText.classList.add('question-text');
-                questionText.textContent = `${index + 1}. ${qData.question}`;
+                // Use a distinct numbering prefix or just the index for this tab
+                questionText.textContent = `MC/TF ${index + 1}. ${qData.question}`;
                 questionBlock.appendChild(questionText);
 
                 const optionsDiv = document.createElement('div');
@@ -447,7 +585,7 @@
                 options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
-                    button.addEventListener('click', handleAnswer);
+                    button.addEventListener('click', handleMcTfAnswer); // Use specific handler
                     optionsDiv.appendChild(button);
                 });
 
@@ -457,22 +595,49 @@
                 feedbackDiv.classList.add('feedback');
                 questionBlock.appendChild(feedbackDiv);
 
-                quizContainer.appendChild(questionBlock);
+                mcTfQuizContainer.appendChild(questionBlock);
             });
         }
 
-        // Function to handle answer selection - Identical to the previous examples
-        function handleAnswer(event) {
+        // Function to display Essay questions
+        function displayEssayQuestions() {
+            essayQuizContainer.innerHTML = '<p style="font-style: italic; color: #666;">Click on a question to reveal the model answer.</p>'; // Clear previous and add instruction
+            essayData.forEach((essay, index) => {
+                const block = document.createElement('div');
+                block.classList.add('essay-question-block');
+
+                // Changed title element to span for better inline behaviour if needed, but keep styling as block-like
+                const title = document.createElement('span'); // Changed to span, but styled like a block
+                title.classList.add('essay-question-title');
+                 // Use a distinct numbering prefix or just the index for this tab
+                title.textContent = `Essay ${index + 1}. ${essay.question}`;
+                title.addEventListener('click', toggleEssayAnswer); // Add listener
+
+                const answer = document.createElement('div');
+                answer.classList.add('essay-answer');
+                // Use textContent for security, but pre-wrap CSS handles formatting
+                answer.textContent = essay.answer; // Using textContent is generally safer
+
+                block.appendChild(title);
+                block.appendChild(answer);
+                essayQuizContainer.appendChild(block);
+            });
+        }
+
+
+        // Function to handle MC/TF answer selection
+        function handleMcTfAnswer(event) {
             const selectedButton = event.target;
             const selectedAnswer = selectedButton.textContent;
             const questionBlock = selectedButton.closest('.question-block');
             const questionIndex = parseInt(questionBlock.getAttribute('data-question-index'), 10);
-            const correctAnswer = quizData[questionIndex].answer;
+            const correctAnswer = mcTfData[questionIndex].answer; // Use mcTfData array
             const feedbackDiv = questionBlock.querySelector('.feedback');
             const optionButtons = questionBlock.querySelectorAll('.options button');
 
             optionButtons.forEach(button => {
                 button.disabled = true;
+                button.classList.remove('selected', 'correct', 'incorrect', 'reveal-correct');
             });
 
             selectedButton.classList.add('selected');
@@ -480,11 +645,11 @@
             if (selectedAnswer === correctAnswer) {
                 selectedButton.classList.add('correct');
                 feedbackDiv.textContent = 'Correct!';
-                feedbackDiv.classList.add('correct');
+                feedbackDiv.className = 'feedback correct';
             } else {
                 selectedButton.classList.add('incorrect');
                 feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
-                feedbackDiv.classList.add('incorrect');
+                feedbackDiv.className = 'feedback incorrect';
 
                 optionButtons.forEach(button => {
                     if (button.textContent === correctAnswer) {
@@ -492,10 +657,48 @@
                     }
                 });
             }
+            feedbackDiv.style.display = 'block';
         }
 
-        // Initial call to display the quiz when the page loads
-        displayQuiz();
+         // Function to toggle essay answer visibility
+         function toggleEssayAnswer(event) {
+            const title = event.target;
+            // Ensure we handle clicks inside the title span correctly
+            const currentTitle = title.classList.contains('essay-question-title') ? title : title.closest('.essay-question-title');
+            if (!currentTitle) return; // Exit if click wasn't on a title element
+
+            const answerDiv = currentTitle.nextElementSibling; // Assumes answer div is immediately after title
+            if (answerDiv && answerDiv.classList.contains('essay-answer')) {
+                answerDiv.classList.toggle('visible');
+                currentTitle.classList.toggle('expanded'); // Toggle class for arrow styling
+            }
+         }
+
+        // Function to handle tab switching
+        function switchTab(event) {
+            const clickedTabButton = event.target;
+            const targetTabContentId = clickedTabButton.getAttribute('data-tab');
+            const targetTabContent = document.getElementById(targetTabContentId);
+
+            // Remove active class from all buttons and content panes
+            tabButtons.forEach(button => button.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to the clicked button and corresponding content pane
+            clickedTabButton.classList.add('active');
+            if (targetTabContent) {
+                targetTabContent.classList.add('active');
+            }
+        }
+
+        // --- Event Listeners ---
+        tabButtons.forEach(button => {
+            button.addEventListener('click', switchTab);
+        });
+
+        // --- Initial Display ---
+        displayMcTfQuiz(); // Display MC/TF questions on load
+        displayEssayQuestions(); // Display Essay questions on load (will be hidden initially unless tab is active)
 
     </script>
 
