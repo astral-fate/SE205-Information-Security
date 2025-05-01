@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit 1: Information Security Basics Quiz</title>
+    <title>Unit 1 Security Quiz</title>
     <style>
-        /* CSS Styles identical to the OOP quiz example */
         body {
             font-family: sans-serif;
             line-height: 1.6;
             margin: 20px;
             background-color: #f4f4f4;
+            color: #333;
         }
 
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 30px;
         }
 
         .quiz-container {
@@ -27,6 +28,45 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        /* --- Tab Styles --- */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1em;
+            font-weight: bold;
+            color: #555;
+            border-bottom: 3px solid transparent; /* Placeholder for active border */
+            margin-bottom: -2px; /* Overlap border-bottom */
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tab-buttons button:hover {
+            color: #007bff;
+        }
+
+        .tab-buttons button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        .tab-content {
+            display: none; /* Hide content by default */
+        }
+
+        .tab-content.active {
+            display: block; /* Show active content */
+        }
+
+
+        /* --- Interactive Quiz Styles (MCQ/TF) --- */
         .question-block {
             margin-bottom: 30px;
             padding-bottom: 20px;
@@ -91,7 +131,6 @@
             display: block;
         }
 
-         /* Style for selected buttons */
         .options button.selected.correct {
             background-color: #28a745;
             color: white;
@@ -104,28 +143,114 @@
             border-color: #dc3545;
         }
 
-         /* Style to highlight the correct answer when wrong one is selected */
         .options button.reveal-correct {
-            background-color: #d4edda; /* Light green background */
-            color: #155724;         /* Dark green text */
-            border: 1px solid #c3e6cb; /* Green border */
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
             font-weight: bold;
+        }
+
+        /* --- Essay/Practical Question Styles --- */
+        .essay-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+         .essay-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .essay-question-toggle {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            margin: 0;
+            border: 1px solid #ddd;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            position: relative; /* For pseudo-element */
+        }
+
+        .essay-question-toggle:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Add an indicator for expansion state */
+        .essay-question-toggle::after {
+            content: '+';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #555;
+        }
+        .essay-question-toggle.active::after {
+            content: '−'; /* Minus sign when active */
+        }
+
+
+        .essay-answer {
+            /* Start hidden, use max-height for transition */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            padding: 0 15px; /* No padding when collapsed */
+            background-color: #fdfdfd; /* Slight background difference */
+            border: 1px solid #eee;
+            border-top: none; /* Avoid double border */
+            border-radius: 0 0 5px 5px; /* Match toggle button */
+            margin-top: -1px; /* Overlap border */
+        }
+
+        .essay-answer.active {
+            /* Reveal with sufficient max-height */
+            max-height: 1000px; /* Adjust if answers are very long */
+            padding: 15px; /* Add padding when expanded */
+            transition: max-height 0.5s ease-in, padding 0.5s ease-in;
+        }
+        .essay-answer strong { /* Style the "Answer:" part */
+            color: #0056b3;
+            display: block;
+            margin-bottom: 5px;
         }
 
     </style>
 </head>
 <body>
 
-    <h1>Unit 1: Information Security Basics - Interactive Quiz</h1>
+    <h1>Unit 1 - Information Security Fundamentals Quiz</h1>
 
-    <div class="quiz-container" id="quiz-container">
-        <!-- Questions will be loaded here by JavaScript -->
+    <div class="quiz-container">
+
+        <div class="tab-buttons">
+            <button id="tab-btn-interactive" class="active">Interactive Quiz (MCQ/TF)</button>
+            <button id="tab-btn-essay">Essay & Practical Questions</button>
+        </div>
+
+        <div id="tab-content-interactive" class="tab-content active">
+            <!-- Interactive Questions (MCQ/TF) will be loaded here -->
+        </div>
+
+        <div id="tab-content-essay" class="tab-content">
+             <!-- Essay & Practical Questions will be loaded here -->
+        </div>
+
     </div>
 
     <script>
-        const quizData = [
-            // --- Multiple Choice Questions ---
-            { // MCQ 1
+        const interactiveQuizData = [
+            // --- Multiple Choice Questions (Unit 1) ---
+             { // Page 1, Q1
                 question: "What is the primary goal of information security?",
                 options: [
                     "To increase data storage capacity",
@@ -135,7 +260,7 @@
                 ],
                 answer: "To ensure confidentiality, integrity, and availability of data"
             },
-            { // MCQ 2
+            { // Page 1, Q2
                 question: "Which of the following is NOT a principle of the CIA triad?",
                 options: [
                     "Confidentiality",
@@ -145,7 +270,7 @@
                 ],
                 answer: "Authentication"
             },
-            { // MCQ 3
+            { // Page 1, Q3
                 question: "What type of attack involves eavesdropping on or monitoring transmissions without altering the data?",
                 options: [
                     "Active attack",
@@ -155,17 +280,17 @@
                 ],
                 answer: "Passive attack"
             },
-            { // MCQ 4
+            { // Page 1, Q4
                 question: "Which of the following is an example of an active attack?",
                 options: [
                     "Eavesdropping",
-                    "Data encryption for ransom",
+                    "Data encryption for ransom", // e.g., Ransomware altering data
                     "Monitoring network traffic",
-                    "Collecting sensitive information"
+                    "Collecting sensitive information" // Could be passive, but Ransomware is definitively active
                 ],
                 answer: "Data encryption for ransom"
             },
-            { // MCQ 5
+            { // Page 1, Q5
                 question: "What was the name of the botnet responsible for the largest DDoS attack in 2016?",
                 options: [
                     "Katana",
@@ -175,7 +300,7 @@
                 ],
                 answer: "Mirai"
             },
-            { // MCQ 6
+            { // Page 1, Q6
                 question: "Which of the following is a security mechanism designed to ensure data integrity?",
                 options: [
                     "Encryption",
@@ -185,7 +310,7 @@
                 ],
                 answer: "Hashing"
             },
-            { // MCQ 7
+            { // Page 1, Q7
                 question: "What is the main purpose of confidentiality in information security?",
                 options: [
                     "To ensure data is accessible at all times",
@@ -195,7 +320,7 @@
                 ],
                 answer: "To prevent unauthorized access to sensitive information"
             },
-            { // MCQ 8
+            { // Page 2, Q8
                 question: "Which of the following is a type of security threat?",
                 options: [
                     "Encryption",
@@ -205,7 +330,7 @@
                 ],
                 answer: "Malware"
             },
-            { // MCQ 9
+            { // Page 2, Q9
                 question: "What is the primary goal of availability in information security?",
                 options: [
                     "To ensure data is accessible to authorized users when needed",
@@ -215,140 +340,220 @@
                 ],
                 answer: "To ensure data is accessible to authorized users when needed"
             },
-            { // MCQ 10
+            { // Page 2, Q10
                 question: "Which of the following is an example of a passive attack?",
                 options: [
                     "Ransomware attack",
-                    "Data theft", // Note: Data theft is often the *result* of an attack (active or passive), but eavesdropping is the passive *action* itself.
+                    "Data theft", // Can be active or passive, but eavesdropping is clearly passive
                     "Eavesdropping on network traffic",
                     "DDoS attack"
                 ],
                 answer: "Eavesdropping on network traffic"
             },
-            // --- True/False Questions ---
-            { // T/F 1
+
+            // --- True/False Questions (Unit 1) ---
+             { // Page 2, TF 1
                 question: "Confidentiality ensures that data is accessible to authorized users at all times.",
                 options: ["True", "False"],
-                answer: "False"
+                answer: "False" // Correct explanation: Confidentiality ensures that data is protected from unauthorized access.
             },
-            { // T/F 2
+             { // Page 2, TF 2
                 question: "Integrity ensures that data is accurate and has not been tampered with.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 3
+             { // Page 2, TF 3
                 question: "A passive attack involves altering or destroying data.",
                 options: ["True", "False"],
-                answer: "False"
+                answer: "False" // Correct explanation: A passive attack involves monitoring or eavesdropping without altering data.
             },
-            { // T/F 4
+             { // Page 2, TF 4
                 question: "The Mirai botnet was responsible for the largest DDoS attack in 2016.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 5
+             { // Page 2, TF 5
                 question: "Availability ensures that data is protected from unauthorized access.",
                 options: ["True", "False"],
-                answer: "False"
+                answer: "False" // Correct explanation: Availability ensures that data is accessible to authorized users when needed.
             },
-            { // T/F 6
+             { // Page 2, TF 6
                 question: "Active attacks are easier to detect than passive attacks.",
                 options: ["True", "False"],
-                answer: "True" // Generally true as active attacks modify/disrupt systems.
+                answer: "True" // Generally true as they modify systems/traffic.
             },
-            { // T/F 7
+             { // Page 2, TF 7
                 question: "The CIA triad stands for Confidentiality, Integrity, and Authentication.",
                 options: ["True", "False"],
-                answer: "False"
+                answer: "False" // Correct explanation: It stands for Confidentiality, Integrity, and Availability.
             },
-            { // T/F 8
+             { // Page 2, TF 8
                 question: "The Black Energy malware was used in a cyberattack on a Ukrainian power station.",
                 options: ["True", "False"],
                 answer: "True"
             },
-            { // T/F 9
+            { // Page 3, TF 9
                 question: "A DDoS attack is an example of a passive attack.",
                 options: ["True", "False"],
-                answer: "False"
+                answer: "False" // Correct explanation: It is an example of an active attack.
             },
-            { // T/F 10
+            { // Page 3, TF 10
                 question: "The Katana virus is a variant of the Mirai botnet.",
                 options: ["True", "False"],
-                answer: "True" // Assuming Katana is related/variant based on context, though Mirai is the famous one. If this is factually incorrect, adjust answer.
+                answer: "True" // Katana was identified as a Mirai variant.
             }
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
+        const essayPracticalData = [
+             // --- Practical Questions (Page 3) ---
+             { // Page 3, Prac 1
+                question: "1. Explain how the Mirai botnet works and how it was used in the 2016 DDoS attack.",
+                answer: "The Mirai botnet infects IoT devices (like cameras, routers) by scanning for devices using default or weak factory usernames and passwords. Once it gains access, it installs malware. These compromised devices then form a large network (botnet) which can be commanded to launch Distributed Denial-of-Service (DDoS) attacks. In 2016, Mirai was used to flood target servers (like Dyn, a major DNS provider) with massive amounts of traffic, overwhelming them and making websites and online services inaccessible."
+            },
+            { // Page 3, Prac 2
+                question: "2. Describe the steps you would take to ensure data confidentiality in an organization.",
+                answer: "Key steps include: <strong>Implement strong encryption:</strong> Encrypt sensitive data both at rest (storage) and in transit (network). <strong>Use robust access control:</strong> Implement mechanisms like Role-Based Access Control (RBAC) and the principle of least privilege, ensuring users only have access to data necessary for their roles. <strong>Enforce strong authentication:</strong> Use multi-factor authentication (MFA) and strong password policies. <strong>Conduct regular security audits and monitoring:</strong> Check access logs and system configurations for anomalies or unauthorized access attempts. <strong>Data minimization:</strong> Collect and retain only the data that is absolutely necessary. <strong>Secure disposal:</strong> Properly destroy or sanitize media containing sensitive data when no longer needed. <strong>Employee training:</strong> Educate staff on data handling policies and security best practices."
+            },
+            { // Page 3, Prac 3
+                question: "3. What is the difference between an active attack and a passive attack? Provide examples of each.",
+                answer: "<strong>Active Attack:</strong> Involves an attacker attempting to modify, disrupt, or destroy data or systems. These attacks actively interact with the target and attempt to change its state. Examples include: Ransomware (encrypts/modifies data), DDoS attacks (disrupts service availability), Man-in-the-Middle (MitM) attacks where data is altered, Data modification/deletion, Malware infection.<br><strong>Passive Attack:</strong> Involves an attacker monitoring, eavesdropping on, or collecting information from a target without altering the system or data. The goal is usually information gathering. Examples include: Eavesdropping on network traffic (sniffing), Port scanning (reconnaissance), Monitoring communication patterns (traffic analysis)."
+            },
+            { // Page 3, Prac 4
+                question: "4. How does the CIA triad apply to securing an organization's data?",
+                answer: "The CIA triad provides a foundational model for information security: <strong>Confidentiality:</strong> Ensures that data is protected from unauthorized disclosure or access. Measures like encryption and access controls directly support this. <strong>Integrity:</strong> Ensures that data is accurate, complete, and has not been tampered with or altered inappropriately. Mechanisms like hashing, digital signatures, and version control support integrity. <strong>Availability:</strong> Ensures that data and systems are accessible and usable by authorized users when needed. Measures like redundancy (RAID, clustering), backups, disaster recovery plans, and DDoS mitigation support availability. Balancing these three principles is crucial for comprehensive security."
+            },
+            { // Page 3, Prac 5
+                question: "5. Explain how the Black Energy malware was used in the cyberattack on the Ukrainian power station.",
+                answer: "The attack typically involved several stages: <strong>Initial Access:</strong> Attackers often used spear-phishing emails containing malicious attachments (e.g., infected Microsoft Office documents) sent to employees of the power company. <strong>Malware Deployment:</strong> Opening the attachment executed the Black Energy malware (specifically, versions like BlackEnergy 3), which established a backdoor on the infected system. <strong>Reconnaissance & Lateral Movement:</strong> The attackers used the foothold to explore the network, steal credentials, and gain access to the Industrial Control Systems (ICS) / SCADA network managing the power grid. <strong>Disruption:</strong> Once they had control, they remotely manipulated circuit breakers to disconnect substations, causing widespread power outages. They also deployed destructive components (like KillDisk) to wipe data from operator workstations and disable systems, hindering recovery efforts, and launched a telephony denial-of-service (TDoS) attack against the call center."
+            },
+            { // Page 3, Prac 6
+                question: "6. What are the key components of a security mechanism designed to ensure data integrity?",
+                answer: "Key components include: <strong>Hashing Algorithms:</strong> Functions (like SHA-256, MD5 - though MD5 is weak) that produce a fixed-size digest (hash) of the data. Any change to the data results in a different hash, allowing detection of tampering. <strong>Digital Signatures:</strong> Uses asymmetric cryptography. A hash of the data is encrypted with the sender's private key. The recipient uses the sender's public key to decrypt the hash and compares it with a hash they compute themselves. This verifies both integrity and authenticity (non-repudiation). <strong>Checksums:</strong> Simpler error-detection methods (often used for accidental corruption rather than malicious tampering) that calculate a numerical value based on the data block. <strong>Access Controls:</strong> Preventing unauthorized users from modifying data in the first place. <strong>Version Control Systems:</strong> Tracking changes to data or code over time, allowing detection of unauthorized modifications and rollback if needed. <strong>Message Authentication Codes (MACs):</strong> Similar to hashes but use a shared secret key, providing integrity and some level of authenticity between parties sharing the key."
+            },
+            { // Page 3, Prac 7
+                question: "7. How can organizations protect against DDoS attacks?",
+                answer: "Organizations can employ a multi-layered approach: <strong>Increase Bandwidth:</strong> Have sufficient network capacity to absorb smaller attacks. <strong>Network Infrastructure Hardening:</strong> Use firewalls, routers, and switches configured to block spoofed IPs and filter unwanted traffic. <strong>Intrusion Prevention/Detection Systems (IPS/IDS):</strong> Identify and potentially block malicious traffic patterns characteristic of DDoS. <strong>Web Application Firewalls (WAFs):</strong> Filter malicious HTTP/S traffic targeting web applications. <strong>Deploy DDoS Mitigation Services:</strong> Use specialized third-party services (like Cloudflare, Akamai, AWS Shield) that have massive capacity and sophisticated filtering techniques to scrub malicious traffic before it reaches the organization's network. <strong>Anycast Network Diffusion:</strong> Distribute traffic across multiple geographically dispersed data centers to diffuse the impact of an attack. <strong>Rate Limiting:</strong> Limit the number of requests a source IP can make in a given time. <strong>Develop an Incident Response Plan:</strong> Have a clear plan for how to react when a DDoS attack occurs."
+            },
+            { // Page 3, Prac 8
+                question: "8. What is the role of availability in information security, and how can it be ensured?",
+                answer: "<strong>Role:</strong> Availability ensures that systems, applications, and data are accessible and operational for authorized users whenever they need them. It's about preventing disruption and ensuring business continuity. Lack of availability can halt operations, cause financial loss, and damage reputation. <strong>Ensuring Availability:</strong> This involves implementing: <strong>Redundancy:</strong> Deploying redundant components (servers, network links, power supplies, RAID storage) so that if one fails, another takes over. <strong>High Availability (HA) Clustering:</strong> Grouping servers to work together, providing failover capabilities. <strong>Regular Backups:</strong> Creating copies of data that can be restored in case of loss or corruption. <strong>Disaster Recovery (DR) Plans:</strong> Having procedures and potentially alternate sites to recover operations after a major incident (fire, flood, cyberattack). <strong>Patch Management:</strong> Keeping systems updated to prevent outages caused by vulnerabilities. <strong>Performance Monitoring & Load Balancing:</strong> Ensuring systems can handle expected load and distributing traffic efficiently. <strong>DDoS Protection:</strong> Defending against attacks designed to overwhelm services (as mentioned in Q7)."
+            },
+            { // Page 3, Prac 9
+                question: "9. Explain the concept of a passive attack and provide an example.",
+                answer: "<strong>Concept:</strong> A passive attack is a type of security intrusion where the attacker monitors, intercepts, or collects information from a target system or network communication without modifying the data or affecting the system's operation. The primary goal is usually reconnaissance or data theft, and these attacks are often difficult to detect because they don't cause changes or disruptions. <strong>Example:</strong> An attacker using a network sniffer tool (like Wireshark) on an unsecured Wi-Fi network to capture unencrypted data packets. They might intercept login credentials, emails, or sensitive files being transmitted between users on that network, without altering the traffic or alerting the users."
+            },
+             { // Page 4, Prac 10
+                question: "10. What are the potential consequences of a ransomware attack on an organization?",
+                answer: "Potential consequences are severe and multi-faceted: <strong>Data Unavailability/Loss:</strong> Critical data is encrypted and inaccessible, potentially leading to permanent loss if backups are unavailable or also encrypted, or if the ransom isn't paid (and even then, decryption isn't guaranteed). <strong>Operational Downtime:</strong> Business operations can grind to a halt as systems become unusable, leading to lost productivity and revenue. <strong>Financial Loss:</strong> Costs include ransom payments (if made), recovery efforts (IT support, consultants), system restoration/rebuilding, potential regulatory fines (e.g., GDPR, HIPAA), and lost business. <strong>Reputational Damage:</strong> Loss of customer trust, negative publicity, and damage to brand image. <strong>Data Breach:</strong> Many ransomware attacks now involve data exfiltration before encryption (double extortion), meaning sensitive data might be leaked or sold even if the ransom is paid. <strong>Legal and Regulatory Issues:</strong> Fines and lawsuits can arise, especially if sensitive personal or financial data is compromised. <strong>Psychological Impact:</strong> Stress and pressure on IT staff, management, and employees."
+            },
 
-        // Function to shuffle options (optional, but good for quizzes)
-        // Not used here to keep options consistent with PDF order, but code remains
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            // --- Essay Questions (Page 4) ---
+            { // Page 4, Essay 1
+                question: "1. Discuss the importance of the CIA triad in information security. How do confidentiality, integrity, and availability work together to protect data?",
+                answer: "<strong>Importance:</strong> The CIA triad (Confidentiality, Integrity, Availability) is the foundational model for information security policy and practice. It provides a framework for identifying security needs, assessing risks, and implementing controls. Neglecting any one aspect can leave data vulnerable. <strong>How they work together:</strong> These principles are interconnected and often require balancing. <strong>Confidentiality</strong> ensures only authorized individuals can access sensitive data (achieved via encryption, access controls). <strong>Integrity</strong> ensures data is accurate, trustworthy, and unaltered (achieved via hashing, digital signatures, version control). <strong>Availability</strong> ensures authorized users can access data and systems when needed (achieved via redundancy, backups, disaster recovery). For example, strong encryption (Confidentiality) is useless if the decryption key is lost or the system holding the data is down (Availability). Data that is always available but easily modified by anyone lacks Integrity. Accurate data (Integrity) kept confidential is meaningless if it cannot be accessed when required (Availability). Together, they provide a comprehensive approach to securing data and systems against various threats."
+            },
+            { // Page 4, Essay 2
+                question: "2. Explain the difference between active and passive attacks. Provide examples of each and discuss their potential impact on an organization.",
+                answer: "<strong>Difference:</strong> As defined previously, active attacks modify or disrupt systems/data, while passive attacks observe or collect information without altering the target. <strong>Examples & Impact:</strong><br><strong>Active Attack (e.g., Ransomware, DDoS):</strong> <i>Impact:</i> Immediate and often severe. Ransomware halts operations, risks data loss, incurs ransom costs, and causes reputational damage. DDoS attacks make services unavailable, leading to lost revenue and customer frustration. Active attacks are generally easier to detect due to their disruptive nature.<br><strong>Passive Attack (e.g., Eavesdropping, Traffic Analysis):</strong> <i>Impact:</i> Often subtle and long-term. Eavesdropping can lead to the theft of sensitive information (credentials, intellectual property, personal data) over time, resulting in financial loss, competitive disadvantage, or regulatory breaches. Traffic analysis can reveal communication patterns or organizational structures. Passive attacks are harder to detect as they don't directly interfere with normal operations."
+            },
+            { // Page 4, Essay 3
+                question: "3. What are the key challenges in ensuring data availability in an organization? How can these challenges be addressed?",
+                answer: "<strong>Key Challenges:</strong><br><strong>Hardware Failures:</strong> Components like hard drives, servers, power supplies, or network equipment can fail unexpectedly.<br><strong>Software Failures/Bugs:</strong> Operating system crashes, application errors, or faulty updates can render systems unusable.<br><strong>Network Outages:</strong> Issues with ISPs, internal network configuration errors, or physical cable damage can disrupt connectivity.<br><strong>Cyberattacks:</strong> DDoS attacks aim to overwhelm services, while ransomware can encrypt critical systems and backups.<br><strong>Human Error:</strong> Accidental deletion of data, misconfiguration of systems, or physical damage.<br><strong>Natural Disasters:</strong> Events like fires, floods, or earthquakes can destroy physical infrastructure.<br><strong>Scalability Issues:</strong> Systems unable to handle increasing user load can become slow or unresponsive.<br><br><strong>Addressing Challenges:</strong><br><strong>Redundancy:</strong> Implement redundant hardware (RAID, power supplies, network paths) and high-availability clusters.<br><strong>Robust Backup and Recovery Strategy:</strong> Perform regular, tested backups (following the 3-2-1 rule: 3 copies, 2 different media, 1 offsite) and have a clear disaster recovery plan.<br><strong>Monitoring and Alerting:</strong> Use tools to monitor system health, performance, and network connectivity, alerting administrators to potential issues.<br><strong>Patch Management:</strong> Keep software and operating systems updated to fix bugs and vulnerabilities.<br><strong>DDoS Mitigation:</strong> Employ DDoS protection services.<br><strong>Security Measures:</strong> Implement firewalls, IPS/IDS, and anti-malware solutions.<br><strong>Infrastructure Planning:</strong> Design scalable systems and ensure adequate environmental controls (cooling, power).<br><strong>Employee Training:</strong> Educate staff on proper procedures to minimize human error."
+            },
+             { // Page 4, Essay 4
+                question: "4. Discuss the role of encryption in ensuring data confidentiality. What are the advantages and disadvantages of using encryption?",
+                answer: "<strong>Role:</strong> Encryption is a primary mechanism for ensuring confidentiality. It transforms plaintext data into an unreadable format (ciphertext) using an algorithm and a key. Only someone possessing the correct key can decrypt the ciphertext back into readable plaintext. This protects data from being understood by unauthorized parties, even if they gain physical or network access to it (e.g., stolen laptop, intercepted network traffic). It applies to data at rest (stored) and data in transit (transmitted).<br><br><strong>Advantages:</strong><br><strong>Strong Protection:</strong> Provides robust defense against unauthorized access and data breaches.<br><strong>Regulatory Compliance:</strong> Helps meet requirements of data privacy regulations (e.g., GDPR, HIPAA).<br><strong>Data Integrity (indirectly):</strong> Some encryption modes (authenticated encryption) can also provide integrity checks.<br><strong>Secure Communication:</strong> Enables secure transmission of sensitive data over insecure networks (like the internet via TLS/SSL).<br><br><strong>Disadvantages:</strong><br><strong>Performance Overhead:</strong> Encryption and decryption consume processing power, which can impact system performance, especially for large volumes of data or high-speed communication.<br><strong>Key Management Complexity:</strong> Securely generating, distributing, storing, rotating, and revoking encryption keys is crucial and complex. Lost keys can mean permanent data loss. Compromised keys negate the encryption's value.<br><strong>Implementation Challenges:</strong> Correctly implementing encryption can be difficult; errors can lead to weak or ineffective protection.<br><strong>Cost:</strong> May involve costs for specialized hardware (HSMs), software licenses, or management tools.<br><strong>Impact on Availability:</strong> If keys are lost or systems managing encryption fail, data can become inaccessible."
+            },
+             { // Page 4, Essay 5
+                question: "5. Explain the concept of integrity in information security. How can organizations ensure data integrity?",
+                answer: "<strong>Concept:</strong> Integrity ensures that data is accurate, complete, consistent, and trustworthy. It guarantees that data has not been modified, deleted, or otherwise tampered with in an unauthorized or undetected manner. It applies throughout the data lifecycle, from creation to storage, transmission, and processing. Maintaining integrity is crucial for reliable decision-making, regulatory compliance, and maintaining trust.<br><br><strong>Ensuring Data Integrity:</strong> Organizations use a combination of technical and procedural controls:<br><strong>Hashing:</strong> Generating cryptographic hashes of data allows verification that the data hasn't changed (comparing a stored hash with a newly computed hash).<br><strong>Digital Signatures:</strong> Provide stronger assurance by combining hashing with asymmetric encryption (using the sender's private key), verifying both integrity and the origin (authenticity/non-repudiation).<br><strong>Message Authentication Codes (MACs):</strong> Use a shared secret key along with a hash function to verify integrity and authenticity between parties sharing the key.<br><strong>Access Controls:</strong> Implementing strict permissions (e.g., using RBAC, least privilege) to limit who can modify data.<br><strong>Input Validation:</strong> Ensuring data entered into systems meets predefined formats and constraints, preventing corruption.<br><strong>Version Control:</strong> Tracking changes to files or data, allowing detection of unauthorized modifications and rollback.<br><strong>Auditing and Logging:</strong> Recording who accessed or modified data and when, enabling detection and investigation of tampering.<br><strong>Checksums:</strong> Simpler methods often used for detecting accidental corruption during transmission or storage.<br><strong>Database Constraints:</strong> Using database features like constraints and triggers to enforce data consistency rules."
+            },
+             { // Page 4, Essay 6
+                question: "6. What are the potential consequences of a data breach caused by a passive attack? How can organizations mitigate these risks?",
+                answer: "<strong>Potential Consequences:</strong> Even though passive attacks don't directly alter data, the consequences of the resulting data breach can be significant:<br><strong>Loss of Sensitive Information:</strong> Theft of confidential data such as customer PII (Personally Identifiable Information), financial records, intellectual property, trade secrets, or employee data.<br><strong>Financial Loss:</strong> Costs associated with incident response, forensic investigation, legal fees, regulatory fines (e.g., GDPR), potential lawsuits from affected individuals, credit monitoring services for victims, and loss of competitive advantage if trade secrets are stolen.<br><strong>Reputational Damage:</strong> Erosion of customer trust, negative media coverage, and damage to the organization's brand and public image.<br><strong>Regulatory Penalties:</strong> Failure to protect data can lead to substantial fines under various data protection laws.<br><strong>Foundation for Future Attacks:</strong> Information gathered passively (e.g., credentials, network topology) can be used to plan and execute more damaging active attacks later.<br><strong>Espionage:</strong> State-sponsored or corporate espionage aims to gather intelligence passively.<br><br><strong>Risk Mitigation:</strong><br><strong>Encryption:</strong> Encrypting sensitive data both at rest and, crucially for passive attacks, in transit (using protocols like TLS/SSL, VPNs). This makes intercepted data unusable without the key.<br><strong>Network Segmentation and Monitoring:</strong> Segmenting networks limits the scope of potential eavesdropping. Monitoring network traffic for unusual patterns or data exfiltration attempts (even if encrypted) can help detection.<br><strong>Strong Access Controls:</strong> Limiting access to sensitive data reduces the potential impact if an attacker gains internal network access.<br><strong>Secure Network Protocols:</strong> Avoid using unencrypted protocols (like plain HTTP, FTP, Telnet). Use secure alternatives (HTTPS, SFTP, SSH).<br><strong>Endpoint Security:</strong> Protecting devices where data might be accessed or stored.<br><strong>Security Awareness Training:</strong> Educating users about the risks of unsecured networks (e.g., public Wi-Fi) and phishing attempts that might precede passive monitoring.<br><strong>Regular Security Audits:</strong> Proactively searching for vulnerabilities or signs of compromise."
             }
+        ];
+
+        const interactiveQuizContainer = document.getElementById('tab-content-interactive');
+        const essayQuizContainer = document.getElementById('tab-content-essay');
+        const tabButtons = document.querySelectorAll('.tab-buttons button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // --- Tab Switching Logic ---
+        function activateTab(tabId) {
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.id === `tab-btn-${tabId}`) {
+                    button.classList.add('active');
+                }
+            });
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                 if (content.id === `tab-content-${tabId}`) {
+                    content.classList.add('active');
+                }
+            });
         }
 
-        // Function to display questions - Identical to the OOP example
-        function displayQuiz() {
-            quizData.forEach((qData, index) => {
-                // Create question block
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.id.replace('tab-btn-', '');
+                activateTab(tabId);
+            });
+        });
+
+        // --- Interactive Quiz Display Logic ---
+        function displayInteractiveQuiz() {
+            interactiveQuizData.forEach((qData, index) => {
                 const questionBlock = document.createElement('div');
                 questionBlock.classList.add('question-block');
-                questionBlock.setAttribute('data-question-index', index); // Link block to question index
+                questionBlock.setAttribute('data-question-index', index); // Use index within interactiveQuizData
 
-                // Create question text
                 const questionText = document.createElement('p');
                 questionText.classList.add('question-text');
-                questionText.textContent = `${index + 1}. ${qData.question}`; // Add question number
+                // Using a simple index for interactive questions
+                questionText.textContent = `${index + 1}. ${qData.question}`;
                 questionBlock.appendChild(questionText);
 
-                // Create options container
                 const optionsDiv = document.createElement('div');
                 optionsDiv.classList.add('options');
 
-                // Use original order for this example
                 const options = qData.options;
-
-                // Create buttons for each option
-                 options.forEach(option => {
+                options.forEach(option => {
                     const button = document.createElement('button');
                     button.textContent = option;
-                    button.addEventListener('click', handleAnswer);
+                    // Add listener specific to interactive answers
+                    button.addEventListener('click', handleInteractiveAnswer);
                     optionsDiv.appendChild(button);
                 });
 
                 questionBlock.appendChild(optionsDiv);
 
-                // Create feedback element (initially hidden)
                 const feedbackDiv = document.createElement('div');
                 feedbackDiv.classList.add('feedback');
                 questionBlock.appendChild(feedbackDiv);
 
-                // Add the complete question block to the container
-                quizContainer.appendChild(questionBlock);
+                interactiveQuizContainer.appendChild(questionBlock);
             });
         }
 
-        // Function to handle answer selection - Identical to the OOP example
-        function handleAnswer(event) {
+        // Function to handle interactive answer selection
+        function handleInteractiveAnswer(event) {
             const selectedButton = event.target;
-            const selectedAnswer = selectedButton.textContent;
             const questionBlock = selectedButton.closest('.question-block');
             const questionIndex = parseInt(questionBlock.getAttribute('data-question-index'), 10);
-            const correctAnswer = quizData[questionIndex].answer;
+            const selectedAnswer = selectedButton.textContent;
+            const correctAnswer = interactiveQuizData[questionIndex].answer; // Use interactiveQuizData
             const feedbackDiv = questionBlock.querySelector('.feedback');
             const optionButtons = questionBlock.querySelectorAll('.options button');
 
-            // Disable all buttons for this question
+            // Disable all buttons in this block
             optionButtons.forEach(button => {
                 button.disabled = true;
             });
 
-            // Mark the selected button
             selectedButton.classList.add('selected');
 
-            // Check if the answer is correct
             if (selectedAnswer === correctAnswer) {
                 selectedButton.classList.add('correct');
                 feedbackDiv.textContent = 'Correct!';
@@ -358,8 +563,8 @@
                 feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
                 feedbackDiv.classList.add('incorrect');
 
-                // Highlight the correct answer button
-                 optionButtons.forEach(button => {
+                // Highlight the correct answer
+                optionButtons.forEach(button => {
                     if (button.textContent === correctAnswer) {
                         button.classList.add('reveal-correct');
                     }
@@ -367,8 +572,45 @@
             }
         }
 
-        // Initial call to display the quiz when the page loads
-        displayQuiz();
+        // --- Essay/Practical Quiz Display Logic ---
+         function displayEssayQuestions() {
+            essayPracticalData.forEach((qData, index) => {
+                const essayItem = document.createElement('div');
+                essayItem.classList.add('essay-item');
+
+                const questionToggle = document.createElement('button');
+                questionToggle.classList.add('essay-question-toggle');
+                // Remove explicit numbering if it's already in the question text
+                questionToggle.textContent = qData.question.startsWith(`${index + 1}.`) ? qData.question : `${index + 1}. ${qData.question}`; // Auto-number if needed
+                questionToggle.setAttribute('aria-expanded', 'false'); // Accessibility
+                questionToggle.setAttribute('aria-controls', `essay-answer-${index}`);
+
+                const answerDiv = document.createElement('div');
+                answerDiv.classList.add('essay-answer');
+                answerDiv.id = `essay-answer-${index}`;
+                 // Add "Answer:" prefix and use innerHTML to render potential HTML in answers
+                answerDiv.innerHTML = `<strong>Answer:</strong> ${qData.answer}`;
+
+
+                questionToggle.addEventListener('click', () => {
+                    const isExpanded = questionToggle.getAttribute('aria-expanded') === 'true';
+                    questionToggle.setAttribute('aria-expanded', !isExpanded);
+                    questionToggle.classList.toggle('active');
+                    answerDiv.classList.toggle('active');
+                });
+
+                essayItem.appendChild(questionToggle);
+                essayItem.appendChild(answerDiv);
+                essayQuizContainer.appendChild(essayItem);
+            });
+        }
+
+
+        // --- Initial Call ---
+        displayInteractiveQuiz();
+        displayEssayQuestions();
+        // Activate the default tab (optional, CSS already does this)
+        // activateTab('interactive');
 
     </script>
 
