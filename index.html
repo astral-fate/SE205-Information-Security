@@ -90,6 +90,58 @@
             font-size: 1.1em;
             color: #555;
         }
+        /* Add a wrapper for table scrolling */
+        .table-wrapper {
+            overflow-x: auto; /* Enable horizontal scrolling */
+            margin-top: 20px;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.4em;
+            }
+            body {
+                font-size: 0.95em;
+            }
+            table {
+                font-size: 0.85em; /* Smaller font in table */
+            }
+            th, td {
+                padding: 8px 10px; /* Smaller padding */
+                /* Remove fixed widths on small screens to allow natural flow */
+                width: auto !important;
+                min-width: 100px; /* Optional: set a min-width */
+            }
+            /* Ensure table takes minimum necessary width */
+            table {
+                width: auto;
+                min-width: 100%; /* Ensure it tries to fill the wrapper */
+            }
+        }
+         @media (max-width: 480px) {
+             h1 {
+                 font-size: 1.5em;
+             }
+             h2 {
+                 font-size: 1.2em;
+             }
+             .container {
+                 padding: 10px 15px;
+             }
+             th, td {
+                 padding: 6px 8px;
+             }
+         }
 
     </style>
 </head>
@@ -103,196 +155,200 @@
         </p>
 
         <h2>Course Syllabus</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Unit</th>
-                    <th>Main Topics</th>
-                    <th>Key Concepts</th>
-                    <th>Algorithms / Tools</th>
-                    <th>Interactive Material</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong><a href="chapters/unit1.html">Unit 1</a></strong></td>
-                    <td>
-                        - Introduction to Information Security<br>
-                        - Security Threats & Attacks<br>
-                        - Security Services (CIA Triad)<br>
-                        - Security Mechanisms<br>
-                        - Network Security Models
-                    </td>
-                    <td>
-                        - Importance of Security (Big Data, Internet Growth)<br>
-                        - Historical Context (ARPANET)<br>
-                        - Information Security Definition<br>
-                        - Confidentiality, Integrity, Availability (CIA)<br>
-                        - Security Threats vs. Attacks<br>
-                        - Active vs. Passive Attacks (Masquerade, Replay, DoS, Eavesdropping, Traffic Analysis)<br>
-                        - Security Mechanisms (Encipherment, Access Control, Integrity, Digital Signature, Padding)<br>
-                        - OSI Security Architecture Overview<br>
-                        - General & Network Access Security Models<br>
-                        - Security Trinity (Prevention, Detection, Response)
-                    </td>
-                    <td>
-                        - CIA Triad<br>
-                        - Attack Classification<br>
-                        - Security Models
-                    </td>
-                    <td><a href="chapters/quiz1.html">Quiz 1</a></td>
-                </tr>
-                <tr>
-                    <td><strong><a href="chapters/c2.html">Unit 2</a></strong></td>
-                    <td>
-                        - Cryptography Concepts<br>
-                        - Symmetric Key Ciphers<br>
-                        - Classical Encryption Techniques<br>
-                        - Modern Symmetric Block Ciphers
-                    </td>
-                    <td>
-                        - Cryptography Dimensions (Operations, Keys, Processing)<br>
-                        - Terminology (Plaintext, Ciphertext, Encrypt, Decrypt, Key, Cipher)<br>
-                        - Symmetric vs. Asymmetric Overview<br>
-                        - Cryptanalysis (Goals, Brute-Force)<br>
-                        - Substitution vs. Transposition<br>
-                        - Stream vs. Block Ciphers<br>
-                        - Classical Ciphers (Caesar, Monoalphabetic, Polyalphabetic, Playfair, Hill, Rail Fence)<br>
-                        - Simple Modern Ciphers (XOR)<br>
-                        - DES (Structure, Features, Weaknesses)<br>
-                        - SDES (Simplified DES for learning)<br>
-                        - 3DES (Structure, Keying Options)<br>
-                        - AES (Structure, Key Sizes, Rounds, Operations: SubBytes, ShiftRows, MixColumns, AddRoundKey)
-                    </td>
-                    <td>
-                        - Caesar Cipher<br>
-                        - Playfair Cipher<br>
-                        - Hill Cipher<br>
-                        - Rail Fence Cipher<br>
-                        - XOR Cipher<br>
-                        - DES / SDES<br>
-                        - 3DES<br>
-                        - AES
-                    </td>
-                    <td><a href="chapters/quiz2.html">1. Quiz 2</a>
-                        <br>
-                    <a href="https://astral-fate.github.io/Cryptography-visualizer/" target="_blank" rel="noopener noreferrer">
-                        <br>
-                        2. Cryptography visualizer</a>
-                    
-                    <a href="https://astral-fate.github.io/s-des-key-generation/" target="_blank" rel="noopener noreferrer">3. S-DES key generator visualizer</a>
-                  
-                    
-                    </td>
-                </tr>
-                 <tr>
-                    <td><strong><a href="chapters/c3.html">Unit 3</a></strong></td>
-                    <td>
-                        - Asymmetric Key Cryptography<br>
-                        - Public Key Principles<br>
-                        - RSA Algorithm<br>
-                        - Diffie-Hellman Key Exchange<br>
-                        - Other Asymmetric Systems
-                    </td>
-                    <td>
-                        - Public/Private Key Pairs<br>
-                        - Encryption/Decryption Process<br>
-                        - Authentication with Asymmetric Keys<br>
-                        - Secrecy & Authentication Combined<br>
-                        - Applications (Encryption, Digital Signatures, Key Exchange)<br>
-                        - Requirements for Public Key Crypto<br>
-                        - Cryptanalysis (Brute-force, Factoring)<br>
-                        - Symmetric vs. Asymmetric (Comparison: Speed, Keys, Management, Use Cases)<br>
-                        - Hybrid Approach (e.g., TLS/SSL, PGP)<br>
-                        - RSA Algorithm Steps (Key Gen, Encrypt, Decrypt)<br>
-                        - Euler Totient Function<br>
-                        - Diffie-Hellman Steps (Setup, Key Calculation)<br>
-                        - Primitive Roots, Modulo Arithmetic<br>
-                        - ElGamal, ECC (Concepts)
-                    </td>
-                    <td>
-                        - RSA<br>
-                        - Diffie-Hellman<br>
-                        - ElGamal<br>
-                        - ECC
-                    </td>
+        <!-- Add the table wrapper div -->
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Unit</th>
+                        <th>Main Topics</th>
+                        <th>Key Concepts</th>
+                        <th>Algorithms / Tools</th>
+                        <th>Interactive Material</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong><a href="chapters/unit1.html">Unit 1</a></strong></td>
+                        <td>
+                            - Introduction to Information Security<br>
+                            - Security Threats & Attacks<br>
+                            - Security Services (CIA Triad)<br>
+                            - Security Mechanisms<br>
+                            - Network Security Models
+                        </td>
+                        <td>
+                            - Importance of Security (Big Data, Internet Growth)<br>
+                            - Historical Context (ARPANET)<br>
+                            - Information Security Definition<br>
+                            - Confidentiality, Integrity, Availability (CIA)<br>
+                            - Security Threats vs. Attacks<br>
+                            - Active vs. Passive Attacks (Masquerade, Replay, DoS, Eavesdropping, Traffic Analysis)<br>
+                            - Security Mechanisms (Encipherment, Access Control, Integrity, Digital Signature, Padding)<br>
+                            - OSI Security Architecture Overview<br>
+                            - General & Network Access Security Models<br>
+                            - Security Trinity (Prevention, Detection, Response)
+                        </td>
+                        <td>
+                            - CIA Triad<br>
+                            - Attack Classification<br>
+                            - Security Models
+                        </td>
+                        <td><a href="chapters/quiz1.html">Quiz 1</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong><a href="chapters/c2.html">Unit 2</a></strong></td>
+                        <td>
+                            - Cryptography Concepts<br>
+                            - Symmetric Key Ciphers<br>
+                            - Classical Encryption Techniques<br>
+                            - Modern Symmetric Block Ciphers
+                        </td>
+                        <td>
+                            - Cryptography Dimensions (Operations, Keys, Processing)<br>
+                            - Terminology (Plaintext, Ciphertext, Encrypt, Decrypt, Key, Cipher)<br>
+                            - Symmetric vs. Asymmetric Overview<br>
+                            - Cryptanalysis (Goals, Brute-Force)<br>
+                            - Substitution vs. Transposition<br>
+                            - Stream vs. Block Ciphers<br>
+                            - Classical Ciphers (Caesar, Monoalphabetic, Polyalphabetic, Playfair, Hill, Rail Fence)<br>
+                            - Simple Modern Ciphers (XOR)<br>
+                            - DES (Structure, Features, Weaknesses)<br>
+                            - SDES (Simplified DES for learning)<br>
+                            - 3DES (Structure, Keying Options)<br>
+                            - AES (Structure, Key Sizes, Rounds, Operations: SubBytes, ShiftRows, MixColumns, AddRoundKey)
+                        </td>
+                        <td>
+                            - Caesar Cipher<br>
+                            - Playfair Cipher<br>
+                            - Hill Cipher<br>
+                            - Rail Fence Cipher<br>
+                            - XOR Cipher<br>
+                            - DES / SDES<br>
+                            - 3DES<br>
+                            - AES
+                        </td>
+                        <td><a href="chapters/quiz2.html">1. Quiz 2</a>
+                            <br>
+                        <a href="https://astral-fate.github.io/Cryptography-visualizer/" target="_blank" rel="noopener noreferrer">
+                            <br>
+                            2. Cryptography visualizer</a>
+                        
+                            <br>
+                        <a href="https://astral-fate.github.io/s-des-key-generation/" target="_blank" rel="noopener noreferrer">3. S-DES key generator visualizer</a>
+                      
+                        
+                        </td>
+                    </tr>
+                     <tr>
+                        <td><strong><a href="chapters/c3.html">Unit 3</a></strong></td>
+                        <td>
+                            - Asymmetric Key Cryptography<br>
+                            - Public Key Principles<br>
+                            - RSA Algorithm<br>
+                            - Diffie-Hellman Key Exchange<br>
+                            - Other Asymmetric Systems
+                        </td>
+                        <td>
+                            - Public/Private Key Pairs<br>
+                            - Encryption/Decryption Process<br>
+                            - Authentication with Asymmetric Keys<br>
+                            - Secrecy & Authentication Combined<br>
+                            - Applications (Encryption, Digital Signatures, Key Exchange)<br>
+                            - Requirements for Public Key Crypto<br>
+                            - Cryptanalysis (Brute-force, Factoring)<br>
+                            - Symmetric vs. Asymmetric (Comparison: Speed, Keys, Management, Use Cases)<br>
+                            - Hybrid Approach (e.g., TLS/SSL, PGP)<br>
+                            - RSA Algorithm Steps (Key Gen, Encrypt, Decrypt)<br>
+                            - Euler Totient Function<br>
+                            - Diffie-Hellman Steps (Setup, Key Calculation)<br>
+                            - Primitive Roots, Modulo Arithmetic<br>
+                            - ElGamal, ECC (Concepts)
+                        </td>
+                        <td>
+                            - RSA<br>
+                            - Diffie-Hellman<br>
+                            - ElGamal<br>
+                            - ECC
+                        </td>
 
 
-                    <td><a href="chapters/quiz4.html">1. Quiz 3</a>
-                        <br>
-                     <a href="https://hmthanh.github.io/rsa/" target="_blank" rel="noopener noreferrer">2. RSA Visualizer</a>
-                    </td>
-                 </tr>
-                 <tr>
-                    <td><strong><a href="chapters/c4.html">Unit 4</a></strong></td>
-                    <td>
-                        - Message Authentication<br>
-                        - Hash Functions<br>
-                        - MAC Algorithms<br>
-                        - Digital Signatures<br>
-                        - SHA Algorithms<br>
-                        - Blockchain Hashing
-                    </td>
-                    <td>
-                        - Need for Authentication (Integrity, Sender ID, Replay Prevention)<br>
-                        - Authentication Functions Overview<br>
-                        - Hash Function Definition & Purpose<br>
-                        - Properties (One-way, Collision Resistance)<br>
-                        - Preimage vs. Collision<br>
-                        - Hash Applications (Integrity Check, Passwords, MACs, Signatures)<br>
-                        - Message Authentication Code (MAC) Process<br>
-                        - Keyed Hash Function<br>
-                        - HMAC vs. CMAC (Concept)<br>
-                        - Digital Signature Process (Hashing + Asymmetric Encryption)<br>
-                        - Simple Hash Functions (XOR-based)<br>
-                        - Security Requirements for Hash Functions<br>
-                        - Attacks (Brute-Force, Cryptanalysis, Birthday Attack)<br>
-                        - Secure Hash Structure (Merkle–Damgård)<br>
-                        - SHA Family (SHA-1, SHA-2 variants, SHA-3 Keccak/Sponge Construction)<br>
-                        - Blockchain Basics (Ledger, Blocks, Chaining, Hashes, Immutability)<br>
-                        - Block Structure (Header, Body, Merkle Root, Nonce)<br>
-                        - Proof-of-Work vs. Proof-of-Stake
-                    </td>
-                    <td>
-                        - MAC (HMAC, CMAC)<br>
-                        - Digital Signatures<br>
-                        - SHA-1<br>
-                        - SHA-2 (256, 512)<br>
-                        - SHA-3<br>
-                        - Merkle Trees<br>
-                        - PoW / PoS
-                    </td>
-                    <td><!-- Interactive Material for Unit 4 --></td>
-                </tr>
-                 <tr>
-                    <td><strong><a href="chapters/c5.html">Unit 5</a></strong></td>
-                    <td>
-                        - Secure Software Design (SSDLC)<br>
-                        - Web Application Security<br>
-                        - Firewalls
-                    </td>
-                    <td>
-                        - Secure Software Development Life Cycle (SSDLC) vs. SDLC<br>
-                        - Importance of Early Security Integration<br>
-                        - Key Principles (Security by Design, Monitoring, Risk Assessment, Training, Collaboration)<br>
-                        - 7 Secure Design Principles (SaC, Secure Defaults, Least Privilege, SoD, Minimize Attack Surface, Complete Mediation, Fail Securely)<br>
-                        - Best Practices for Secure Development<br>
-                        - Web Security Principles (AuthN, Confidentiality, Integrity, Availability)<br>
-                        - Common Web Threats (SQL Injection, Cross-Site Scripting - XSS, Broken Authentication)<br>
-                        - Firewall Purpose & Function<br>
-                        - Firewall Types (Packet Filtering, Stateful, Proxy, NGFW)<br>
-                        - Web Application Firewall (WAF) - Purpose, How it works (Reverse Proxy), Relation to SQLi/XSS protection.
-                    </td>
-                    <td>
-                        - SSDLC Methodologies<br>
-                        - OWASP Top 10 (Implied)<br>
-                        - Firewalls (Various Types)<br>
-                        - WAF
-                    </td>
-                    <td><!-- Interactive Material for Unit 5 --></td>
-                </tr>
-            </tbody>
-        </table>
+                        <td><a href="chapters/quiz4.html">1. Quiz 3</a>
+                            <br>
+                         <a href="https://hmthanh.github.io/rsa/" target="_blank" rel="noopener noreferrer">2. RSA Visualizer</a>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td><strong><a href="chapters/c4.html">Unit 4</a></strong></td>
+                        <td>
+                            - Message Authentication<br>
+                            - Hash Functions<br>
+                            - MAC Algorithms<br>
+                            - Digital Signatures<br>
+                            - SHA Algorithms<br>
+                            - Blockchain Hashing
+                        </td>
+                        <td>
+                            - Need for Authentication (Integrity, Sender ID, Replay Prevention)<br>
+                            - Authentication Functions Overview<br>
+                            - Hash Function Definition & Purpose<br>
+                            - Properties (One-way, Collision Resistance)<br>
+                            - Preimage vs. Collision<br>
+                            - Hash Applications (Integrity Check, Passwords, MACs, Signatures)<br>
+                            - Message Authentication Code (MAC) Process<br>
+                            - Keyed Hash Function<br>
+                            - HMAC vs. CMAC (Concept)<br>
+                            - Digital Signature Process (Hashing + Asymmetric Encryption)<br>
+                            - Simple Hash Functions (XOR-based)<br>
+                            - Security Requirements for Hash Functions<br>
+                            - Attacks (Brute-Force, Cryptanalysis, Birthday Attack)<br>
+                            - Secure Hash Structure (Merkle–Damgård)<br>
+                            - SHA Family (SHA-1, SHA-2 variants, SHA-3 Keccak/Sponge Construction)<br>
+                            - Blockchain Basics (Ledger, Blocks, Chaining, Hashes, Immutability)<br>
+                            - Block Structure (Header, Body, Merkle Root, Nonce)<br>
+                            - Proof-of-Work vs. Proof-of-Stake
+                        </td>
+                        <td>
+                            - MAC (HMAC, CMAC)<br>
+                            - Digital Signatures<br>
+                            - SHA-1<br>
+                            - SHA-2 (256, 512)<br>
+                            - SHA-3<br>
+                            - Merkle Trees<br>
+                            - PoW / PoS
+                        </td>
+                        <td><!-- Interactive Material for Unit 4 --></td>
+                    </tr>
+                     <tr>
+                        <td><strong><a href="chapters/c5.html">Unit 5</a></strong></td>
+                        <td>
+                            - Secure Software Design (SSDLC)<br>
+                            - Web Application Security<br>
+                            - Firewalls
+                        </td>
+                        <td>
+                            - Secure Software Development Life Cycle (SSDLC) vs. SDLC<br>
+                            - Importance of Early Security Integration<br>
+                            - Key Principles (Security by Design, Monitoring, Risk Assessment, Training, Collaboration)<br>
+                            - 7 Secure Design Principles (SaC, Secure Defaults, Least Privilege, SoD, Minimize Attack Surface, Complete Mediation, Fail Securely)<br>
+                            - Best Practices for Secure Development<br>
+                            - Web Security Principles (AuthN, Confidentiality, Integrity, Availability)<br>
+                            - Common Web Threats (SQL Injection, Cross-Site Scripting - XSS, Broken Authentication)<br>
+                            - Firewall Purpose & Function<br>
+                            - Firewall Types (Packet Filtering, Stateful, Proxy, NGFW)<br>
+                            - Web Application Firewall (WAF) - Purpose, How it works (Reverse Proxy), Relation to SQLi/XSS protection.
+                        </td>
+                        <td>
+                            - SSDLC Methodologies<br>
+                            - OWASP Top 10 (Implied)<br>
+                            - Firewalls (Various Types)<br>
+                            - WAF
+                        </td>
+                        <td><!-- Interactive Material for Unit 5 --></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> <!-- Close the table wrapper div -->
 
         <h2>Course Objectives</h2>
         <ul>
@@ -326,21 +382,21 @@
 
         <h2> Course References</h2>
         <ul>
-
-      <li>"Cryptography and Network Security" by William Stallings, Pearson Education</li>
+            <!-- Replace existing list items with the new ones -->
+            <li>"Cryptography and Network Security" by William Stallings, Pearson Education</li>
             <li>"Cryptography and Network Security" by Atul Kahate, McGraw Hill</li>
-            <li</li>
-            <a href=">https://xipher.netlify.app/" target="_blank" rel="noopener noreferrer"> 
-  
-        
-     </ul>
-        
+            <li><a href="https://xipher.netlify.app/" target="_blank" rel="noopener noreferrer">https://xipher.netlify.app/</a></li>
+            <li><a href="https://pythontutor.com/visualize.html#mode=edit" target="_blank" rel="noopener noreferrer">https://pythontutor.com/visualize.html#mode=edit</a></li>
+        </ul>
+
         <h2>Original repo</h2>
         <ul>
-          <a href="https://github.com/astral-fate/SE205-Information-Security" target="_blank" rel="noopener noreferrer"> 
-          
-       
-        
+            <!-- Corrected link structure -->
+            <li><a href="https://github.com/astral-fate/SE205-Information-Security" target="_blank" rel="noopener noreferrer">SE205-Information-Security GitHub Repository</a></li>
+            <!-- Add the new link here -->
+            <li><a href="https://github.com/astral-fate/SE205-Information-Security/" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+        </ul>
+
     </div>
 </body>
 </html>
