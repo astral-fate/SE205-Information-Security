@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Security Quiz</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* --- Tab Styles --- */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 1em;
+            font-weight: bold;
+            color: #555;
+            border-bottom: 3px solid transparent; /* Placeholder for active border */
+            margin-bottom: -2px; /* Overlap border-bottom */
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .tab-buttons button:hover {
+            color: #007bff;
+        }
+
+        .tab-buttons button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        .tab-content {
+            display: none; /* Hide content by default */
+        }
+
+        .tab-content.active {
+            display: block; /* Show active content */
+        }
+
+
+        /* --- Interactive Quiz Styles (MCQ/TF) --- */
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .options button:hover:not(:disabled) {
+            background-color: #e9e9e9;
+        }
+
+        .options button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: none; /* Initially hidden */
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .options button.selected.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .options button.selected.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .options button.reveal-correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+        }
+
+        /* --- Essay/Practical Question Styles --- */
+        .essay-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+         .essay-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .essay-question-toggle {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            margin: 0;
+            border: 1px solid #ddd;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            position: relative; /* For pseudo-element */
+        }
+
+        .essay-question-toggle:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Add an indicator for expansion state */
+        .essay-question-toggle::after {
+            content: '+';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #555;
+        }
+        .essay-question-toggle.active::after {
+            content: '−'; /* Minus sign when active */
+        }
+
+
+        .essay-answer {
+            /* Start hidden, use max-height for transition */
+            max-height: 0;
+            overflow: hidden;
+            transition: padding 0.4s ease-out, max-height 0.4s ease-out; /* Keep max-height for collapse */
+            padding: 0 15px; /* No padding when collapsed */
+            background-color: #fdfdfd; /* Slight background difference */
+            border: 1px solid #eee;
+            border-top: none; /* Avoid double border */
+            border-radius: 0 0 5px 5px; /* Match toggle button */
+            margin-top: -1px; /* Overlap border */
+        }
+
+        .essay-answer.active {
+            /* Remove fixed max-height to allow full content visibility */
+            max-height: none; /* Allow content to determine height */
+            padding: 15px; /* Add padding when expanded */
+            overflow: visible; /* Ensure content isn't clipped */
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Comprehensive Security Quiz</h1>
+
+    <div class="quiz-container">
+
+        <div class="tab-buttons">
+            <button id="tab-btn-interactive" class="active">Interactive Quiz (MCQ/TF)</button>
+            <button id="tab-btn-practical">Practical Questions</button>
+            <button id="tab-btn-essay">Essay Questions</button>
+        </div>
+
+        <div id="tab-content-interactive" class="tab-content active">
+            <!-- Interactive Questions (MCQ/TF) will be loaded here -->
+        </div>
+
+        <div id="tab-content-practical" class="tab-content">
+             <!-- Practical Questions will be loaded here -->
+             <p style="font-style: italic; color: #666;">Practical questions will appear here.</p>
+        </div>
+
+        <div id="tab-content-essay" class="tab-content">
+             <!-- Essay Questions will be loaded here -->
+             <p style="font-style: italic; color: #666;">Essay questions will appear here.</p>
+        </div>
+
+    </div>
+
+    <script>
+        const interactiveQuizData = [
+            // --- Multiple Choice Questions (Unit 1) ---
+             { // Page 1, Q1
+                question: "What is the primary goal of information security?",
+                options: [
+                    "To increase data storage capacity",
+                    "To ensure confidentiality, integrity, and availability of data",
+                    "To improve network speed",
+                    "To reduce hardware costs"
+                ],
+                answer: "To ensure confidentiality, integrity, and availability of data"
+            },
+            { // Page 1, Q2
+                question: "Which of the following is NOT a principle of the CIA triad?",
+                options: [
+                    "Confidentiality",
+                    "Integrity",
+                    "Availability",
+                    "Authentication"
+                ],
+                answer: "Authentication"
+            },
+            { // Page 1, Q3
+                question: "What type of attack involves eavesdropping on or monitoring transmissions without altering the data?",
+                options: [
+                    "Active attack",
+                    "Passive attack",
+                    "DDoS attack",
+                    "Ransomware attack"
+                ],
+                answer: "Passive attack"
+            },
+            { // Page 1, Q4
+                question: "Which of the following is an example of an active attack?",
+                options: [
+                    "Eavesdropping",
+                    "Data encryption for ransom", // e.g., Ransomware altering data
+                    "Monitoring network traffic",
+                    "Collecting sensitive information" // Could be passive, but Ransomware is definitively active
+                ],
+                answer: "Data encryption for ransom"
+            },
+            { // Page 1, Q5
+                question: "What was the name of the botnet responsible for the largest DDoS attack in 2016?",
+                options: [
+                    "Katana",
+                    "Mirai",
+                    "Black Energy",
+                    "Zyxel"
+                ],
+                answer: "Mirai"
+            },
+            { // Page 1, Q6
+                question: "Which of the following is a security mechanism designed to ensure data integrity?",
+                options: [
+                    "Encryption",
+                    "Hashing",
+                    "Firewalls",
+                    "Intrusion detection systems"
+                ],
+                answer: "Hashing"
+            },
+            { // Page 1, Q7
+                question: "What is the main purpose of confidentiality in information security?",
+                options: [
+                    "To ensure data is accessible at all times",
+                    "To prevent unauthorized access to sensitive information",
+                    "To ensure data accuracy and trustworthiness",
+                    "To protect against hardware failures"
+                ],
+                answer: "To prevent unauthorized access to sensitive information"
+            },
+            { // Page 2, Q8
+                question: "Which of the following is a type of security threat?",
+                options: [
+                    "Encryption",
+                    "Malware",
+                    "Hashing",
+                    "Firewalls"
+                ],
+                answer: "Malware"
+            },
+            { // Page 2, Q9
+                question: "What is the primary goal of availability in information security?",
+                options: [
+                    "To ensure data is accessible to authorized users when needed",
+                    "To prevent unauthorized modifications to data",
+                    "To protect data from being intercepted",
+                    "To encrypt sensitive information"
+                ],
+                answer: "To ensure data is accessible to authorized users when needed"
+            },
+            { // Page 2, Q10
+                question: "Which of the following is an example of a passive attack?",
+                options: [
+                    "Ransomware attack",
+                    "Data theft", // Can be active or passive, but eavesdropping is clearly passive
+                    "Eavesdropping on network traffic",
+                    "DDoS attack"
+                ],
+                answer: "Eavesdropping on network traffic"
+            },
+
+            // --- True/False Questions (Unit 1) ---
+             { // Page 2, TF 1
+                question: "Confidentiality ensures that data is accessible to authorized users at all times.",
+                options: ["True", "False"],
+                answer: "False" // Correct explanation: Confidentiality ensures that data is protected from unauthorized access.
+            },
+             { // Page 2, TF 2
+                question: "Integrity ensures that data is accurate and has not been tampered with.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+             { // Page 2, TF 3
+                question: "A passive attack involves altering or destroying data.",
+                options: ["True", "False"],
+                answer: "False" // Correct explanation: A passive attack involves monitoring or eavesdropping without altering data.
+            },
+             { // Page 2, TF 4
+                question: "The Mirai botnet was responsible for the largest DDoS attack in 2016.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+             { // Page 2, TF 5
+                question: "Availability ensures that data is protected from unauthorized access.",
+                options: ["True", "False"],
+                answer: "False" // Correct explanation: Availability ensures that data is accessible to authorized users when needed.
+            },
+             { // Page 2, TF 6
+                question: "Active attacks are easier to detect than passive attacks.",
+                options: ["True", "False"],
+                answer: "True" // Generally true as they modify systems/traffic.
+            },
+             { // Page 2, TF 7
+                question: "The CIA triad stands for Confidentiality, Integrity, and Authentication.",
+                options: ["True", "False"],
+                answer: "False" // Correct explanation: It stands for Confidentiality, Integrity, and Availability.
+            },
+             { // Page 2, TF 8
+                question: "The Black Energy malware was used in a cyberattack on a Ukrainian power station.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 3, TF 9
+                question: "A DDoS attack is an example of a passive attack.",
+                options: ["True", "False"],
+                answer: "False" // Correct explanation: It is an example of an active attack.
+            },
+            { // Page 3, TF 10
+                question: "The Katana virus is a variant of the Mirai botnet.",
+                options: ["True", "False"],
+                answer: "True" // Katana was identified as a Mirai variant.
+            },
+            // --- Appended Questions from quiz2.html ---
+            { // Unit 2, Q1
+                question: "What is the primary goal of cryptography?",
+                options: ["Data compression","Data encryption for secure communication","Increasing data transmission speed","Reducing data storage requirements"],
+                answer: "Data encryption for secure communication"
+            },
+            { question: "Which of the following is a symmetric key algorithm?", options: ["RSA", "AES", "ECC", "DSA"], answer: "AES" },
+            { question: 'In Caesar Cipher, if the key is 5, what is the ciphertext for "HELLO"?', options: ["KHOOR", "EBIIL", "MJQQT", "OLSSV"], answer: "MJQQT" },
+            { question: "Which of the following is NOT a classical encryption technique?", options: ["Caesar Cipher", "AES", "Hill Cipher", "Playfair Cipher"], answer: "AES" },
+            { question: "What is the key length of DES?", options: ["56 bits", "128 bits", "192 bits", "256 bits"], answer: "56 bits" },
+            { question: "Which cipher uses a 5x5 matrix for encryption?", options: ["Caesar Cipher", "Playfair Cipher", "Hill Cipher", "Vigenère Cipher"], answer: "Playfair Cipher" },
+            { question: "What is the main weakness of the Caesar Cipher?", options: ["It uses a large key space","It is vulnerable to brute-force attacks","It is too complex to implement","It requires a public key"], answer: "It is vulnerable to brute-force attacks" },
+            { question: "Which of the following is a polyalphabetic cipher?", options: ["Caesar Cipher", "Vigenère Cipher", "Playfair Cipher", "Hill Cipher"], answer: "Vigenère Cipher" },
+            { question: "What is the key size of AES-256?", options: ["128 bits", "192 bits", "256 bits", "512 bits"], answer: "256 bits" },
+            { question: "Which of the following is a characteristic of symmetric key cryptography?", options: ["Uses two different keys","Faster than asymmetric cryptography","Provides non-repudiation","Uses public and private keys"], answer: "Faster than asymmetric cryptography" },
+            { question: "What is the main advantage of 3DES over DES?", options: ["It uses a single key","It is faster than DES","It increases key length and complexity","It is less secure than DES"], answer: "It increases key length and complexity" },
+            { question: "Which of the following is a substitution cipher?", options: ["Caesar Cipher", "Rail Fence Cipher", "Transposition Cipher", "Stream Cipher"], answer: "Caesar Cipher" },
+            { question: "What is the purpose of the S-box in AES?", options: ["To shift rows", "To mix columns", "To perform substitution", "To add round keys"], answer: "To perform substitution" },
+            { question: "Which of the following is a transposition cipher?", options: ["Caesar Cipher", "Playfair Cipher", "Rail Fence Cipher", "Vigenère Cipher"], answer: "Rail Fence Cipher" },
+            { question: "What is the key length of AES-128?", options: ["128 bits", "192 bits", "256 bits", "512 bits"], answer: "128 bits" },
+            { question: "Which of the following is a characteristic of asymmetric cryptography?", options: ["Uses the same key for encryption and decryption","Provides confidentiality, authentication, and non-repudiation","Faster than symmetric cryptography","Uses a single key"], answer: "Provides confidentiality, authentication, and non-repudiation" },
+            { question: "What is the main disadvantage of brute-force attacks?", options: ["They are too fast","They require a lot of computational resources","They are easy to implement","They are only effective against weak algorithms"], answer: "They require a lot of computational resources" },
+            { question: "Which of the following is a modern encryption algorithm?", options: ["Caesar Cipher", "DES", "AES", "Playfair Cipher"], answer: "AES" },
+            { question: "What is the purpose of the MixColumns step in AES?", options: ["To substitute bytes","To shift rows","To mix columns for diffusion","To add round keys"], answer: "To mix columns for diffusion" },
+            { question: "Which of the following is a characteristic of DES?", options: ["It uses a 128-bit key","It is a block cipher","It is resistant to brute-force attacks","It is an asymmetric algorithm"], answer: "It is a block cipher" },
+            { question: "Symmetric key cryptography uses the same key for encryption and decryption.", options: ["True", "False"], answer: "True" },
+            { question: "AES is a type of asymmetric key cryptography.", options: ["True", "False"], answer: "False" },
+            { question: "In Caesar Cipher, the decryption process involves shifting letters in the opposite direction of the encryption shift.", options: ["True", "False"], answer: "True" },
+            { question: "DES is considered secure against modern cryptographic attacks.", options: ["True", "False"], answer: "False" },
+            { question: "The Playfair Cipher is a polyalphabetic cipher.", options: ["True", "False"], answer: "False" },
+            { question: "Brute-force attacks are effective against all encryption algorithms.", options: ["True", "False"], answer: "False" },
+            { question: "The Hill Cipher uses matrix multiplication for encryption.", options: ["True", "False"], answer: "True" },
+            { question: "3DES is more secure than AES.", options: ["True", "False"], answer: "False" },
+            { question: "The Caesar Cipher is a type of transposition cipher.", options: ["True", "False"], answer: "False" },
+            { question: "AES supports key sizes of 128, 192, and 256 bits.", options: ["True", "False"], answer: "True" },
+            { question: "DES uses a 64-bit block size.", options: ["True", "False"], answer: "True" },
+            { question: "Asymmetric cryptography is faster than symmetric cryptography.", options: ["True", "False"], answer: "False" },
+            { question: "The Rail Fence Cipher is a type of transposition cipher.", options: ["True", "False"], answer: "True" },
+            { question: "AES is vulnerable to brute-force attacks.", options: ["True", "False"], answer: "False" },
+            { question: "The Caesar Cipher is still widely used in modern cryptography.", options: ["True", "False"], answer: "False" },
+            { question: "The Playfair Cipher uses a 5x5 matrix for encryption.", options: ["True", "False"], answer: "True" },
+            { question: "DES is an example of a stream cipher.", options: ["True", "False"], answer: "False" },
+            { question: "AES is an open-source encryption standard.", options: ["True", "False"], answer: "True" },
+            // Secure Design MC/TF Questions
+            { question: "What does the \"Secure-by-design\" approach emphasize?", options: ["Adding security after development","Embedding security from the beginning of the software lifecycle","Using only open-source software","Ignoring security during development"], answer: "Embedding security from the beginning of the software lifecycle" },
+            { question: "Which of the following is NOT typically considered a core Principle of Secure Design?", options: ["Minimize Attack Surface","Open Access","Least Privilege","Secure Defaults"], answer: "Open Access" },
+            { question: "The \"Least Privilege\" principle applies to:", options: ["Only users","Users, machines, and network resources","Only network devices","Only databases"], answer: "Users, machines, and network resources" },
+            { question: "Secure-by-design means embedding security from the start of development.", options: ["True", "False"], answer: "True" },
+            { question: "Stateful inspection firewalls track active connection states.", options: ["True", "False"], answer: "True" },
+            { question: "Public key encryption uses the same key for encryption and decryption.", options: ["True", "False"], answer: "False" },
+            // --- Appended Questions from quiz4 (1).html ---
+            { // Page 1, Q1
+                question: "What does the \"Secure-by-design\" approach emphasize?",
+                options: [
+                    "Adding security after development",
+                    "Embedding security from the beginning of the software lifecycle",
+                    "Using only open-source software",
+                    "Ignoring security during development"
+                ],
+                answer: "Embedding security from the beginning of the software lifecycle"
+            },
+            { // Page 1, Q2
+                question: "Which of the following is NOT one of the 7 Principles of Secure Design?",
+                options: [
+                    "Security as Code",
+                    "Secure Defaults",
+                    "Open Access",
+                    "Least Privilege"
+                ],
+                answer: "Open Access"
+            },
+            { // Page 1, Q3
+                question: "The \"Least Privilege\" principle applies to:",
+                options: [
+                    "Only users",
+                    "Users, machines, and network resources",
+                    "Only network devices",
+                    "Only databases"
+                ],
+                answer: "Users, machines, and network resources"
+            },
+            { // Page 1, Q4
+                question: "What does Separation of Duties aim to prevent?",
+                options: [
+                    "System downtime",
+                    "Unauthorized system misuse by a single user",
+                    "Overlapping job roles",
+                    "Redundant code"
+                ],
+                answer: "Unauthorized system misuse by a single user"
+            },
+            { // Page 1, Q5
+                question: "Minimizing the Attack Surface Area involves:",
+                options: [
+                    "Opening all ports",
+                    "Limiting entry points and disabling unused services",
+                    "Increasing API endpoints",
+                    "Allowing wildcard API access"
+                ],
+                answer: "Limiting entry points and disabling unused services"
+            },
+            { // Page 1, Q6
+                question: "Complete Mediation requires:",
+                options: [
+                    "Authenticating once per session",
+                    "Authenticating every access request without exception",
+                    "Ignoring repeated requests",
+                    "Allowing cached permissions"
+                ],
+                answer: "Authenticating every access request without exception"
+            },
+            { // Page 1, Q7
+                question: "Failing Securely means:",
+                options: [
+                    "Revealing detailed error messages",
+                    "Defaulting to a secure state on failure",
+                    "Allowing access after failure",
+                    "Logging sensitive information in errors"
+                ],
+                answer: "Defaulting to a secure state on failure"
+            },
+            { // Page 1, Q8
+                question: "What is the role of Security as Code (SaC)?",
+                options: [
+                    "Manual security checks",
+                    "Automating security policies and vulnerability assessments",
+                    "Ignoring security in development",
+                    "Using third-party tools only"
+                ],
+                answer: "Automating security policies and vulnerability assessments"
+            },
+            { // Page 2, Q1
+                question: "Which firewall type tracks the state of active connections?",
+                options: [
+                    "Packet-filtering firewall",
+                    "Stateful inspection firewall",
+                    "Proxy firewall",
+                    "Next-generation firewall"
+                ],
+                answer: "Stateful inspection firewall"
+            },
+            { // Page 2, Q2
+                question: "SSL/TLS provides:",
+                options: [
+                    "Data compression",
+                    "Encryption, authentication, and integrity",
+                    "Load balancing",
+                    "IP filtering"
+                ],
+                answer: "Encryption, authentication, and integrity"
+            },
+            { // Page 2, Q3
+                question: "In asymmetric cryptography, which key encrypts the message (for confidentiality)?",
+                options: [
+                    "Private key",
+                    "Public key",
+                    "Symmetric key",
+                    "Session key"
+                ],
+                answer: "Public key"
+            },
+            { // Page 2, Q4
+                question: "Digital signatures are created by:",
+                options: [
+                    "Encrypting with the sender's public key",
+                    "Encrypting (or signing) with the sender's private key",
+                    "Encrypting with the receiver's public key",
+                    "Encrypting with the receiver's private key"
+                ],
+                answer: "Encrypting (or signing) with the sender's private key"
+            },
+            { // Page 2, Q5
+                question: "What is the main advantage of public key cryptography (for key exchange)?",
+                options: [
+                    "Faster encryption speed",
+                    "No need for a secure channel to exchange keys",
+                    "Uses the same key for encryption and decryption",
+                    "Less computationally expensive"
+                ],
+                answer: "No need for a secure channel to exchange keys"
+            },
+            { // Page 2, Q6
+                question: "Which of the following is NOT a common web security threat?",
+                options: [
+                    "SQL Injection",
+                    "Cross-Site Scripting (XSS)",
+                    "Cross-Site Request Forgery (CSRF)",
+                    "Symmetric key encryption"
+                ],
+                answer: "Symmetric key encryption"
+            },
+            { // Page 2, Q7
+                question: "What is the main challenge in virtual elections?",
+                options: [
+                    "Counting paper ballots",
+                    "Ensuring voter anonymity and vote integrity",
+                    "Avoiding network connections",
+                    "Using symmetric encryption only"
+                ],
+                answer: "Ensuring voter anonymity and vote integrity"
+            },
+            { // Page 2, Q8
+                question: "Which principle requires that no user should have enough access to misuse a system alone?",
+                options: [
+                    "Least Privilege",
+                    "Separation of Duties",
+                    "Complete Mediation",
+                    "Failing Securely"
+                ],
+                answer: "Separation of Duties"
+            },
+            { // Page 3, Q1
+                question: "What does the Attack Surface Area represent?",
+                options: [
+                    "Number of users on a system",
+                    "All points where an unauthorized user can interact with a system",
+                    "Amount of data stored",
+                    "Number of firewalls deployed"
+                ],
+                answer: "All points where an unauthorized user can interact with a system"
+            },
+            { // Page 3, Q2
+                question: "What is the purpose of Role-Based Access Control (RBAC)?",
+                options: [
+                    "To give all users full access",
+                    "To assign permissions based on roles",
+                    "To remove all user permissions",
+                    "To allow unrestricted network access"
+                ],
+                answer: "To assign permissions based on roles"
+            },
+            { // Page 3, Q3
+                question: "Which of the following is a feature of proxy firewalls?",
+                options: [
+                    "Filter packets by IP only",
+                    "Act as intermediaries between users and the internet",
+                    "Block all outgoing traffic",
+                    "Inspect packet states"
+                ],
+                answer: "Act as intermediaries between users and the internet"
+            },
+            { // Page 3, Q4
+                question: "What is the function of the SET protocol?",
+                options: [
+                    "Secure credit card transactions",
+                    "Encrypt emails",
+                    "Manage firewalls",
+                    "Authenticate users"
+                ],
+                answer: "Secure credit card transactions"
+            },
+            { // Page 3, Q5
+                question: "Which cryptographic algorithm is generally faster?",
+                options: [
+                    "RSA",
+                    "AES",
+                    "ECC",
+                    "Diffie-Hellman"
+                ],
+                answer: "AES"
+            },
+            { // Page 3, Q6
+                question: "What is a one-way function in public key cryptography?",
+                options: [
+                    "Easy to reverse",
+                    "Hard to reverse",
+                    "Symmetric",
+                    "Used for hashing only"
+                ],
+                answer: "Hard to reverse"
+            },
+            { // Page 3, Q7
+                question: "What is the main risk of insecure default configurations?",
+                options: [
+                    "Users will change settings immediately",
+                    "Increased attack surface",
+                    "No impact on security",
+                    "Faster system performance"
+                ],
+                answer: "Increased attack surface"
+            },
+            { // Page 3, Q8
+                question: "Which of the following best describes \"Security as Code\"?",
+                options: [
+                    "Automating security enforcement through scripts",
+                    "Manual security testing",
+                    "Ignoring security in development",
+                    "Using only third-party security tools"
+                ],
+                answer: "Automating security enforcement through scripts"
+            },
+            { // Page 4, Q1
+                question: "What is the main purpose of intrusion detection systems?",
+                options: [
+                    "Prevent attacks",
+                    "Detect suspicious activity",
+                    "Encrypt data",
+                    "Manage passwords"
+                ],
+                answer: "Detect suspicious activity"
+            },
+            { // Page 4, Q2
+                question: "Which of the following is NOT a principle of secure software design?",
+                options: [
+                    "Secure Defaults",
+                    "Open Access",
+                    "Least Privilege",
+                    "Failing Securely"
+                ],
+                answer: "Open Access"
+            },
+            { // Page 4, Q3
+                question: "What is the role of multi-factor authentication in Secure Defaults?",
+                options: [
+                    "Optional feature",
+                    "Fundamental security control",
+                    "Not related to security",
+                    "Only for administrators"
+                ],
+                answer: "Fundamental security control"
+            },
+            { // Page 4, Q4
+                question: "What is the main advantage of asymmetric cryptography in key exchange?",
+                options: [
+                    "Faster encryption",
+                    "Secure key exchange without sharing secrets",
+                    "Uses same key for encryption and decryption",
+                    "Less computationally expensive"
+                ],
+                answer: "Secure key exchange without sharing secrets"
+            },
+            { // Page 4, Q5
+                question: "What is a brute-force attack?",
+                options: [
+                    "Using social engineering",
+                    "Trying all possible keys to break encryption",
+                    "Exploiting software bugs",
+                    "Phishing"
+                ],
+                answer: "Trying all possible keys to break encryption"
+            },
+            { // Page 4, Q6
+                question: "Which of the following is a common mitigation for SQL injection?",
+                options: [
+                    "Input validation and parameterized queries",
+                    "Disabling firewalls",
+                    "Using default passwords",
+                    "Ignoring user input"
+                ],
+                answer: "Input validation and parameterized queries"
+            },
+            { // Page 4, Q7
+                question: "What is the main function of a digital signature?",
+                options: [
+                    "Encrypt data",
+                    "Verify authenticity and integrity",
+                    "Exchange keys",
+                    "Compress data"
+                ],
+                answer: "Verify authenticity and integrity"
+            },
+            { // Page 4, Q8
+                question: "Which of the following is true about public keys?",
+                options: [
+                    "Must be kept secret",
+                    "Can be shared openly",
+                    "Used only for decryption",
+                    "Used only for signing"
+                ],
+                answer: "Can be shared openly"
+            },
+            { // Page 5, Q1
+                question: "What is a key feature of stateful inspection firewalls?",
+                options: [
+                    "Filter packets by IP only",
+                    "Track connection states",
+                    "Act as proxies",
+                    "Block all traffic by default"
+                ],
+                answer: "Track connection states"
+            },
+            { // Page 5, Q2
+                question: "Which of the following is a secure coding practice?",
+                options: [
+                    "Hard-coding passwords",
+                    "Input validation",
+                    "Ignoring error handling",
+                    "Using default configurations"
+                ],
+                answer: "Input validation"
+            },
+            { // Page 5, Q3
+                question: "What is the main benefit of automation in security?",
+                options: [
+                    "Increase human error",
+                    "Speed up vulnerability detection and remediation",
+                    "Remove all security controls",
+                    "Replace developers"
+                ],
+                answer: "Speed up vulnerability detection and remediation"
+            },
+            { // Page 5, Q4
+                question: "What does \"Failing Securely\" prevent?",
+                options: [
+                    "Information leakage on errors",
+                    "System crashes",
+                    "User frustration",
+                    "Slow performance"
+                ],
+                answer: "Information leakage on errors"
+            },
+            { // Page 5, Q5
+                question: "What is the purpose of threat modeling?",
+                options: [
+                    "Identify potential security threats early",
+                    "Design user interfaces",
+                    "Improve system speed",
+                    "Manage databases"
+                ],
+                answer: "Identify potential security threats early"
+            },
+            { // Page 5, Q6
+                question: "Which of the following is true about symmetric encryption?",
+                options: [
+                    "Uses different keys for encryption and decryption",
+                    "Requires secure key sharing",
+                    "Is slower than asymmetric encryption",
+                    "Used mainly for digital signatures"
+                ],
+                answer: "Requires secure key sharing"
+            },
+            { // Page 5, Q7
+                question: "What is the main challenge in virtual elections?",
+                options: [
+                    "Counting paper ballots",
+                    "Ensuring voter anonymity and integrity",
+                    "Avoiding network connections",
+                    "Using symmetric encryption only"
+                ],
+                answer: "Ensuring voter anonymity and integrity"
+            },
+            { // Page 5, Q8
+                question: "What is the main reason for using public-key cryptography in TLS?",
+                options: [
+                    "Encrypt bulk data",
+                    "Secure key exchange",
+                    "Manage firewalls",
+                    "Authenticate users only"
+                ],
+                answer: "Secure key exchange"
+            },
+            { // Page 6, Q1
+                question: "Which of the following best describes Role-Based Access Control (RBAC)?",
+                options: [
+                    "Assigning permissions based on user roles",
+                    "Giving all users full access",
+                    "Removing all permissions",
+                    "Allowing anonymous access"
+                ],
+                answer: "Assigning permissions based on user roles"
+            },
+            { // Page 6, Q2
+                question: "What is the main purpose of input validation?",
+                options: [
+                    "Improve user experience",
+                    "Prevent injection attacks",
+                    "Speed up processing",
+                    "Reduce network traffic"
+                ],
+                answer: "Prevent injection attacks"
+            },
+            { // Page 6, Q3
+                question: "Which cryptographic algorithm is used in Bitcoin wallets?",
+                options: [
+                    "AES",
+                    "RSA",
+                    "ECC",
+                    "SHA-256"
+                ],
+                answer: "ECC"
+            },
+            { // Page 6, Q4
+                question: "What is a common consequence of weak password policies?",
+                options: [
+                    "Faster login",
+                    "Increased risk of unauthorized access",
+                    "Better usability",
+                    "Reduced network traffic"
+                ],
+                answer: "Increased risk of unauthorized access"
+            },
+            { // Page 6, Q5
+                question: "What is the main function of a firewall?",
+                options: [
+                    "Encrypt data",
+                    "Control network traffic based on rules",
+                    "Store passwords",
+                    "Manage user accounts"
+                ],
+                answer: "Control network traffic based on rules"
+            },
+            { // Page 6, Q6
+                question: "Which of the following is NOT a feature of next-generation firewalls?",
+                options: [
+                    "Intrusion prevention",
+                    "Application-level inspection",
+                    "Only IP filtering",
+                    "Stateful inspection"
+                ],
+                answer: "Only IP filtering"
+            },
+            { // Page 6, Q7
+                question: "What is the main benefit of using multi-factor authentication?",
+                options: [
+                    "Faster login",
+                    "Increased security by requiring multiple verification methods",
+                    "Easier password management",
+                    "Reduces encryption overhead"
+                ],
+                answer: "Increased security by requiring multiple verification methods"
+            },
+            { // Page 6, Q8
+                question: "What is the main purpose of patch management?",
+                options: [
+                    "Add new features",
+                    "Fix security vulnerabilities",
+                    "Remove users",
+                    "Increase system speed"
+                ],
+                answer: "Fix security vulnerabilities"
+            },
+            { // Page 7, Q1
+                question: "What is the main risk if API endpoints are overly generic?",
+                options: [
+                    "Improved functionality",
+                    "Increased attack surface",
+                    "Better performance",
+                    "Easier debugging"
+                ],
+                answer: "Increased attack surface"
+            },
+            { // Page 7, Q2
+                question: "Which of the following is a key step in the RSA encryption process?",
+                options: [
+                    "Using the same key for encryption and decryption",
+                    "Generating a public/private key pair",
+                    "Sharing the private key openly",
+                    "Encrypting with the private key only"
+                ],
+                answer: "Generating a public/private key pair"
+            },
+            { // Page 8, T/F 1
+                question: "Secure-by-design means embedding security from the start of development.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 2
+                question: "Least Privilege applies only to user accounts.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 3
+                question: "Stateful inspection firewalls track active connection states.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 4
+                question: "Public key encryption uses the same key for encryption and decryption.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 5
+                question: "Secure Defaults mean configuring systems with the most secure settings out-of-the-box.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 6
+                question: "Complete Mediation requires every access request to be authenticated and authorized.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 7
+                question: "The MOVEit breach was caused by a vulnerability in a file transfer application.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 8
+                question: "Digital signatures are created by encrypting a message with the sender's public key.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 9
+                question: "SSL/TLS provides encryption, authentication, and integrity for web communications.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 10
+                question: "Separation of Duties means one person should have all system privileges.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 11
+                question: "Symmetric encryption is generally faster than asymmetric encryption.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 12
+                question: "Public keys must be kept secret to maintain security.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 13
+                question: "Attack Surface Area refers to all points where an attacker can interact with a system.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 14
+                question: "Failing securely means providing detailed error messages to users.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 15
+                question: "The SET protocol is used in secure credit card transactions.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 16
+                question: "In asymmetric cryptography, the private key is used to encrypt messages.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 17
+                question: "Threat modeling is part of secure software development.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 18
+                question: "Public key cryptography is mainly used for encrypting large volumes of data.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 8, T/F 19
+                question: "Multi-factor authentication can be part of Secure Defaults.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 8, T/F 20
+                question: "API endpoints should be as generic as possible to maximize functionality.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 9, T/F 1
+                question: "Role-Based Access Control helps enforce the Least Privilege principle.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 2
+                question: "Proxy firewalls act as intermediaries between users and the internet.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 3
+                question: "Brute-force attacks try all possible keys to break encryption.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 4
+                question: "Input validation is a defense against SQL injection attacks.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 5
+                question: "Public key cryptography eliminates the need for secure key exchange channels.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 6
+                question: "Hard-coded passwords are a secure coding practice.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 9, T/F 7
+                question: "Automating security checks reduces human error.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 8
+                question: "Attack Surface Area increases with more open ports and services.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 9
+                question: "Digital signatures provide confidentiality.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 9, T/F 10
+                question: "Symmetric encryption requires secure key sharing.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 11
+                question: "SSL/TLS handshake negotiates encryption and authenticates parties.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 12
+                question: "Separation of Duties is difficult to implement technically.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 9, T/F 13
+                question: "Secure Defaults reduce risk for users who do not change settings.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 14
+                question: "Public keys are kept secret to prevent attacks.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 9, T/F 15
+                question: "Failing securely helps prevent information leakage.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 16
+                question: "Multi-factor authentication requires only a password.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 9, T/F 17
+                question: "Threat modeling helps identify potential vulnerabilities early.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 18
+                question: "Symmetric encryption is best for encrypting large data volumes.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 19
+                question: "Public key cryptography is computationally expensive compared to symmetric.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 20
+                question: "Firewalls can block unauthorized network traffic.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 9, T/F 21
+                question: "Stateful firewalls do not track connection states.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 10, T/F 1
+                question: "Secure coding standards include error handling and input validation.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 10, T/F 2
+                question: "The MOVEit breach affected only one organization.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 10, T/F 3
+                question: "Public key cryptography is used for digital signatures.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 10, T/F 4
+                question: "Encryption keys should never be changed once generated.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 10, T/F 5
+                question: "Secure Software Development Frameworks help standardize security practices.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 10, T/F 6
+                question: "Attack Surface Area can be minimized by disabling unused features.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            { // Page 10, T/F 7
+                question: "Proxy firewalls operate at the network layer only.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 10, T/F 8
+                question: "The SET protocol is obsolete and no longer used.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            { // Page 10, T/F 9
+                question: "Digital signatures verify the sender's identity and message integrity.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            // --- Newly Added Questions ---
+            {
+                question: "XCS is considered one of the common web security threat.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            {
+                question: "Complete Mediation requires every access request to be authenticated and authorized.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            {
+                question: "Public keys must be secret in the encryption of the data process.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            {
+                question: "Secure Defaults mean configuring systems with the most secure settings out-of-the-box.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            {
+                question: "Public key cryptography eliminates the need for secure key exchange channels.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            {
+                question: "Threat modeling helps identify potential vulnerabilities early.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            {
+                question: "Digital signatures are created by encrypting a message with the sender's public key.",
+                options: ["True", "False"],
+                answer: "False"
+            },
+            {
+                question: "Secure Software Development Frameworks help standardize security practices.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            {
+                question: "Firewalls can block unauthorized network traffic.",
+                options: ["True", "False"],
+                answer: "True"
+            },
+            {
+                question: "El Gamal, AES and RSA are considered the best Asymmetric algorithms",
+                options: ["True", "False"],
+                answer: "False"
+            },
+        ];
+
+        const essayPracticalData = [
+            // --- New Essay Questions ---
+            {
+                question: "The CIA Triad (Each Component & How They Work Together)",
+                answer: `The CIA Triad represents the three fundamental principles and objectives (also referred to as services on Slide 25/56) of information security. Every element of an information security program should be designed to achieve one or more of these principles. Together, they form the CIA Triad (Slide 25/56).<br><br>
+                <strong>Confidentiality (Slides 26, 57):</strong><br>
+                <em>Definition:</em> Measures aimed at safeguarding sensitive information against any unauthorized access or disclosure.<br>
+                <em>Goal:</em> To maintain the privacy and confidentiality of confidential information, ensuring it remains accessible only to authorized individuals who require it for their job responsibilities.<br>
+                <em>Mechanism Example (Implicit):</em> Encipherment/Encryption helps achieve confidentiality by hiding data (Slide 70).<br><br>
+                <strong>Integrity (Slides 27, 58):</strong><br>
+                <em>Definition:</em> Focuses on preventing any unauthorized modifications, deletions, or additions to the data.<br>
+                <em>Goal:</em> To ensure that data is accurate and trustworthy, and that it has not been tampered with or altered in any way without proper authorization. Upholding integrity maintains the quality and reliability of data.<br>
+                <em>Mechanism Example:</em> Hash functions (Slide 184, 188) and MACs (Slide 191) are used to verify data integrity. Digital signatures also ensure integrity (Slide 195).<br><br>
+                <strong>Availability (Slides 28, 59):</strong><br>
+                <em>Definition:</em> Involves ensuring that data is accessible to its users at all times, whenever they require it.<br>
+                <em>Goal:</em> Concerned with the functionality of support systems (hardware, software, network infrastructure), ensuring they remain operational and responsive to user needs, allowing users to access necessary data for informed decisions.<br><br>
+                <strong>How They Work Together:</strong> The CIA Triad components are the core pillars of information security. Security measures (like encryption, access controls, firewalls, hashing) are implemented to protect one or more of these principles simultaneously. For example, encryption primarily ensures confidentiality but can be used in modes that also help ensure integrity. Secure systems aim to balance these three goals according to the specific needs and risks involved. The overall security posture depends on effectively addressing all three aspects.`
+            },
+            {
+                question: "The difference between CIA triads and Security threats",
+                answer: `<strong>CIA Triad (Slides 25-28, 56-59):</strong> Represents the fundamental goals, principles, or desired properties of information security. It defines what needs to be protected: the Confidentiality, Integrity, and Availability of information and systems. It's the objective or the state to be maintained.<br><br>
+                <strong>Security Threats (Slides 24, 60):</strong> Are defined as any type of malicious activity or attack that could potentially cause harm or damage to an organization, its data, or its personnel. Threats are the potential dangers or sources of harm that aim to violate one or more principles of the CIA Triad. They can be physical (like theft, vandalism) or digital (like malware, ransomware, attacks). Security Attacks (Active/Passive) are specific actions that realize these threats (Slide 29).<br><br>
+                <strong>In essence:</strong> The CIA Triad is the objective (what to protect), while Security Threats are the dangers that challenge or try to undermine that objective.`
+            },
+            {
+                question: "The goal of the encryption",
+                answer: `Based on the slides:<br>
+                <ul>
+                    <li>The primary goal of encryption (or encipherment) is to ensure <strong>Confidentiality</strong> (Slides 26, 57, 70).</li>
+                    <li>It involves converting plaintext (original message) into ciphertext (coded message) using a specified key and algorithm (Slide 87).</li>
+                    <li>This transformation makes the information unreadable to unauthorized parties or opponents, especially when data is transmitted over insecure channels (like the internet) or stored (Slides 70, 77).</li>
+                    <li>It achieves this by hiding and covering the data (Slide 70).</li>
+                </ul>`
+            },
+            {
+                question: "Difference between Symmetric and Asymmetric Encryption",
+                answer: `The slides provide several points of difference, notably in tables on Slide 94 and Slide 154, and discussions on Slides 92, 93, 142, 143, 159-161:<br><br>
+                <table border="1" style="width:100%; border-collapse: collapse;">
+                    <tr><th>Feature</th><th>Symmetric Encryption</th><th>Asymmetric Encryption</th></tr>
+                    <tr><td>Keys</td><td>Uses one identical secret key for both encryption and decryption (Slide 92, 94). Parties must securely share this key (Slide 160).</td><td>Uses a pair of mathematically related keys: one public key (shared openly) and one private key (kept secret) (Slide 93, 143, 94).</td></tr>
+                    <tr><td>Encryption/Decryption</td><td>Sender & receiver use the same key (Slide 92).</td><td>Data encrypted with the public key can only be decrypted with the corresponding private key, and vice versa (Slide 143).</td></tr>
+                    <tr><td>Speed</td><td>Very fast encryption process (Slide 94, 154, 159).</td><td>Slower encryption process (Slide 94, 154, 159).</td></tr>
+                    <tr><td>Efficiency/Use Case</td><td>Best for encrypting large amounts of data efficiently (e.g., files, databases, VPNs) (Slide 94, 160).</td><td>Best for secure key exchange, digital signatures, and authentication (e.g., SSL/TLS, PGP, Bitcoin wallets). Often used for small amounts of data (Slide 94, 160).</td></tr>
+                    <tr><td>Security Properties</td><td>Primarily offers confidentiality (Slide 94, 154).</td><td>Offers confidentiality, authentication, and non-repudiation (Slide 94, 154).</td></tr>
+                    <tr><td>Key Management</td><td>Key distribution is a challenge; requires a secure channel to share the secret key (Slide 95, 160). Risky if key is intercepted. "A big problem" (Slide 154).</td><td>Easier key distribution; public key can be shared openly, reducing risks (Slide 159, 160). Solves key agreement/exchange issue (Slide 154).</td></tr>
+                    <tr><td>Key Length Example</td><td>128-256 bits (e.g., for AES) (Slide 94, 159).</td><td>At least 2048 bits (e.g., for RSA) for comparable security (Slide 94, 159).</td></tr>
+                    <tr><td>Basis</td><td>Based on substitution and permutation operations (Slide 143).</td><td>Based on mathematical functions (e.g., factorization, discrete logarithms) (Slide 143).</td></tr>
+                    <tr><td>Algorithms Examples</td><td>DES, 3DES, AES, RC4, Blowfish, SDES (Slide 4, 94, 100, 112)</td><td>RSA, Diffie-Hellman, ECC, ElGamal (Slide 4, 94, 156, 176)</td></tr>
+                    <tr><td>Combined Use</td><td>Often used together: Asymmetric encryption exchanges a secret key, then Symmetric encryption uses that key for fast, bulk data encryption (Slide 161).</td><td>(See Symmetric)</td></tr>
+                </table>`
+            },
+            {
+                question: "Active attack and Passive attack",
+                answer: `Slides 29-31 and 61-67 define and compare these:<br><br>
+                <strong>Passive Attack (Slides 31, 63, 66, 67):</strong><br>
+                <ul>
+                    <li><em>Definition:</em> Attackers quietly watch and collect information without the target's knowledge. Does not modify data or harm the system.</li>
+                    <li><em>Nature:</em> Eavesdropping on or monitoring transmission.</li>
+                    <li><em>Goal:</em> To obtain information being transmitted.</li>
+                    <li><em>Examples (Types on Slide 66):</em> Release of Message Content (reading messages), Traffic Analysis (observing patterns).</li>
+                    <li><em>Characteristics (Slide 67):</em> Monitors/copies info, only collects info (e.g., passwords, messages), observes communication, relatively easier to prohibit, does not inform victim, aims to learn about the system, threatens confidentiality, does not harm systems, can be long duration, lower complexity.</li>
+                </ul><br>
+                <strong>Active Attack (Slides 30, 62, 65, 67):</strong><br>
+                <ul>
+                    <li><em>Definition:</em> Attackers directly harm computer systems or modify data in transit. Involves some modification of the data stream or creation of a false stream.</li>
+                    <li><em>Nature:</em> Directly interacts with or modifies system/data.</li>
+                    <li><em>Goal:</em> To affect system operation, alter data, gain unauthorized access, deny service.</li>
+                    <li><em>Examples (Types on Slide 65):</em> Masquerade Attack (impersonation), Modification of Messages, Repudiation (denial of action), Replay Attack (capturing and resending data), Denial of Service (DoS) Attack. Can cause crashing files, encrypting for ransom, stealing data (Slide 30).</li>
+                    <li><em>Characteristics (Slide 67):</em> Intercepts to modify info, can use info from passive attacks, may require physical control, difficult to restrict entry, informs victim (usually through system disruption/changes), aims to harm the system, threatens integrity and availability, can damage systems/resources, often short duration, highly complex.</li>
+                </ul>`
+            },
+            {
+                question: "Secure Hash algorithm sha (Description)",
+                answer: `SHA stands for Secure Hash Algorithm, a family of cryptographic hash functions developed by NIST (US National Institute of Standards and Technology) (Slides 212, 213).<br><br>
+                <strong>Purpose:</strong> Designed to keep data secured by ensuring data integrity (Slide 184, 188). They produce a fixed-size "fingerprint" or "message digest" from a variable-size input message (Slides 182, 184, 213).<br><br>
+                <strong>Functionality:</strong> They transform data using an algorithm involving bitwise operations, modular additions, and compression functions (Slide 212). They operate based on the Merkle-Damgård construction (Slides 207-209), processing the input message in fixed-size blocks iteratively.<br><br>
+                <strong>One-Way Property:</strong> SHAs are designed as one-way functions, meaning it's computationally infeasible to find the original input message (preimage) given only the hash output (Slides 184, 200, 212).<br><br>
+                <strong>Collision Resistance:</strong> They aim to be collision-resistant, meaning it's computationally infeasible to find two different input messages that produce the same hash output (Slides 184, 200).<br><br>
+                <strong>Evolution (Slides 212, 213, 220):</strong><br>
+                <ul>
+                    <li><strong>SHA-0:</strong> Obsolete due to vulnerabilities.</li>
+                    <li><strong>SHA-1:</strong> Developed 1993, produces a 160-bit hash. Widely used (TLS, SSL, PGP, etc.) but considered "broken" in 2017. Input size < 2^64 bits.</li>
+                    <li><strong>SHA-2:</strong> Released 2002, includes SHA-256, SHA-384, SHA-512 (producing 256, 384, 512-bit hashes respectively). Uses larger block/word sizes and more steps than SHA-1 for increased security (Slide 214).</li>
+                    <li><strong>SHA-3:</strong> Released 2015. Internally different (based on Keccak algorithm and sponge construction), designed as an alternative to SHA-2 (Slide 220-221). Offers variable output lengths (e.g., SHAKE128, SHAKE256).</li>
+                </ul><br>
+                <strong>Structure Example (SHA-512, Slides 215-219):</strong> Processes 1024-bit blocks, uses 80 rounds of operations involving permutations, substitutions (S-boxes implicitly), modular addition, and XOR operations with round constants and derived message words to produce a 512-bit hash.`
+            },
+            {
+                question: "Definition SHA",
+                answer: `According to Slide 212, Secure Hash Algorithms (SHA) are a family of cryptographic functions designed to keep data secured. They work by transforming data using a hash function (an algorithm with bitwise operations, modular additions, compression functions) to produce a fixed-size string (hash value or message digest) that looks nothing like the original. They are designed as one-way functions.`
+            },
+            {
+                question: "7 principles of secure design in software Definition every one",
+                answer: `These principles guide building systems securely from the start (Slide 245-253):<br><br>
+                <ol>
+                    <li><strong>Security as Code (SaC) (Slide 245):</strong> Transforms security practices from manual processes into automated, scriptable components within the software development lifecycle. Involves using scripts or predefined code templates for enforcing policies, vulnerability assessments, automated remediation, and scanning.</li>
+                    <li><strong>Secure Defaults (Slide 247):</strong> Mandates that system configurations are inherently safe by default, understanding that many users don't change default settings. Examples include robust default password policies, MFA requirements, or disabling unnecessary services by default.</li>
+                    <li><strong>Least Privilege (Slide 248):</strong> Users, processes, and system components should operate with the absolute minimum level of permissions necessary to perform their function. This reduces the potential damage if a component or user account is compromised.</li>
+                    <li><strong>Separation of Duties (SoD) (Slide 249):</strong> Divides tasks and privileges among multiple users or roles to minimize the risk of malicious activity or errors. Ensures no single user has excessive access to misuse a system alone (e.g., developer writes code, separate person/system deploys).</li>
+                    <li><strong>Minimize Attack Surface Area (ASA) (Slide 250):</strong> Reduces the number of points where an unauthorized user can interact with or attack a system. Achieved by limiting non-essential code, services, processes, open ports, and API endpoints, and removing unused features.</li>
+                    <li><strong>Complete Mediation (Slide 251):</strong> Mandates that every access request to any system resource is thoroughly authenticated and authorized every time, without exception. Access rights must be verified for each attempt.</li>
+                    <li><strong>Failing Securely (Slide 253):</strong> Dictates that a system should respond to errors or failures in a way that preserves the overall security. It should default to a secure state (e.g., deny access) rather than exposing vulnerabilities or sensitive information when something goes wrong. Error messages should be generic.</li>
+                </ol>`
+            },
+            {
+                question: "10 practices for secure software",
+                answer: `Slide 256 lists these 10 best practices for secure software development:<br><br>
+                <ol>
+                    <li>Create a Secure Software Development Policy</li>
+                    <li>Address Vulnerabilities as Soon You Discover Them</li>
+                    <li>Remain Agile and Active</li>
+                    <li>Monitor and Respond to Security Threats</li>
+                    <li>Employ a Secure Software Framework</li>
+                    <li>Have Secure Coding Guidelines and Standards</li>
+                    <li>Protect Code Integrity</li>
+                    <li>Conduct Security Awareness Training</li>
+                    <li>Keep Software and Systems Up to Date</li>
+                    <li>Run Code Reviews and Test it as early as Possible</li>
+                </ol>`
+            },
+            {
+                question: "Types of classic encryption: Caesar, Hill cipher etc ......",
+                answer: `Based on Slides 100, 101, and 103-110, the classical (or traditional, character-oriented) encryption techniques mentioned fall into two main categories:<br><br>
+                <strong>1. Substitution Techniques (Slide 101, 102):</strong> Letters of plaintext are replaced by other letters, numbers, or symbols.<br>
+                <ul>
+                    <li><strong>Caesar Cipher (Slide 103):</strong> A simple shift cipher where each letter is replaced by a letter a fixed number of positions down the alphabet (e.g., shift by 3, A becomes D). C = (p + k) mod 26.</li>
+                    <li><strong>Monoalphabetic Ciphers (Slide 106):</strong> Each plaintext letter maps to a fixed, unique ciphertext letter (a 1:1 substitution across the entire alphabet). The key is the permutation of the alphabet.</li>
+                    <li><strong>Polyalphabetic Ciphers (Slide 107):</strong> Use multiple substitution alphabets. The same plaintext letter can map to different ciphertext letters depending on its position or context (e.g., using different shifts based on a keyword or position). Playfair is also a form of this.</li>
+                    <li><strong>Playfair Cipher (Slide 108):</strong> Encrypts pairs of letters (digraphs) using a 5x5 matrix constructed with a keyword. Rules depend on the relative position of the letters in the matrix (same row, same column, or rectangle).</li>
+                    <li><strong>Hill Cipher (Slide 109):</strong> A polygraphic cipher using linear algebra. Plaintext letters are grouped (e.g., pairs, triplets) and converted to numbers, then multiplied by a key matrix modulo 26.</li>
+                </ul><br>
+                <strong>2. Transposition Techniques (Slide 101, 110):</strong> The letters of the plaintext are rearranged (permutated) without changing the letters themselves.<br>
+                <ul>
+                    <li><strong>Rail Fence Cipher (Slide 110):</strong> Plaintext is written diagonally down and up across a number of "rails" (rows), and then read off row by row.</li>
+                </ul>`
+            },
+            {
+                question: "Most common threats on web applications",
+                answer: `According to Slide 258, the common threats listed are:<br><br>
+                <ul>
+                    <li><strong>SQL injection (Slides 259-260):</strong> A code injection technique where malicious SQL code is inserted into input fields (like username/ID). When the application processes this input, the malicious SQL runs on the database, potentially destroying it, stealing data, or bypassing authentication.</li>
+                    <li><strong>Cross Site Scripting (XSS) (Slides 261-262):</strong> An attacker injects malicious scripts (usually JavaScript) into web pages viewed by other users. When a victim visits the compromised page, the script executes in their browser, allowing the attacker to steal session tokens, hijack user sessions, deface websites, or redirect users to malicious sites.</li>
+                    <li><strong>Broken Authentication (Slides 263-264):</strong> Occurs when authentication and session management are implemented incorrectly, allowing attackers to compromise passwords, keys, or session tokens, or exploit other flaws to assume users' identities. This can happen through predictable credentials, insecure storage, session IDs in URLs, session fixation, sessions not expiring properly, or credentials sent unencrypted.</li>
+                </ul>`
+            },
+            {
+                question: "Digital signature 3 status",
+                answer: `The term "3 status" isn't explicitly used in the slides. However, based on the descriptions of Digital Signatures (Slides 74, 155, 195, 196), we can infer the key properties or functions they provide:<br><br>
+                <ol>
+                    <li><strong>Authentication (Sender Identity):</strong> A digital signature, created using the sender's unique private key, confirms the identity of the sender. Only the holder of the private key could have created that specific signature for the message (Slide 195, 74). The receiver uses the sender's public key to verify this.</li>
+                    <li><strong>Data Integrity:</strong> By hashing the message and encrypting the hash (the signature), it ensures that the message content has not been altered since it was signed. The receiver re-hashes the message and compares it to the decrypted hash from the signature; if they match, the integrity is verified (Slide 195, 155).</li>
+                    <li><strong>Non-repudiation (Implicit):</strong> Because the signature is created with the sender's private key (which only they should possess), they cannot later deny having signed the message. While the term "non-repudiation" is only used in the comparison table for asymmetric crypto generally (Slide 94, 154), the mechanism described strongly supports this property. Slide 74 notes the mechanism is used to "preserve data" and "sender's identity is to be notified."</li>
+                </ol><br>
+                <strong>Process Summary (Slides 195-196):</strong> Sender calculates hash of message -> Encrypts hash with Sender's Private Key (this is the signature) -> Sends Message + Signature -> Receiver gets Message + Signature -> Receiver Decrypts Signature with Sender's Public Key (gets original hash) -> Receiver calculates hash of received message -> Compares the two hashes. If they match, the signature is valid (providing Authentication and Integrity).`
+            }
+        ];
+
+        // Define a new array specifically for practical questions
+        const practicalQuizData = [
+             {
+                question: "practical example on Asymmetric encryption RSA S-DES Diffie-Hellman",
+                answer: `<strong>Note:</strong> SDES (Simplified Data Encryption Standard) is a Symmetric algorithm, not Asymmetric. Examples for RSA and Diffie-Hellman based on the slides:<br><br>
+                <strong>RSA Example (Based on Slides 165-166):</strong><br>
+                <ol>
+                    <li>Select Primes: p = 13, q = 11</li>
+                    <li>Calculate n: n = p * q = 13 * 11 = 143</li>
+                    <li>Calculate Euler's Totient: Ф(n) = (p-1)(q-1) = (13-1)(11-1) = 12 * 10 = 120</li>
+                    <li>Select Public Exponent (e): Choose e such that 1 < e < Ф(n) and gcd(e, Ф(n)) = 1. Select e = 13. (gcd(13, 120) = 1).</li>
+                    <li>Calculate Private Exponent (d): Find d such that e * d ≡ 1 mod Ф(n) or 13 * d ≡ 1 mod 120. Using the extended Euclidean algorithm or iteration d = ((Ф(n) * i) + 1) / e:<br>
+                        i=1: (120*1 + 1) / 13 = 9.30<br>
+                        i=2: (120*2 + 1) / 13 = 18.53<br>
+                        i=3: (120*3 + 1) / 13 = 27.76<br>
+                        i=4: (120*4 + 1) / 13 = 37. So, d = 37.</li>
+                    <li>Keys: Public Key PU = {e, n} = {13, 143}; Private Key PR = {d, n} = {37, 143}.</li>
+                    <li>Encryption (Plaintext M=13): C = M^e mod n = 13^13 mod 143. Calculating this gives C = 52.</li>
+                    <li>Decryption (Ciphertext C=52): M = C^d mod n = 52^37 mod 143. Calculating this gives M = 13.</li>
+                </ol><br>
+                <strong>Diffie-Hellman Example (Based on Slide 175):</strong><br>
+                <ol>
+                    <li>Public Parameters: Alice and Bob agree on a prime P = 23 and a generator G = 9.</li>
+                    <li>Private Keys: Alice chooses private key a = 4; Bob chooses private key b = 3.</li>
+                    <li>Compute Public Values:<br>
+                        Alice computes x = G^a mod P = 9^4 mod 23 = 6561 mod 23 = 6.<br>
+                        Bob computes y = G^b mod P = 9^3 mod 23 = 729 mod 23 = 16.</li>
+                    <li>Exchange Public Values: Alice sends x=6 to Bob; Bob sends y=16 to Alice.</li>
+                    <li>Compute Shared Secret:<br>
+                        Alice computes k_a = y^a mod P = 16^4 mod 23 = 65536 mod 23 = 9.<br>
+                        Bob computes k_b = x^b mod P = 6^3 mod 23 = 216 mod 23 = 9.</li>
+                    <li>Result: Both Alice and Bob independently compute the same shared secret key, K = 9. They can now use this key for symmetric encryption.</li>
+                </ol>`
+            }
+            // Add other practical questions here if needed
+        ];
+
+
+        const interactiveQuizContainer = document.getElementById('tab-content-interactive');
+        const practicalQuizContainer = document.getElementById('tab-content-practical');
+        const essayQuizContainer = document.getElementById('tab-content-essay');
+        const tabButtons = document.querySelectorAll('.tab-buttons button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // --- Tab Switching Logic ---
+        function activateTab(tabId) {
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.id === `tab-btn-${tabId}`) {
+                    button.classList.add('active');
+                }
+            });
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                 if (content.id === `tab-content-${tabId}`) {
+                    content.classList.add('active');
+                }
+            });
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.id.replace('tab-btn-', '');
+                activateTab(tabId);
+            });
+        });
+
+        // --- Interactive Quiz Display Logic ---
+        function displayInteractiveQuiz() {
+            interactiveQuizData.forEach((qData, index) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                questionBlock.setAttribute('data-question-index', index); // Use index within interactiveQuizData
+
+                const questionText = document.createElement('p');
+                questionText.classList.add('question-text');
+                // Using a simple index for interactive questions
+                questionText.textContent = `${index + 1}. ${qData.question}`;
+                questionBlock.appendChild(questionText);
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.classList.add('options');
+
+                const options = qData.options;
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    // Add listener specific to interactive answers
+                    button.addEventListener('click', handleInteractiveAnswer);
+                    optionsDiv.appendChild(button);
+                });
+
+                questionBlock.appendChild(optionsDiv);
+
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.classList.add('feedback');
+                questionBlock.appendChild(feedbackDiv);
+
+                interactiveQuizContainer.appendChild(questionBlock);
+            });
+        }
+
+        // Function to handle interactive answer selection
+        function handleInteractiveAnswer(event) {
+            const selectedButton = event.target;
+            const questionBlock = selectedButton.closest('.question-block');
+            const questionIndex = parseInt(questionBlock.getAttribute('data-question-index'), 10);
+            const selectedAnswer = selectedButton.textContent;
+            const correctAnswer = interactiveQuizData[questionIndex].answer; // Use interactiveQuizData
+            const feedbackDiv = questionBlock.querySelector('.feedback');
+            const optionButtons = questionBlock.querySelectorAll('.options button');
+
+            // Disable all buttons in this block
+            optionButtons.forEach(button => {
+                button.disabled = true;
+            });
+
+            selectedButton.classList.add('selected');
+
+            if (selectedAnswer === correctAnswer) {
+                selectedButton.classList.add('correct');
+                feedbackDiv.textContent = 'Correct!';
+                feedbackDiv.classList.add('correct');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackDiv.textContent = `Incorrect. The correct answer is: ${correctAnswer}`;
+                feedbackDiv.classList.add('incorrect');
+
+                // Highlight the correct answer
+                optionButtons.forEach(button => {
+                    if (button.textContent === correctAnswer) {
+                        button.classList.add('reveal-correct');
+                    }
+                });
+            }
+        }
+
+        // --- Practical Quiz Display Logic ---
+        function displayPracticalQuestions() {
+            // Clear existing content, including the placeholder
+            practicalQuizContainer.innerHTML = '';
+            if (practicalQuizData.length === 0) {
+                 practicalQuizContainer.innerHTML = '<p style="font-style: italic; color: #666;">No practical questions available yet.</p>';
+                 return;
+            }
+
+            practicalQuizData.forEach((qData, index) => {
+                // Reuse essay item structure and classes for consistency
+                const practicalItem = document.createElement('div');
+                practicalItem.classList.add('essay-item'); // Reusing class
+
+                const questionToggle = document.createElement('button');
+                questionToggle.classList.add('essay-question-toggle'); // Reusing class
+                // Add a prefix to distinguish practical questions if desired
+                questionToggle.textContent = `Practical ${index + 1}. ${qData.question}`;
+                questionToggle.setAttribute('aria-expanded', 'false');
+                questionToggle.setAttribute('aria-controls', `practical-answer-${index}`);
+
+                const answerDiv = document.createElement('div');
+                answerDiv.classList.add('essay-answer'); // Reusing class
+                answerDiv.id = `practical-answer-${index}`;
+                // Use innerHTML for practical answers as they contain HTML formatting
+                answerDiv.innerHTML = `<strong>Solution:</strong> ${qData.answer}`;
+
+                questionToggle.addEventListener('click', () => {
+                    const isExpanded = questionToggle.getAttribute('aria-expanded') === 'true';
+                    questionToggle.setAttribute('aria-expanded', !isExpanded);
+                    questionToggle.classList.toggle('active');
+                    answerDiv.classList.toggle('active');
+                });
+
+                practicalItem.appendChild(questionToggle);
+                practicalItem.appendChild(answerDiv);
+                practicalQuizContainer.appendChild(practicalItem);
+            });
+        }
+
+        // --- Essay Quiz Display Logic ---
+         function displayEssayQuestions() {
+            essayQuizContainer.innerHTML = ''; // Clear existing content before adding new ones
+            // Ensure it iterates over the correct, potentially modified, array
+            essayPracticalData.forEach((qData, index) => {
+                const essayItem = document.createElement('div');
+                essayItem.classList.add('essay-item');
+
+                const questionToggle = document.createElement('button');
+                questionToggle.classList.add('essay-question-toggle');
+                // Remove explicit numbering if it's already in the question text
+                questionToggle.textContent = qData.question.startsWith(`${index + 1}.`) ? qData.question : `Essay ${index + 1}. ${qData.question}`; // Auto-number if needed, added "Essay" prefix
+                questionToggle.setAttribute('aria-expanded', 'false'); // Accessibility
+                questionToggle.setAttribute('aria-controls', `essay-answer-${index}`);
+
+                const answerDiv = document.createElement('div');
+                answerDiv.classList.add('essay-answer');
+                answerDiv.id = `essay-answer-${index}`;
+                 // Add "Answer:" prefix and use innerHTML to render potential HTML in answers
+                answerDiv.innerHTML = `<strong>Answer:</strong> ${qData.answer}`;
+
+
+                questionToggle.addEventListener('click', () => {
+                    const isExpanded = questionToggle.getAttribute('aria-expanded') === 'true';
+                    questionToggle.setAttribute('aria-expanded', !isExpanded);
+                    questionToggle.classList.toggle('active');
+                    answerDiv.classList.toggle('active');
+                });
+
+                essayItem.appendChild(questionToggle);
+                essayItem.appendChild(answerDiv);
+                essayQuizContainer.appendChild(essayItem);
+            });
+        }
+
+
+        // --- Initial Call ---
+        displayInteractiveQuiz();
+        displayPracticalQuestions(); // Call the updated function
+        displayEssayQuestions(); // Call the updated function
+        // Activate the default tab (optional, CSS already does this)
+        // activateTab('interactive');
+
+    </script>
+
+</body>
+</html>
