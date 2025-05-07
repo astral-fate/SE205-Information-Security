@@ -21,3 +21,4 @@ This course is part of [Cairo University Software Engineering Professional Maste
 3. https://xipher.netlify.app/
 4. https://pythontutor.com/visualize.html#mode=edit
 5. https://youtu.be/mS2VC7vbbNc?si=JXKOSlqRjSwVyylO
+6. https://www.youtube.com/watch?v=SN_-LMdx6cI
